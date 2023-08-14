@@ -8,19 +8,24 @@ import { Input } from "@/components/ui/input"
 import { useState } from "react";
 import BasicFlow from "@/components/explorer/Flow";
 
+import axios from 'axios';
+
 const Page = () => {
     
     const [exploreTopic, setExploreTopic] = useState<string>("")
 
-    const handleExplore = () => {
-      alert(exploreTopic)
+    const handleExplore = async() => {
+      
+      const response = await axios.post("/api/explore", {explore:exploreTopic})
+      console.log(JSON.stringify(response, null, 2))
     }
     
     return (
     <section className="container flex flex-col gap-y-16">
       <div className="w-full mt-16 flex gap-x-4 ">
         <Input className="flex-1" onChange={ (e) => setExploreTopic(e.target.value) } placeholder="What do you want to Explore!" value={exploreTopic}/>
-        <Button onClick={handleExplore}>Explore</Button>
+        <Button onClick={handleExplore}>Explore</Button>        
+
       </div>
 
       <div className="w-full h-screen">

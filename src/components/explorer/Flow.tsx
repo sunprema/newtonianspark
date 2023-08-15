@@ -62,7 +62,7 @@ import "reactflow/dist/style.css";
       > 
         <Controls />
         <Background />
-        <MiniMap />
+        <MiniMap zoomable pannable/>
         
       </ReactFlow>
     );

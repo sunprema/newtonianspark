@@ -27,8 +27,8 @@ const Page = () => {
     }
     
     return (
-    <section className="container flex flex-col gap-y-8">
-      <div className="w-full mt-8 flex gap-x-4 ">
+    <section className="flex flex-col gap-y-8 px-8">
+      <div className="w-[50%] mt-8 flex gap-x-4 ">
         <Input className="flex-1" onChange={ (e) => setExploreTopic(e.target.value) } placeholder="What do you want to Explore!" value={exploreTopic}/>
         <Button onClick={handleExplore}>Explore</Button>        
 
@@ -44,7 +44,7 @@ const Page = () => {
   
         <TabsContent value="explore">
           <ScrollArea className="h-screen" >
-          <div className="w-full h-[calc(100vh-150px)]">
+          <div className="w-full h-[calc(100vh/2)]">
           <BasicFlow />
           </div>
           </ScrollArea>

@@ -13,6 +13,7 @@ import ReactFlow, {
   } from "reactflow";
 import CustomNode from "./CustomNode";
 import "reactflow/dist/style.css";
+import ExplorerNode from "./ExplorerNode";
 
   const initialNodes: Node[] = [
     {
@@ -25,8 +26,8 @@ import "reactflow/dist/style.css";
     { id: "3", data: { label: "Node 3" }, position: { x: 400, y: 100 } },
     {
       id: "4",
-      type: "custom",
-      data: { label: "Custom Node" },
+      type: "explorer",
+      data: { label: "Custom Node", topic: "Laws of Thermodynamics", summary: "This is the summary" },
       position: { x: 400, y: 200 }
     }
   ];
@@ -38,7 +39,7 @@ import "reactflow/dist/style.css";
   
   
   const nodeTypes = {
-    custom: CustomNode
+    explorer: ExplorerNode
   };
 
   const BasicFlow = () => {

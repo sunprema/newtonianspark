@@ -32,14 +32,14 @@ const ExplorerNode = ({data}:{data:any}) => {
       </CardHeader>
 
       <CardContent>
-      <Accordion type="single" collapsible className="w-full grid gap-4">
+      <Accordion type="single" collapsible className="w-full">
       {
         questions.map( 
           ( {question, answer}:{question:string, answer:string},
             index:number
           ) => 
           <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger>{question}</AccordionTrigger>
+            <AccordionTrigger className={'flex items-start justify-start text-sm '}>{question}</AccordionTrigger>
             <AccordionContent>
               {answer}
             </AccordionContent>

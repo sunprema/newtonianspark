@@ -18,12 +18,14 @@ const Page = () => {
     
     const [exploreTopic, setExploreTopic] = useState<string>("")
     const [rawDataJson, setRawDataJson] = useState<string>("");
-
+    const [initialNodes, setInitialNodes] = useState(null);
+    const [initialEdges, setInitialEdges] = useState([]);
     const handleExplore = async() => {
       
       const response = await axios.post("/api/explore", {explore:exploreTopic})
       setRawDataJson( JSON.stringify(response, null, 2))
-
+      const {nodes} = response.data['result']
+      setInitialNodes(nodes)
     }
     
     return (
@@ -45,7 +47,10 @@ const Page = () => {
         <TabsContent value="explore">
           <ScrollArea className="h-screen" >
           <div className="w-full h-[calc(100vh/2)]">
-          <BasicFlow />
+          {
+            initialNodes && <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges}/>
+          }
+          
           </div>
           </ScrollArea>
         </TabsContent>

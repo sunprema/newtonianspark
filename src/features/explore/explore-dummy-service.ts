@@ -11,7 +11,7 @@ export const ExploreDummyTopic = async ( {explore, context}:
     const jsonDirectory = path.join(process.cwd(), 'dummyData');
     //Read the json data file data.json
     const result = await fs.readFile(jsonDirectory + '/explore_dummy_data.json', 'utf8');    
-    console.log(JSON.stringify(result, null, 2))
+    
     return {
         result : JSON.parse(result)
     }

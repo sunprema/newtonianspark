@@ -25,7 +25,7 @@ const ExplorerNode = ({data}:{data:any}) => {
   const {topic, summary, questions} = data
    
   return (
-    <Card className="w-[350px] ">
+    <Card className="w-[500px] ">
       <CardHeader>
         <CardTitle>{topic}</CardTitle>
         <CardDescription>{summary}</CardDescription>

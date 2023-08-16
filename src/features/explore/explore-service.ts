@@ -2,7 +2,6 @@
 import 'server-only'
 
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { HumanMessage, ChatMessage, SystemMessage } from "langchain/schema"; 
 import { createStructuredOutputChainFromZod } from "langchain/chains/openai_functions";
 
 import {
@@ -21,12 +20,13 @@ const chatAI = new ChatOpenAI({
 });
 
 export const ExploreTopic = async ( {explore, context}:
-
+    
     { explore: string, context : object | null }) => {
 
+    console.log(context)    
     const prompt = new ChatPromptTemplate({
         promptMessages:[
-            SystemMessagePromptTemplate.fromTemplate("You will help explore the topic provided in the following message"),
+            SystemMessagePromptTemplate.fromTemplate("Help explore the topic provided in the following message"),
             HumanMessagePromptTemplate.fromTemplate("{inputText}"),
         ],
         inputVariables:["inputText"]
@@ -36,18 +36,19 @@ export const ExploreTopic = async ( {explore, context}:
         prompt,
         llm: chatAI,
       });
-      
+    
+    let result = null
+    let error = null
     try{
-        const result = await chain.call({ inputText : explore})        
+        result = await chain.call({ inputText : explore})        
         console.log(JSON.stringify(result, null, 2))
         return {
-            result
+            result,
+            error : null
         }
-    }catch(error){
-        return {
-            "error" : error
-            
-        }
+    }catch(errorz){
+        error = errorz
     }
+    return {result, error}
     
 }

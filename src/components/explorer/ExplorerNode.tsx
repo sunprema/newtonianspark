@@ -16,6 +16,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
+import { Handle, Position } from 'reactflow';
+
 
 
 const ExplorerNode = ({data}:{data:any}) => {
@@ -23,7 +25,8 @@ const ExplorerNode = ({data}:{data:any}) => {
   const {topic, summary, questions} = data
    
   return (
-    <Card className="w-[500px] ">
+    <div>
+    <Card className="w-[500px]">
       <CardHeader>
         <CardTitle>{topic}</CardTitle>
         <CardDescription>{summary}</CardDescription>
@@ -37,7 +40,7 @@ const ExplorerNode = ({data}:{data:any}) => {
             index:number
           ) => 
           <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger className={'flex items-start justify-start text-sm '}>{question}</AccordionTrigger>
+            <AccordionTrigger> {question}</AccordionTrigger>
             <AccordionContent>
               {answer}
             </AccordionContent>
@@ -47,11 +50,15 @@ const ExplorerNode = ({data}:{data:any}) => {
     </Accordion>
     </CardContent>
       
-      <CardFooter className="flex justify-between">
-        <Badge variant="outline">Cancel</Badge>
-        <Badge variant="outline" onClick={() => alert("Hi")}>Deploy</Badge>
-      </CardFooter>
+    <CardFooter className="flex justify-between">
+      <Badge variant="outline">Cancel</Badge>
+      <Badge variant="outline" onClick={() => alert("Hi")}>Deploy</Badge>
+    </CardFooter>
+    
     </Card>
+    <Handle type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-red-500" />
+    <Handle type="source" position={Position.Bottom} className="!w-6 !h-2 !rounded-none !bg-red-500" />
+    </div>
   )
 
 

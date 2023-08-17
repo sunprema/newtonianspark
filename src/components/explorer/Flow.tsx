@@ -11,9 +11,10 @@ import ReactFlow, {
     useNodesState,
     useEdgesState
   } from "reactflow";
-import CustomNode from "./CustomNode";
 import "reactflow/dist/style.css";
+import ExplorerNode from "./ExplorerNode";
 
+/*
   const initialNodes: Node[] = [
     {
       id: "1",
@@ -25,8 +26,8 @@ import "reactflow/dist/style.css";
     { id: "3", data: { label: "Node 3" }, position: { x: 400, y: 100 } },
     {
       id: "4",
-      type: "custom",
-      data: { label: "Custom Node" },
+      type: "explorer",
+      data: { label: "Custom Node", topic: "Laws of Thermodynamics", summary: "This is the summary" },
       position: { x: 400, y: 200 }
     }
   ];
@@ -36,12 +37,14 @@ import "reactflow/dist/style.css";
     { id: "e1-3", source: "1", target: "3" }
   ];
   
-  
+  */
   const nodeTypes = {
-    custom: CustomNode
+    explorer: ExplorerNode
   };
 
-  const BasicFlow = () => {
+  
+
+  const BasicFlow = ( {initialNodes, initialEdges}:{initialNodes:Node[], initialEdges:Edge[]}) => {
     const [nodes, , onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const onConnect = useCallback(

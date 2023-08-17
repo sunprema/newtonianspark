@@ -2,28 +2,53 @@
 import 'server-only'
 
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { HumanMessage, ChatMessage, SystemMessage } from "langchain/schema"; 
+import { createStructuredOutputChainFromZod } from "langchain/chains/openai_functions";
 
+import {
+    ChatPromptTemplate,
+    SystemMessagePromptTemplate,
+    HumanMessagePromptTemplate,
+  } from "langchain/prompts";
+import { BasicExploreSchema } from './explore-schema';
 
 const chatAI = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_KEY,
+    maxRetries :2 ,
+    maxConcurrency : 5,
+    modelName: "gpt-3.5-turbo-0613", 
+    temperature: 0
 });
 
 export const ExploreTopic = async ( {explore, context}:
+    
     { explore: string, context : object | null }) => {
+
+    console.log(context)    
+    const prompt = new ChatPromptTemplate({
+        promptMessages:[
+            SystemMessagePromptTemplate.fromTemplate("Help explore the topic provided in the following message"),
+            HumanMessagePromptTemplate.fromTemplate("{inputText}"),
+        ],
+        inputVariables:["inputText"]
+    });
+
+    const chain = createStructuredOutputChainFromZod(BasicExploreSchema, {
+        prompt,
+        llm: chatAI,
+      });
+    
+    let result = null
+    let error = null
     try{
-        const humanMessage = new HumanMessage( explore )
-        const systemMessage = new SystemMessage("You will help explore the topic provided in the message. You will return data in JSON with each topic and summary of the topic and additional questions related to the topic")
-        const result = await chatAI.predictMessages([systemMessage, humanMessage])
-        console.log(result)
+        result = await chain.call({ inputText : explore})        
+        console.log(JSON.stringify(result, null, 2))
         return {
-            result
+            result,
+            error : null
         }
-    }catch(error){
-        return {
-            "error" : error
-            
-        }
+    }catch(errorz){
+        error = errorz
     }
+    return {result, error}
     
 }

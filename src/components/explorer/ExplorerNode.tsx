@@ -56,8 +56,8 @@ const ExplorerNode = ({data}:{data:any}) => {
     </CardFooter>
     
     </Card>
-    <Handle type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-red-500" />
-    <Handle type="source" position={Position.Bottom} className="!w-6 !h-2 !rounded-none !bg-red-500" />
+    <Handle type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
+    <Handle type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-red-500" />
     </div>
   )
 

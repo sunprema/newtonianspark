@@ -7,10 +7,11 @@ export const runtime = 'edge';
 
 export async function POST(request:NextRequest){
     const req = await request.json()
-    let {key, data} = req
+    let {key} = req
+    const {data} = req
     try{
         key = key || nanoid()
-        const result = await setValue(key, data)
+        const result = await setValue(key,data)
         return NextResponse.json({'key': key, 'status': result}, {'status': 200})
     }catch(error){
         return NextResponse.json({'key': key, 'status': error}, {'status': 400})

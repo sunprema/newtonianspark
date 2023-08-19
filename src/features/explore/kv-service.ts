@@ -5,7 +5,7 @@ import { kv } from "@vercel/kv";
 
 export const getValue = async ( key:string) => {
     try{
-        const value = await kv.get<string>(key)
+        const value = await kv.get(key)
         return value ;
     }catch(error){
         console.log(error)

@@ -72,8 +72,7 @@ import { useToast } from "@/components/ui/use-toast"
           })
         }
       }
-
-    },[rfInstance]) 
+    },[rfInstance,key, toast]) 
 
     return (
       <ReactFlowProvider>

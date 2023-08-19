@@ -43,7 +43,10 @@ type TopicFromDB = {
 }
 
 export const getTopics =  async() => {
-    const {data, error} = await supabase.from('topics').select()
+    const {data, error} = await supabase
+        .from('topics')
+        .select()
+        
     return {data, error}
 
 }

@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { nanoid } from 'nanoid'
 
-import {getValue,setValue} from "@/features/explore/kv-service"
+import {getValue,setValue} from "@/features/explore/store-service"
 
 export const runtime = 'edge';
 
@@ -11,7 +11,11 @@ export async function POST(request:NextRequest){
     const {data} = req
     try{
         key = key || nanoid()
-        const result = await setValue(key,data)
+        const {title, summary} = data
+        const result = await setValue(key,data, title, summary)
+        
+        console.log(`Title : ${title}, Summary: ${summary}`)
+        //update in postgres, the key, title, summary, created_at etc, 
         return NextResponse.json({'key': key, 'status': result}, {'status': 200})
     }catch(error){
         return NextResponse.json({'key': key, 'status': error}, {'status': 400})
@@ -26,7 +30,7 @@ export async function GET(request:NextRequest){
         if(key === null || key === ''){
             throw "Key is not available"
         }
-        const data = await getValue(key!)
+        const data = await getValue(key)
         if(!data){
             throw "Data is not available"
         }

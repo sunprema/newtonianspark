@@ -34,6 +34,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { UUID } from "crypto";
 
 
   const nodeTypes = {
@@ -49,7 +50,8 @@ import { Textarea } from "@/components/ui/textarea"
      initialEdges:Edge[],
      initialTitle:(string|null), 
      initialSummary:(string|null), 
-     flowKey:(string|null)
+     flowKey:(string|null),
+     flowId:(UUID|null)
 
     }
     ) => {

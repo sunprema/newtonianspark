@@ -23,23 +23,16 @@ export const getValue = async ( key:string) => {
     
 }
 
-export const setValue= async(key:string, value:string, title:string, summary:string) => {
+export const setValue= async(key:string, value:string, title:string, summary:string, flowId:UUID) => {
     try{
-        await kv.set(key, value)        
-        await supabase.from('topics').insert({'flowKey' : key, title, summary  })
+        await kv.set(key, value)
+        
+        await supabase.from('topics').upsert({title, summary,flowKey : key }).eq('flowKey', key)
+        
         return "SAVED"
     }catch(error){
         console.log(error)
     }
-}
-
-type TopicFromDB = {
-    id: UUID,
-    flowKey: string,
-    title: string,
-    summary:string,
-    created_at:string
-
 }
 
 export const getTopics =  async() => {

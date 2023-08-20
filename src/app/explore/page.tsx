@@ -86,7 +86,7 @@ const Page =() => {
       <ScrollArea >
         <div className="h-[calc(100vh-80px)] w-full">
           {
-            initialNodes && <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={""} initialSummary={""} flowKey={""}/>
+            initialNodes && <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={""} initialSummary={""} flowKey={""} flowId={null}/>
           }
           
         </div>

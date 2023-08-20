@@ -3,12 +3,11 @@ import { getTopics } from "@/features/explore/store-service";
 
 import {
     Card,
-    CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+import Link from "next/link";
 
 const Page = async() => {
 
@@ -23,17 +22,18 @@ const Page = async() => {
     }
 
     return (
-        <div className="grid grid-cols-5 gap-5">
+        <div className="container mx-auto mt-24 flex justify-around">
             {
-            data?.map( (d,index)=> {
+            data?.map( (d)=> {
                 return (
-                <Card className="w-[350px] h-[350px]" key={d.flowKey}>
+                <Link key={d.flowKey} href={`/visit/${d.flowKey}`}>    
+                <Card className="hover:bg-muted h-[300px] w-[300px] rounded-none hover:shadow-lg " >
                     <CardHeader>
                     <CardTitle>{d.title}</CardTitle>
                     <CardDescription>{d.summary}</CardDescription>
                     </CardHeader>
-
                 </Card>
+                </Link>
                 )
             })
             }  

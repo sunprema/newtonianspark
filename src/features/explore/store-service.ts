@@ -45,7 +45,9 @@ type TopicFromDB = {
 export const getTopics =  async() => {
     const {data, error} = await supabase
         .from('topics')
-        .select()
+        .select('*')
+        .order('created_at', {ascending:false})
+        .limit(100)
         
     return {data, error}
 

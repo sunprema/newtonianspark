@@ -48,7 +48,7 @@ const Page =() => {
     const [initialEdges, setInitialEdges] = useState<Edge[]|[]>([]);
     const [error, setError] = useState(null);
 
-    /*  
+     
     useEffect(() => {
 
       const callExploreService = async(topic:string|null) => {
@@ -69,8 +69,9 @@ const Page =() => {
     if(error){
       return <h1> Error : {error} </h1>
     }
-    */
+    
 
+    /*
     useEffect(() => {
 
       setInitialNodes(sampleNodes)
@@ -78,14 +79,14 @@ const Page =() => {
       setError(null)
 
     },[topic])
-    
+    */
 
     return (
     <section>
       <ScrollArea >
         <div className="h-[calc(100vh-80px)] w-full">
           {
-            initialNodes && <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges}/>
+            initialNodes && <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={""} initialSummary={""} flowKey={""}/>
           }
           
         </div>

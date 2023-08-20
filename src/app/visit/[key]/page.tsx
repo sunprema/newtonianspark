@@ -1,6 +1,7 @@
 import BasicFlow from "@/components/explorer/Flow"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { getValue } from "@/features/explore/store-service"
+import { UUID } from "crypto";
 import {
     Node,
     Edge,    
@@ -9,6 +10,7 @@ import {
 type Topic = {
     title :string,
     summary: string,
+    id: UUID|null,
     flow: NodesAndEdges
 }  
 type NodesAndEdges = {
@@ -23,7 +25,7 @@ const Page = async ({params}:{params:{'key': string}}) => {
     console.log(value)
     const topic = value as Topic
     
-    const {flow:{nodes, edges}, title, summary} = topic
+    const {flow:{nodes, edges}, title, summary, id} = topic
 
     if(value == null){
         return <h1>No data for key ${key}</h1>
@@ -33,7 +35,7 @@ const Page = async ({params}:{params:{'key': string}}) => {
             <section>
                 <ScrollArea >
                 <div className="h-[calc(100vh-80px)] w-full">
-                    <BasicFlow initialNodes={nodes} initialEdges={edges} initialTitle={title} initialSummary={summary} flowKey={key}/>
+                    <BasicFlow initialNodes={nodes} initialEdges={edges} initialTitle={title} initialSummary={summary} flowKey={key} flowId={id}/>
                 </div>
                 </ScrollArea>
             </section>

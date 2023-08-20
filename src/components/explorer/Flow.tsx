@@ -45,7 +45,7 @@ import { UUID } from "crypto";
   
 
   const BasicFlow = ( 
-    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey}: 
+    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey, flowId}: 
     {initialNodes:Node[], 
      initialEdges:Edge[],
      initialTitle:(string|null), 

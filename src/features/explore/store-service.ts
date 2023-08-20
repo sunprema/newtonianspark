@@ -23,7 +23,7 @@ export const getValue = async ( key:string) => {
     
 }
 
-export const setValue= async(key:string, value:string, title:string, summary:string, flowId:UUID) => {
+export const setValue= async(key:string, value:string, title:string, summary:string) => {
     try{
         await kv.set(key, value)
         

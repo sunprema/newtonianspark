@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/accordion"
 
 import { Handle, Position } from 'reactflow';
+import Link from "next/link";
+import { Button } from "../ui/button";
 
 
 
@@ -52,12 +54,16 @@ const ExplorerNode = ({data}:{data:any}) => {
       
     <CardFooter className="flex justify-between">
       <Badge variant="outline">Cancel</Badge>
-      <Badge variant="outline" onClick={() => alert("Hi")}>Deploy</Badge>
+      <Link href="/visit/cYHR0KnX6My0PZ30ciom3" target="_blank">
+        <Button variant="link" >Go to</Button>
+      </Link>
     </CardFooter>
     
     </Card>
-    <Handle type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
-    <Handle type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-red-500" />
+    <Handle id="1" type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-green-500"  />
+    <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
+    <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
+    <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />
     </div>
   )
 

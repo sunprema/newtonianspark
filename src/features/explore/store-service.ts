@@ -41,7 +41,7 @@ export const getTopics =  async() => {
         .select('*')
         .order('created_at', {ascending:false})
         .limit(100)
-        
+    console.log(JSON.stringify(data, null, 2 ))    
     return {data, error}
 
 }

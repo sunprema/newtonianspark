@@ -22,7 +22,7 @@ const Page = async() => {
     }
 
     return (
-        <div className="container mx-auto mt-24 flex justify-around">
+        <div className="container mx-auto mt-24 flex flex-wrap gap-8">
             {
             data?.map( (d)=> {
                 return (
@@ -41,5 +41,5 @@ const Page = async() => {
     )
     
 }
-
+export const revalidate = 60;
 export default Page ;

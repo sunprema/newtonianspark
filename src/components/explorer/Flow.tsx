@@ -122,6 +122,7 @@ import { UUID } from "crypto";
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         onInit={setRfInstance}
+        snapToGrid={true}
         fitView
         
       > 

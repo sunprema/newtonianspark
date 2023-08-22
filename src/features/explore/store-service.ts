@@ -27,7 +27,11 @@ export const setValue= async(key:string, value:string, title:string, summary:str
     try{
         await kv.set(key, value)
         
-        await supabase.from('topics').upsert({title, summary,flowKey : key }).eq('flowKey', key)
+        await supabase
+            .from('topics')
+            .upsert(
+                {title, summary,flowKey : key },
+                {'onConflict' : 'flowKey', ignoreDuplicates : false })
         
         return "SAVED"
     }catch(error){

@@ -9,7 +9,7 @@ import ReactFlow, {
     Controls,
     Edge,
     Connection,
-    useReactFlow,
+    useReactFlow,    
     useNodesState,
     useEdgesState,
     ReactFlowInstance
@@ -35,6 +35,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { UUID } from "crypto";
+import SideSheet from "./SideSheet";
+
+
 
 
   const nodeTypes = {
@@ -62,6 +65,7 @@ import { UUID } from "crypto";
     const {toast} = useToast()
     const [title, setTitle] = useState<string|null>(initialTitle)
     const [summary, setSummary] = useState<string|null>(initialSummary)
+    const [sideSheetOpen, setSideSheetOpen]  = useState<boolean>(false)
 
     const onConnect = useCallback(
       (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
@@ -122,14 +126,14 @@ import { UUID } from "crypto";
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         onInit={setRfInstance}
-        fitView
-        
+        onlyRenderVisibleElements
+        fitView        
       > 
-        <Controls >
+        <Controls className="dark:bg-inherit">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="icon">
-                <SaveIcon className="h-4 w-4 hover:stroke-green-500"/>
+              <Button variant="link" className="h-4 p-2 rounded-md text-xs border-none">
+                <SaveIcon size={14} className=" hover:stroke-green-500"/>
               </Button>
             </DialogTrigger>
 
@@ -167,10 +171,12 @@ import { UUID } from "crypto";
             
           </Dialog>
         </Controls>  
-        <Background />
-        <MiniMap zoomable pannable/>
+        
+        <MiniMap className="dark:bg-inherit"  zoomable pannable/>
+        <SideSheet />
         
       </ReactFlow>
+      
       </ReactFlowProvider>
     );
   };

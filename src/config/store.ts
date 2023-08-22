@@ -1,47 +1,37 @@
 import { create } from 'zustand';
-import {
-  Connection,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-  addEdge,
-  OnNodesChange,
-  OnEdgesChange,
-  OnConnect,
-  applyNodeChanges,
-  applyEdgeChanges,
-} from 'reactflow';
 
+interface ExploreState  {
+  //states
+  sideSheetOpen:boolean
+  nodeIdSelectedForSideSheet:string
 
+  //reducers
+  toggleSideSheet: () => void
+  openSideSheetForNode:(nodeId:string) => void
 
-type RFState = {
-  nodes: Node[];
-  edges: Edge[];
-  onNodesChange: OnNodesChange;
-  onEdgesChange: OnEdgesChange;
-  onConnect: OnConnect;
 };
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
-const useStore = create<RFState>((set, get) => ({
-  nodes: [],
-  edges: [],
-  onNodesChange: (changes: NodeChange[]) => {
-    set({
-      nodes: applyNodeChanges(changes, get().nodes),
-    });
-  },
-  onEdgesChange: (changes: EdgeChange[]) => {
-    set({
-      edges: applyEdgeChanges(changes, get().edges),
-    });
-  },
-  onConnect: (connection: Connection) => {
-    set({
-      edges: addEdge(connection, get().edges),
-    });
-  },
+
+
+
+const useExploreStore = create<ExploreState>((set, get) => ({
+  
+  sideSheetOpen:false,
+  nodeIdSelectedForSideSheet: "",
+
+  toggleSideSheet: () => set((state) => (
+    {sideSheetOpen : !state.sideSheetOpen}
+    )
+  ),
+
+  openSideSheetForNode: (nodeId:string) => set(() => (
+    {
+      sideSheetOpen:true,
+      nodeIdSelectedForSideSheet:nodeId
+    }
+  ))
+
 }));
 
-export default useStore
+export default useExploreStore ;

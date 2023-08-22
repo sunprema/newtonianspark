@@ -19,12 +19,13 @@ import {
 import { Handle, Position } from 'reactflow';
 import Link from "next/link";
 import { Button } from "../ui/button";
+import useExploreStore from "@/config/store";
 
 
 
-const ExplorerNode = ({data}:{data:any}) => {
-  console.log(data)  
+const ExplorerNode = ({data , id}:{data:any, id:string}) => {
   const {topic, summary, questions} = data
+  const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
    
   return (
     <div>
@@ -53,14 +54,14 @@ const ExplorerNode = ({data}:{data:any}) => {
     </CardContent>
       
     <CardFooter className="flex justify-between">
-      <Badge variant="outline">Cancel</Badge>
+      <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id) }>explore more</Button>
       <Link href="/visit/cYHR0KnX6My0PZ30ciom3" target="_blank">
         <Button variant="link" >Go to</Button>
       </Link>
     </CardFooter>
     
     </Card>
-    <Handle id="1" type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-green-500"  />
+    <Handle id="1" type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-green-500"  ></Handle>
     <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
     <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
     <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />

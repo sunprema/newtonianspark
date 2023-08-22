@@ -3,7 +3,7 @@ import 'server-only'
 import { kv } from "@vercel/kv";
 
 import { createClient } from '@supabase/supabase-js'
-import { UUID } from 'crypto';
+
 
 // Create a single supabase client for interacting with your database
 

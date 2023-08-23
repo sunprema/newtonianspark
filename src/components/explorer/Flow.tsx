@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import ReactFlow, {
     ReactFlowProvider,
     Node,
@@ -37,6 +37,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { UUID } from "crypto";
 import SideSheet from "./SideSheet";
 import ButtonEdge from "./ButtonEdge";
+import YoutubeCard from "./YoutubeCard";
+import AddNode from "./AddNode";
 
 
 
@@ -44,6 +46,7 @@ import ButtonEdge from "./ButtonEdge";
   const nodeTypes = {
     explorer: ExplorerNode,
     tableNode : TableNode,
+    youtube: YoutubeCard,
   };
 
   const edgeTypes = {
@@ -62,7 +65,8 @@ import ButtonEdge from "./ButtonEdge";
 
     }
     ) => {
-    const [nodes,, onNodesChange] = useNodesState(initialNodes);
+    const reactFlowWrapper = useRef(null);  
+    const [nodes,setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null >(null);
     const [key, setKey] = useState<string|null>(flowKey);
@@ -74,6 +78,40 @@ import ButtonEdge from "./ButtonEdge";
       (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
       [setEdges]
     );
+
+    const onDrop = useCallback(
+      (event) => {
+        event.preventDefault();
+  
+        const reactFlowBounds = reactFlowWrapper?.current?.getBoundingClientRect();
+        const type = event.dataTransfer.getData('application/reactflow');
+  
+        // check if the dropped element is valid
+        if (typeof type === 'undefined' || !type) {
+          return;
+        }
+  
+        const position = rfInstance?.project({
+          x: event.clientX - reactFlowBounds.left,
+          y: event.clientY - reactFlowBounds.top,
+        });
+
+        const newNode = {
+          id: uuidv4(),
+          type,
+          position,
+          data: { label: `${type} node` },
+        };
+  
+        setNodes((nds) => nds.concat(newNode as Node));
+      },
+      [rfInstance, setNodes]
+    );
+
+    const onDragOver = useCallback((event) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'move';
+    }, []);
       
     //TODO: Refactor this, I dont think we need a new function when rfInstance, or key or toast changes each time.
     const onSave = useCallback(async ()=> {
@@ -120,6 +158,7 @@ import ButtonEdge from "./ButtonEdge";
     },[rfInstance,key, toast, title, summary]) 
 
     return (
+      <div ref={reactFlowWrapper}>
       <ReactFlowProvider>
       <ReactFlow
         nodes={nodes}
@@ -131,6 +170,8 @@ import ButtonEdge from "./ButtonEdge";
         edgeTypes={edgeTypes}
         onInit={setRfInstance}
         onlyRenderVisibleElements
+        onDrop={onDrop}
+        onDragOver={onDragOver}        
         fitView        
       > 
         <Controls style={{
@@ -144,7 +185,7 @@ import ButtonEdge from "./ButtonEdge";
          >
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="link" className="h-8 px-1 rounded-none bg-white">
+              <Button variant="link" className="h-8 rounded-none bg-white px-1">
                 <SaveIcon size={14} className=" hover:stroke-green-500 dark:stroke-black"/>
               </Button>
             </DialogTrigger>
@@ -188,9 +229,14 @@ import ButtonEdge from "./ButtonEdge";
         <SideSheet />
         
       </ReactFlow>
-      
+      <AddNode />
       </ReactFlowProvider>
+      </div>
     );
   };
   
   export default BasicFlow ;
+
+function uuidv4() {
+  throw new Error("Function not implemented.");
+}

@@ -29,7 +29,7 @@ const ExplorerNode = ({data , id}:{data:any, id:string}) => {
    
   return (
     <div>
-    <Card className="w-[500px]">
+    <Card className="w-[500px] shadow-2xl dark:bg-slate-700">
       <CardHeader>
         <CardTitle>{topic}</CardTitle>
         <CardDescription>{summary}</CardDescription>

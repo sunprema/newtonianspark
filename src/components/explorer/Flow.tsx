@@ -36,6 +36,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { UUID } from "crypto";
 import SideSheet from "./SideSheet";
+import ButtonEdge from "./ButtonEdge";
 
 
 
@@ -45,6 +46,9 @@ import SideSheet from "./SideSheet";
     tableNode : TableNode,
   };
 
+  const edgeTypes = {
+    default: ButtonEdge
+  }
   
 
   const BasicFlow = ( 
@@ -65,8 +69,7 @@ import SideSheet from "./SideSheet";
     const {toast} = useToast()
     const [title, setTitle] = useState<string|null>(initialTitle)
     const [summary, setSummary] = useState<string|null>(initialSummary)
-    const [sideSheetOpen, setSideSheetOpen]  = useState<boolean>(false)
-
+    
     const onConnect = useCallback(
       (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
       [setEdges]
@@ -125,15 +128,24 @@ import SideSheet from "./SideSheet";
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         onInit={setRfInstance}
         onlyRenderVisibleElements
         fitView        
       > 
-        <Controls className="dark:bg-inherit">
+        <Controls style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            left: '1%',
+                            transform: 'translate(-50%, -50%)'
+                    }}
+                    
+         
+         >
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="link" className="h-4 p-2 rounded-md text-xs border-none">
-                <SaveIcon size={14} className=" hover:stroke-green-500"/>
+              <Button variant="link" className="h-8 px-1 rounded-none bg-white">
+                <SaveIcon size={14} className=" hover:stroke-green-500 dark:stroke-black"/>
               </Button>
             </DialogTrigger>
 
@@ -171,7 +183,7 @@ import SideSheet from "./SideSheet";
             
           </Dialog>
         </Controls>  
-        
+        <Background className="bg-slate-50 dark:bg-slate-600" gap={24} />
         <MiniMap className="dark:bg-inherit"  zoomable pannable/>
         <SideSheet />
         

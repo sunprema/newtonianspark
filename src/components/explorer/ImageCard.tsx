@@ -21,15 +21,20 @@ import { Label } from "@/components/ui/label"
   
 
 
-  const YoutubeInputCard = ( {nodeId}:{nodeId:string} )=> {
+  const ImageCard = ( {nodeId}:{nodeId:string} )=> {
 
     const [topic, setTopic] = useState("")
     const [summary, setSummary] = useState("")
-    const [videoId, setVideoId] = useState("")
+    const [imageData, setImageData] = useState("")
     const { setNodes } = useReactFlow();   
 
-    const addYoutubeVideoToNodes = () => {
+    const generateImage = async() => {
+      
+      //here we will first generate an image using DallE, and add the data to the node.
+      
+      
       //Here we will use the node state and modify the nodes.
+
       setNodes((nds) =>
       nds.map((node) => {
         if (node.id === nodeId) {
@@ -38,7 +43,7 @@ import { Label } from "@/components/ui/label"
           node.data = {
             topic,
             summary,
-            videoId : getVideoId()
+            imageData
           };
         }
 
@@ -47,32 +52,26 @@ import { Label } from "@/components/ui/label"
     ); 
     
     }
-    const getVideoId = () => {
-      if (videoId.startsWith("https://www.youtube.com/watch?v=")){
-        return videoId.split("https://www.youtube.com/watch?v=")[1]
-      }else{
-        return videoId
-      }
-    }
+    
 
     return (
-    <div className="w-[500px] shadow-2xl dark:bg-slate-700">
+    <div className="h-[500px] w-[500px] shadow-2xl dark:bg-slate-700">
       <Card>
 
       <CardHeader>
-        <CardTitle>Add a video</CardTitle>
-        <CardDescription>You can embed videos in your document</CardDescription>
+        <CardTitle>Add a image</CardTitle>
+        <CardDescription>You can embed images in your document</CardDescription>
       </CardHeader>
 
       <CardContent>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="title">Title</Label>
-              <Input id="title" placeholder="Title for this video" value={topic} onChange={(e) => setTopic(e.target.value)}/>
+              <Input id="title" placeholder="Title for this image" value={topic} onChange={(e) => setTopic(e.target.value)}/>
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="summary">Summary</Label>
-              <Input id="summary" placeholder="Summary" value={summary} onChange={(e) => setSummary(e.target.value)}/>              
+              <Label htmlFor="summary">Image Summary</Label>
+              <Input id="summary" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)}/>              
             </div>
 
             <div className="flex flex-col space-y-1.5">
@@ -84,7 +83,7 @@ import { Label } from "@/components/ui/label"
 
       <CardFooter className="flex justify-between">
         <Button variant="outline">Cancel</Button>
-        <Button onClick={ ()=> addYoutubeVideoToNodes()}>Apply</Button>
+        <Button onClick={ ()=> generateImage()}>DallE, make me an image!</Button>
       </CardFooter>
 
       </Card>
@@ -165,4 +164,4 @@ import { Label } from "@/components/ui/label"
   
   }
   
-  export default YoutubeCard ;
+  export default ImageCard ;

@@ -60,8 +60,8 @@ import { Label } from "@/components/ui/label"
       <Card>
 
       <CardHeader>
-        <CardTitle>Create project</CardTitle>
-        <CardDescription>Deploy your new project in one-click.</CardDescription>
+        <CardTitle>Add a video</CardTitle>
+        <CardDescription>You can embed videos in your document</CardDescription>
       </CardHeader>
 
       <CardContent>

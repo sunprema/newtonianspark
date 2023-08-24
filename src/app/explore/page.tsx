@@ -7,39 +7,10 @@ import { useSearchParams } from 'next/navigation'
 import axios from 'axios';
 
 import { ScrollArea } from "@/components/ui/scroll-area"
-import ReactFlow, {
-    Node,
-    addEdge,
-    Background,
-    MiniMap,
-    Controls,
+import {
+    Node,   
     Edge,
-    Connection,
-    useNodesState,
-    useEdgesState
   } from "reactflow";
-
-  const sampleNodes: Node[] = [
-    {
-      id: "4",
-      type: "tableNode",
-      data: { label: "Custom Node", topic: "Laws of Thermodynamics", summary: "This is the summary" },
-      position: { x: 400, y: 200 }
-    },
-    {
-      id: "5",
-      type: "tableNode",
-      data: { label: "Custom Node", topic: "Laws of Thermodynamics", summary: "This is the summary" },
-      position: { x: 500, y: 200 }
-    }
-  ];
-  
-  const sampleEdges: Edge[] = [
-    { id: "e4-5", source: "4", target: "5", animated: true },    
-  ];
-  
-  
-
 
 const Page =() => {
     const searchParams = useSearchParams()
@@ -70,23 +41,12 @@ const Page =() => {
       return <h1> Error : {error} </h1>
     }
     
-
-    /*
-    useEffect(() => {
-
-      setInitialNodes(sampleNodes)
-      setInitialEdges(sampleEdges)
-      setError(null)
-
-    },[topic])
-    */
-
     return (
     <section>
       <ScrollArea >
         <div className="h-[calc(100vh-80px)] w-full">
           {
-            initialNodes && <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={""} initialSummary={""} flowKey={""} flowId={null}/>
+            initialNodes && <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={""} initialSummary={""} flowKey={""}/>
           }
           
         </div>

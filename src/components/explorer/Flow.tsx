@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import ReactFlow, {
     ReactFlowProvider,
     Node,
@@ -12,7 +12,8 @@ import ReactFlow, {
     useReactFlow,    
     useNodesState,
     useEdgesState,
-    ReactFlowInstance
+    ReactFlowInstance,
+    XYPosition
   } from "reactflow";
 import "reactflow/dist/style.css";
 import ExplorerNode from "./ExplorerNode";
@@ -34,9 +35,11 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { UUID } from "crypto";
+import { v4 } from 'uuid';
 import SideSheet from "./SideSheet";
 import ButtonEdge from "./ButtonEdge";
+import YoutubeCard from "./YoutubeCard";
+import AddNode from "./AddNode";
 
 
 
@@ -44,6 +47,7 @@ import ButtonEdge from "./ButtonEdge";
   const nodeTypes = {
     explorer: ExplorerNode,
     tableNode : TableNode,
+    youtube: YoutubeCard,
   };
 
   const edgeTypes = {
@@ -52,17 +56,17 @@ import ButtonEdge from "./ButtonEdge";
   
 
   const BasicFlow = ( 
-    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey, flowId}: 
+    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey}: 
     {initialNodes:Node[], 
      initialEdges:Edge[],
      initialTitle:(string|null), 
      initialSummary:(string|null), 
-     flowKey:(string|null),
-     flowId:(UUID|null)
+     flowKey:(string|null),     
 
     }
     ) => {
-    const [nodes,, onNodesChange] = useNodesState(initialNodes);
+    const reactFlowWrapper = useRef<HTMLInputElement>(null);  
+    const [nodes,setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null >(null);
     const [key, setKey] = useState<string|null>(flowKey);
@@ -74,6 +78,46 @@ import ButtonEdge from "./ButtonEdge";
       (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
       [setEdges]
     );
+
+    const onDrop = useCallback(
+      (event:React.DragEvent) => {
+        event.preventDefault();
+  
+        const reactFlowBounds= reactFlowWrapper?.current?.getBoundingClientRect() ?? null;
+        const type = event.dataTransfer?.getData('application/reactflow');
+  
+        // check if the dropped element is valid
+        if (typeof type === 'undefined' || !type) {
+          return;
+        }
+        let position:XYPosition = {x : event.clientX, y: event.clientY}
+
+        if(reactFlowBounds!=null && rfInstance !== null){
+          position = rfInstance?.project({
+            x: event.clientX - reactFlowBounds?.left ?? 0,
+            y: event.clientY - reactFlowBounds?.top ?? 0,
+          });
+        }
+        
+
+        const newNode:Node = {
+          id: v4(),
+          type: 'youtube',
+          position,
+          data: { mode : 'input'},
+        };
+  
+        setNodes((nds) => nds.concat(newNode));
+      },
+      [rfInstance, setNodes]
+    );
+
+    const onDragOver = useCallback((event:React.DragEvent) => {
+      event.preventDefault();
+      if( event.dataTransfer != null){
+        event.dataTransfer.dropEffect = "move"
+      } 
+    }, []);
       
     //TODO: Refactor this, I dont think we need a new function when rfInstance, or key or toast changes each time.
     const onSave = useCallback(async ()=> {
@@ -120,7 +164,9 @@ import ButtonEdge from "./ButtonEdge";
     },[rfInstance,key, toast, title, summary]) 
 
     return (
+      
       <ReactFlowProvider>
+      <div ref={reactFlowWrapper} className="h-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -131,7 +177,10 @@ import ButtonEdge from "./ButtonEdge";
         edgeTypes={edgeTypes}
         onInit={setRfInstance}
         onlyRenderVisibleElements
-        fitView        
+        onDrop={onDrop}
+        onDragOver={onDragOver}        
+        fitView
+                
       > 
         <Controls style={{
                             display: 'flex',
@@ -144,7 +193,7 @@ import ButtonEdge from "./ButtonEdge";
          >
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="link" className="h-8 px-1 rounded-none bg-white">
+              <Button variant="link" className="h-8 rounded-none bg-white px-1">
                 <SaveIcon size={14} className=" hover:stroke-green-500 dark:stroke-black"/>
               </Button>
             </DialogTrigger>
@@ -188,9 +237,15 @@ import ButtonEdge from "./ButtonEdge";
         <SideSheet />
         
       </ReactFlow>
-      
+      </div>
+      <AddNode />
       </ReactFlowProvider>
+      
     );
   };
   
   export default BasicFlow ;
+
+function uuidv4() {
+  throw new Error("Function not implemented.");
+}

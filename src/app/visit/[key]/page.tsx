@@ -35,7 +35,7 @@ const Page = async ({params}:{params:{'key': string}}) => {
             <section>
                 <ScrollArea >
                 <div className="h-[calc(100vh-80px)] w-full">
-                    <BasicFlow initialNodes={nodes} initialEdges={edges} initialTitle={title} initialSummary={summary} flowKey={key} flowId={id}/>
+                    <BasicFlow initialNodes={nodes} initialEdges={edges} initialTitle={title} initialSummary={summary} flowKey={key}/>
                 </div>
                 </ScrollArea>
             </section>

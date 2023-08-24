@@ -39,7 +39,7 @@ const Page = async() => {
                     
                     </CardHeader>
                     <CardContent>
-                        <h4 className="scroll-m-20 text-lg text-gray-800 font-semibold tracking-tight dark:text-gray-100">
+                        <h4 className="scroll-m-20 text-lg font-semibold tracking-tight text-gray-800 dark:text-gray-100">
                         {d.summary}
                         </h4>
                     </CardContent>

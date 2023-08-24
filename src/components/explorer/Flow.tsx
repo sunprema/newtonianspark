@@ -56,13 +56,12 @@ import AddNode from "./AddNode";
   
 
   const BasicFlow = ( 
-    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey, flowId}: 
+    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey}: 
     {initialNodes:Node[], 
      initialEdges:Edge[],
      initialTitle:(string|null), 
      initialSummary:(string|null), 
-     flowKey:(string|null),
-     flowId:null
+     flowKey:(string|null),     
 
     }
     ) => {
@@ -105,7 +104,7 @@ import AddNode from "./AddNode";
           id: v4(),
           type: 'youtube',
           position,
-          data: { label: `${type} node` },
+          data: { mode : 'input'},
         };
   
         setNodes((nds) => nds.concat(newNode));
@@ -117,9 +116,7 @@ import AddNode from "./AddNode";
       event.preventDefault();
       if( event.dataTransfer != null){
         event.dataTransfer.dropEffect = "move"
-      }
-      
-      
+      } 
     }, []);
       
     //TODO: Refactor this, I dont think we need a new function when rfInstance, or key or toast changes each time.

@@ -1,3 +1,5 @@
+'use client'
+
 import BasicFlow from "@/components/explorer/Flow"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { UUID } from "crypto";
@@ -23,7 +25,7 @@ const Page = () => {
     const initialNodes:Node[] = [
         {
         "id" : "1",
-        position: { x: 400, y: 200 },
+        position: { x: 100, y: 200 },
         "type" : "youtube", 
         "data" : {"title" : "Quantum Mechanics", "summary" : "Simplified explanation of Quantum Mechanics", "videoId" : "5hVmeOCJjOU"}
         }, 
@@ -48,7 +50,7 @@ const Page = () => {
                 initialTitle={"test"} 
                 initialSummary={"test_summary"} 
                 flowKey={"123"} 
-                flowId={null}/>
+                />
             </div>
             </ScrollArea>
         </section>

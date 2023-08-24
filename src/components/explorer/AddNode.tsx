@@ -43,7 +43,16 @@ const AddNode = () => {
                   </div>
                 </CardContent>
               </Card>
-              <Card draggable  className="rounded-none border-none p-4 shadow-none hover:bg-slate-300 dark:bg-inherit" onDragStart={(event) => onDragStart(event, 'youtube')}>
+              <Card draggable  className="rounded-none border-none p-4 shadow-none hover:bg-slate-300 dark:bg-inherit" onDragStart={(event) => onDragStart(event, 'image')}>
+                <CardContent className="flex items-center justify-between gap-4 align-middle">
+                <LineChart color="#d11515" />
+                  <div>
+                    <h6 className="scroll-m-20 text-xs font-semibold tracking-tight">Image</h6>
+                    <p className="mt-4 scroll-m-20 text-xs font-extralight tracking-tight" >Upload/Generate Image and add it to your document</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card draggable  className="rounded-none border-none p-4 shadow-none hover:bg-slate-300 dark:bg-inherit" onDragStart={(event) => onDragStart(event, 'chart')}>
                 <CardContent className="flex items-center justify-between gap-4 align-middle">
                 <LineChart color="#d11515" />
                   <div>

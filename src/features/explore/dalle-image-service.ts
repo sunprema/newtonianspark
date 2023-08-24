@@ -1,43 +1,51 @@
 
 import 'server-only'
+import axios from 'axios'
 
-import OpenAI from 'openai';
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_KEY,
+const headers ={
+  "content-type": "application/json",
+   Authorization:  "Bearer " + process.env.OPENAI_KEY,
+  }
+
+
+
+
+export const DallEImageService = async ( prompt:string, context:string | null) => {
     
-});
 
-export const ExploreTopic = async ( {explore, context}:
-    
-    { explore: string, context : object | null }) => {
-
-    console.log(context)    
-    const prompt = new ChatPromptTemplate({
-        promptMessages:[
-            SystemMessagePromptTemplate.fromTemplate("Help explore the topic provided in the following message"),
-            HumanMessagePromptTemplate.fromTemplate("{inputText}"),
-        ],
-        inputVariables:["inputText"]
-    });
-
-    const chain = createStructuredOutputChainFromZod(BasicExploreSchema, {
-        prompt,
-        llm: chatAI,
-      });
-    
-    let result = null
-    let error = null
-    try{
-        result = await chain.call({ inputText : explore})        
-        console.log(JSON.stringify(result, null, 2))
-        return {
-            result,
-            error : null
-        }
-    }catch(errorz){
-        error = errorz
+    const params = {
+        "prompt": prompt,
+        "n":1,
+        "size":"512x512",
+        "response_format" : "b64_json"
     }
-    return {result, error}
+
+    try{
+       const response = await fetch("https://api.openai.com/v1/images/generations",
+              {
+                body: JSON.stringify(params),
+                method: "POST",
+                headers : {
+                  "content-type": "application/json",
+                  "Authorization":  "Bearer " + process.env.OPENAI_KEY,
+                  }
+                  
+              }
+       )
+       if( response.ok) {
+        let data = await response.json()
+        const imageData = data[0]["b64_json"]
+        return imageData ;
+       }else{
+        console.log( response.status, response.statusText)
+        console.log(response)
+       }
+
+    }catch(errorz){
+       console.log(errorz)
+       throw errorz ;
+    }
+    
     
 }

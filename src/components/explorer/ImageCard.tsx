@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react'
+import React, {useCallback, useState} from 'react'
 
 import {
     Card,
@@ -18,40 +18,69 @@ import { Trash2 } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { Input } from '../ui/input';
 import { Label } from "@/components/ui/label"
+import  Axios from 'axios';
+import { useToast } from '../ui/use-toast';
+import { Textarea } from "@/components/ui/textarea"
+
   
 
 
-  const ImageCard = ( {nodeId}:{nodeId:string} )=> {
+  const ImageInputCard = ( {nodeId}:{nodeId:string} )=> {
 
     const [topic, setTopic] = useState("")
     const [summary, setSummary] = useState("")
     const [imageData, setImageData] = useState("")
-    const { setNodes } = useReactFlow();   
+    const [selectedFile, setSelectedFile] = useState<File>()
+    const [imageObtained, setImageObtained] = useState(false)
+
+    const { setNodes } = useReactFlow(); 
+    const {toast} = useToast()  
 
     const generateImage = async() => {
       
       //here we will first generate an image using DallE, and add the data to the node.
-      
-      
-      //Here we will use the node state and modify the nodes.
+      try{
+        const response = await Axios.post('/api/dallE', {"prompt": summary})
+        const imageData = response.data['imageData']
+        if( imageData !== null || imageData !== ""){
 
-      setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === nodeId) {
-          // it's important that you create a new object here
-          // in order to notify react flow about the change
-          node.data = {
-            topic,
-            summary,
-            imageData
+          setNodes((nds) =>
+          nds.map((node) => {
+            if (node.id === nodeId) {
+              // it's important that you create a new object here
+              // in order to notify react flow about the change
+              node.data = {
+                topic,
+                summary,
+                imageData
           };
         }
 
         return node;
       })
     ); 
+
+        }
+      }catch(error){
+        toast({
+          title: "Image generation failed, Please try again later",
+          variant: "destructive" ,
+          description: `error : ${error}`,
+        })
+      }
     
     }
+
+    const fileUploadHandler = (event:React.ChangeEvent<HTMLInputElement>) => {
+      if( event?.target?.files != null){
+        setSelectedFile(event.target.files[0])
+        setImageObtained(true)
+        toast({
+          title: 'TBD: Image will be uploaded here',
+          description : 'Image will be uplaoded and added to the node... Its to be implemented.'
+        })
+      }
+    } 
     
 
     return (
@@ -71,14 +100,13 @@ import { Label } from "@/components/ui/label"
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="summary">Image Summary</Label>
-              <Input id="summary" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)}/>              
+              <Textarea id="summary" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)}/>              
             </div>
-
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="videoId">Video URL/Id</Label>
-              <Input id="videoId" placeholder="Youtube Video URL or VideoId" value={videoId} onChange={(e) => setVideoId(e.target.value)} />              
+            <div>
+              <Label htmlFor="file_upload">Upload File</Label>
+              <Input type="file" id="file_upload" placeholder="Select image file" onChange={fileUploadHandler}/>  
             </div>
-          </div>        
+          </div>  
       </CardContent>
 
       <CardFooter className="flex justify-between">
@@ -94,27 +122,15 @@ import { Label } from "@/components/ui/label"
   }
 
 
-  const YoutubeCard = ({data, id}:{data:any, id:string}) => {
+  const ImageCard = ({data, id}:{data:any, id:string}) => {
 
     const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
-    const {topic, summary, videoId, mode} = data
-    const [ videoIsOpen, setVideoIsOpen] = useState(false)
+    const {topic, summary, imageData, mode} = data
     const [showToolbar, setShowToolbar] = useState(false)
-
-
     
-    
-    const getEmbedHtml = (videoId:string) => {
-      return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" 
-      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-      allowfullscreen></iframe>`
-    }
-
-    
-
     if( mode != null && mode === 'input'){
       return (
-        <YoutubeInputCard nodeId={id} />
+        <ImageInputCard nodeId={id} />
       )
 
     }
@@ -130,14 +146,11 @@ import { Label } from "@/components/ui/label"
         </CardHeader>
         
         <CardContent>
-          { !videoIsOpen &&   
-            <div className="nodrag" onClick={()=> setVideoIsOpen(true)}>            
-              <Image className="object-cover" src={`https://img.youtube.com/vi/${videoId}/0.jpg`} width={560} height={315} alt={"Youtuve video"} />
+          
+            <div className="nodrag">            
+              <Image className="object-cover" src={imageData} width={600} height={400} alt={"Image"} />
             </div>  
-          }
-           { videoIsOpen &&   
-            <div dangerouslySetInnerHTML={{__html : getEmbedHtml(videoId)}} />
-           }
+         
         </CardContent>
         
         <CardFooter className="flex justify-between">

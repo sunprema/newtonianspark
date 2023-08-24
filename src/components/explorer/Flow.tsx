@@ -40,6 +40,7 @@ import SideSheet from "./SideSheet";
 import ButtonEdge from "./ButtonEdge";
 import YoutubeCard from "./YoutubeCard";
 import AddNode from "./AddNode";
+import ImageCard from "./ImageCard";
 
 
 
@@ -48,6 +49,7 @@ import AddNode from "./AddNode";
     explorer: ExplorerNode,
     tableNode : TableNode,
     youtube: YoutubeCard,
+    image: ImageCard,
   };
 
   const edgeTypes = {
@@ -84,10 +86,10 @@ import AddNode from "./AddNode";
         event.preventDefault();
   
         const reactFlowBounds= reactFlowWrapper?.current?.getBoundingClientRect() ?? null;
-        const type = event.dataTransfer?.getData('application/reactflow');
+        const nodeType = event.dataTransfer?.getData('application/reactflow');
   
         // check if the dropped element is valid
-        if (typeof type === 'undefined' || !type) {
+        if (typeof nodeType === undefined || !nodeType) {
           return;
         }
         let position:XYPosition = {x : event.clientX, y: event.clientY}
@@ -102,7 +104,7 @@ import AddNode from "./AddNode";
 
         const newNode:Node = {
           id: v4(),
-          type: 'youtube',
+          type: nodeType,
           position,
           data: { mode : 'input'},
         };

@@ -17,5 +17,5 @@ export async function POST(request:NextRequest){
         console.log(error)
         return NextResponse.json( {error}, {status:400})
     }
-    
+
 }

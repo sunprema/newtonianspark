@@ -34,7 +34,7 @@ export const DallEImageService = async ( prompt:string, context:string | null) =
               }
        )
        if( response.ok) {
-        let data = await response.json()
+        const {data} = await response.json()
         const imageData = data[0]["b64_json"]
         return imageData ;
        }else{

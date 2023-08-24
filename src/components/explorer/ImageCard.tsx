@@ -148,7 +148,8 @@ import { Textarea } from "@/components/ui/textarea"
         <CardContent>
           
             <div className="nodrag">            
-              <Image className="object-cover" src={imageData} width={600} height={400} alt={"Image"} />
+              {/* eslint-disable-next-line @next/next/no-img-element */ }
+              <img className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={600} height={400} alt={"Image"} />
             </div>  
          
         </CardContent>

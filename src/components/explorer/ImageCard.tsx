@@ -125,7 +125,7 @@ import { Textarea } from "@/components/ui/textarea"
   const ImageCard = ({data, id}:{data:any, id:string}) => {
 
     const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
-    const {topic, summary, imageData, mode} = data
+    const {topic, summary, imageURL, mode} = data
     const [showToolbar, setShowToolbar] = useState(false)
     
     if( mode != null && mode === 'input'){
@@ -148,8 +148,8 @@ import { Textarea } from "@/components/ui/textarea"
         <CardContent>
           
             <div className="nodrag">            
-              {/* eslint-disable-next-line @next/next/no-img-element */ }
-              <img className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={600} height={400} alt={"Image"} />
+              <Image src={imageURL} width={600} height={400} alt={topic} />
+              {/* <img className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={600} height={400} alt={"Image"} /> */}
             </div>  
          
         </CardContent>

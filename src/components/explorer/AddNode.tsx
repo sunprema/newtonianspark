@@ -15,6 +15,12 @@ import { Card, CardContent } from "../ui/card"
 
 
 const AddNode = () => {
+
+  const onDragStart = (event:React.DragEvent, nodeType:string) => {
+    event.dataTransfer.setData('application/reactflow', nodeType);
+    event.dataTransfer.effectAllowed = 'move';
+  };
+
     return (
         <div className="absolute left-8 top-8">
           <Popover>
@@ -25,7 +31,7 @@ const AddNode = () => {
             </PopoverTrigger>
             <PopoverContent className="mx-8 shadow-2xl h-96 dark:bg-slate-700">
              <div>
-              <Card>
+              <Card draggable onDragStart={(event) => onDragStart(event, 'youtube')}>
                 <CardContent>
                   <h1>Youtube card</h1>
                 </CardContent>

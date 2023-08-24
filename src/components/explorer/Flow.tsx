@@ -12,7 +12,8 @@ import ReactFlow, {
     useReactFlow,    
     useNodesState,
     useEdgesState,
-    ReactFlowInstance
+    ReactFlowInstance,
+    XYPosition
   } from "reactflow";
 import "reactflow/dist/style.css";
 import ExplorerNode from "./ExplorerNode";
@@ -34,7 +35,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { UUID } from "crypto";
+import { v4 } from 'uuid';
 import SideSheet from "./SideSheet";
 import ButtonEdge from "./ButtonEdge";
 import YoutubeCard from "./YoutubeCard";
@@ -61,11 +62,11 @@ import AddNode from "./AddNode";
      initialTitle:(string|null), 
      initialSummary:(string|null), 
      flowKey:(string|null),
-     flowId:(UUID|null)
+     flowId:null
 
     }
     ) => {
-    const reactFlowWrapper = useRef(null);  
+    const reactFlowWrapper = useRef<HTMLInputElement>(null);  
     const [nodes,setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null >(null);
@@ -80,37 +81,45 @@ import AddNode from "./AddNode";
     );
 
     const onDrop = useCallback(
-      (event) => {
+      (event:React.DragEvent) => {
         event.preventDefault();
   
-        const reactFlowBounds = reactFlowWrapper?.current?.getBoundingClientRect();
-        const type = event.dataTransfer.getData('application/reactflow');
+        const reactFlowBounds= reactFlowWrapper?.current?.getBoundingClientRect() ?? null;
+        const type = event.dataTransfer?.getData('application/reactflow');
   
         // check if the dropped element is valid
         if (typeof type === 'undefined' || !type) {
           return;
         }
-  
-        const position = rfInstance?.project({
-          x: event.clientX - reactFlowBounds.left,
-          y: event.clientY - reactFlowBounds.top,
-        });
+        let position:XYPosition = {x : event.clientX, y: event.clientY}
 
-        const newNode = {
-          id: uuidv4(),
-          type,
+        if(reactFlowBounds!=null && rfInstance !== null){
+          position = rfInstance?.project({
+            x: event.clientX - reactFlowBounds?.left ?? 0,
+            y: event.clientY - reactFlowBounds?.top ?? 0,
+          });
+        }
+        
+
+        const newNode:Node = {
+          id: v4(),
+          type: 'youtube',
           position,
           data: { label: `${type} node` },
         };
   
-        setNodes((nds) => nds.concat(newNode as Node));
+        setNodes((nds) => nds.concat(newNode));
       },
       [rfInstance, setNodes]
     );
 
-    const onDragOver = useCallback((event) => {
+    const onDragOver = useCallback((event:React.DragEvent) => {
       event.preventDefault();
-      event.dataTransfer.dropEffect = 'move';
+      if( event.dataTransfer != null){
+        event.dataTransfer.dropEffect = "move"
+      }
+      
+      
     }, []);
       
     //TODO: Refactor this, I dont think we need a new function when rfInstance, or key or toast changes each time.
@@ -158,8 +167,9 @@ import AddNode from "./AddNode";
     },[rfInstance,key, toast, title, summary]) 
 
     return (
-      <div ref={reactFlowWrapper}>
+      
       <ReactFlowProvider>
+      <div ref={reactFlowWrapper} className="h-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -172,7 +182,8 @@ import AddNode from "./AddNode";
         onlyRenderVisibleElements
         onDrop={onDrop}
         onDragOver={onDragOver}        
-        fitView        
+        fitView
+                
       > 
         <Controls style={{
                             display: 'flex',
@@ -229,9 +240,10 @@ import AddNode from "./AddNode";
         <SideSheet />
         
       </ReactFlow>
+      </div>
       <AddNode />
       </ReactFlowProvider>
-      </div>
+      
     );
   };
   

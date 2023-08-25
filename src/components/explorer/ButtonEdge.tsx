@@ -42,8 +42,10 @@ export default function ButtonEdge({
           }}
           className="nodrag nopan"
         >
+          {/*
           <Button size="icon" className="h-8 w-8 cursor-pointer rounded-full bg-slate-200 text-sm text-black hover:text-white  dark:bg-slate-400" onClick={(event) => onEdgeClick(event, id)}>x</Button>          
-        </div>
+        */}
+          </div>
       </EdgeLabelRenderer>
     </>
   );

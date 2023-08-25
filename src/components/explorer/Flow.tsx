@@ -9,7 +9,9 @@ import ReactFlow, {
     Controls,
     Edge,
     Connection,
-    useReactFlow,    
+    getIncomers,
+    getOutgoers,
+    getConnectedEdges,    
     useNodesState,
     useEdgesState,
     ReactFlowInstance,
@@ -79,6 +81,27 @@ import ImageCard from "./ImageCard";
     const onConnect = useCallback(
       (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
       [setEdges]
+    );
+
+    const onNodesDelete = useCallback(
+      (deleted:Node[]) => {
+        setEdges(
+          deleted.reduce((acc, node) => {
+            const incomers = getIncomers(node, nodes, edges);
+            const outgoers = getOutgoers(node, nodes, edges);
+            const connectedEdges = getConnectedEdges([node], edges);
+  
+            const remainingEdges = acc.filter((edge) => !connectedEdges.includes(edge));
+  
+            const createdEdges = incomers.flatMap(({ id: source }) =>
+              outgoers.map(({ id: target }) => ({ id: `${source}->${target}`, source, target }))
+            );
+  
+            return [...remainingEdges, ...createdEdges];
+          }, edges)
+        );
+      },
+      [nodes, edges]
     );
 
     const onDrop = useCallback(
@@ -174,6 +197,7 @@ import ImageCard from "./ImageCard";
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        onNodesDelete={onNodesDelete}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}

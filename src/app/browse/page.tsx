@@ -23,7 +23,7 @@ const Page = async() => {
     }
 
     return (
-        <div className="flex min-h-screen flex-wrap items-center gap-8 bg-slate-50 p-24 dark:bg-slate-600">
+        <div className="flex min-h-screen flex-wrap justify-center items-center gap-8 bg-slate-50 p-24 dark:bg-slate-600">
             {
             data?.map( (d)=> {
                 return (

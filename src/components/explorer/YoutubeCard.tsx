@@ -100,31 +100,23 @@ import { Label } from "@/components/ui/label"
     const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
     const {topic, summary, videoId, mode} = data
     const [ videoIsOpen, setVideoIsOpen] = useState(false)
-    const [showToolbar, setShowToolbar] = useState(false)
-
-
-    
     
     const getEmbedHtml = (videoId:string) => {
       return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" 
       frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
       allowfullscreen></iframe>`
     }
-
     
-
     if( mode != null && mode === 'input'){
       return (
         <YoutubeInputCard nodeId={id} />
       )
-
     }
-     
-    
+
     return (
       <div>
         
-      <Card className= "shadow-2xl dark:bg-slate-700" onClick={() => setShowToolbar( () => !showToolbar)}>
+      <Card className= "shadow-2xl dark:bg-slate-700">
         <CardHeader>
           <CardTitle>{topic}</CardTitle>
           <CardDescription>{summary}</CardDescription>
@@ -152,17 +144,8 @@ import { Label } from "@/components/ui/label"
       <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
       <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
       <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />
-
-      <NodeToolbar isVisible={showToolbar} position={Position.Right} className='bg-muted-foreground flex flex-col  space-y-2 border p-1 shadow-lg'>
-           <Button size="icon" className='h-[4] w-[4]'><Trash2 strokeWidth={0.5} /></Button>
-           <Separator />
-           <Button size="icon" className='h-[4] w-[4]'><Trash2 strokeWidth={0.5} /></Button>
-      </NodeToolbar>    
       
       </div>
     )
-  
-  
   }
-  
   export default YoutubeCard ;

@@ -124,9 +124,48 @@ import { Textarea } from "@/components/ui/textarea"
   const ImageBase64Card = ( {nodeId, data}:{nodeId:string, data:any} )=> {
     
     const {topic, summary, imageData, mode} = data
+    const { setNodes } = useReactFlow(); 
+    const {toast} = useToast()
     
-    const convertImageToFileAndStore = () => {
+    const convertImageToFileAndStore = async() => {
       alert("Image will be stored here.")
+      //use axios post to post the image data, pass the nodeId. NodeId will be used as the file Name
+      //that way, when we delete the node, the associated file can be deleted as well.
+      try{
+      const response = await Axios.post('/api/imageStorage', {nodeId, 'b64_json':imageData})
+      const imageURL = response.data['imageURL']
+      if(imageURL != null && imageURL !== ""){
+
+        setNodes((nds) =>
+          nds.map((node) => {
+            if (node.id === nodeId) {
+              // it's important that you create a new object here
+              // in order to notify react flow about the change
+              node.data = {
+                topic,
+                summary,
+                "imageURL": imageURL ,
+                mode:'display'
+          };
+        }
+        return node;
+        })
+        ); 
+      }else{
+        toast({
+          title: "Image storage failed, Please try again later",
+          variant: "destructive" ,
+          description: "public URL couldnt be obtained",
+        })
+      }
+      }catch(error){
+        toast({
+          title: "Image storage failed, Please try again later",
+          variant: "destructive" ,
+          description: `error : ${error}`,
+        })
+      }
+
     }
 
     return (
@@ -181,12 +220,9 @@ import { Textarea } from "@/components/ui/textarea"
         </CardHeader>
         
         <CardContent>
-          
-            <div className="nodrag">            
-              <Image src={imageURL} width={600} height={400} alt={topic} />
-              {/* <img className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={600} height={400} alt={"Image"} /> */}
-            </div>  
-         
+            <div className="nodrag container w-[full] mx-auto">            
+              <Image src={imageURL} width={500} height={400} alt={topic} />
+            </div>
         </CardContent>
         
         <CardFooter className="flex justify-between">

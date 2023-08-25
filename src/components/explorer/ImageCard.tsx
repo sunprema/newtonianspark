@@ -52,7 +52,8 @@ import { Textarea } from "@/components/ui/textarea"
               node.data = {
                 topic,
                 summary,
-                imageData
+                imageData,
+                mode:'base64'
           };
         }
 
@@ -84,8 +85,8 @@ import { Textarea } from "@/components/ui/textarea"
     
 
     return (
-    <div className="h-[500px] w-[500px] shadow-2xl dark:bg-slate-700">
-      <Card>
+    
+      <Card className="w-[500px] shadow-2xl dark:bg-slate-700">
 
       <CardHeader>
         <CardTitle>Add a image</CardTitle>
@@ -100,7 +101,7 @@ import { Textarea } from "@/components/ui/textarea"
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="summary">Image Summary</Label>
-              <Textarea id="summary" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)}/>              
+              <Textarea id="summary" className="nodrag nopan" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)} />              
             </div>
             <div>
               <Label htmlFor="file_upload">Upload File</Label>
@@ -115,27 +116,61 @@ import { Textarea } from "@/components/ui/textarea"
       </CardFooter>
 
       </Card>
-    </div>
-
+      
     )
 
   }
 
+  const ImageBase64Card = ( {nodeId, data}:{nodeId:string, data:any} )=> {
+    
+    const {topic, summary, imageData, mode} = data
+    
+    const convertImageToFileAndStore = () => {
+      alert("Image will be stored here.")
+    }
 
-  const ImageCard = ({data, id}:{data:any, id:string}) => {
+    return (
+    
+      <Card className="w-[500px] shadow-2xl dark:bg-slate-700">
 
+      <CardHeader>
+        <CardTitle>Accept the image</CardTitle>
+        <CardDescription>This will store the image and add a URL to the node</CardDescription>
+      </CardHeader>
+
+      <CardContent>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="title">Title</Label>
+              <Input disabled id="title" value={topic} />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="summary">Image Summary</Label>
+              <Textarea disabled id="summary" className="nodrag nopan" value={summary}/>              
+            </div>
+            <div className="nodrag">            
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={500} height={400} alt={"Image"} />
+            </div> 
+            
+          </div>  
+      </CardContent>
+
+      <CardFooter className="flex justify-between">
+        <Button variant="outline">Cancel</Button>
+        <Button onClick={ ()=> convertImageToFileAndStore()}>Accept the image!</Button>
+      </CardFooter>
+
+      </Card>
+      
+    )
+
+  }
+
+  const ImageDisplayCard = ( {nodeId, data}:{nodeId:string, data:any} ) => {
     const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
     const {topic, summary, imageURL, mode} = data
     const [showToolbar, setShowToolbar] = useState(false)
-    
-    if( mode != null && mode === 'input'){
-      return (
-        <ImageInputCard nodeId={id} />
-      )
-
-    }
-     
-    
     return (
       <div>
         
@@ -174,8 +209,35 @@ import { Textarea } from "@/components/ui/textarea"
       
       </div>
     )
-  
-  
+
+  }
+
+
+  const ImageCard = ({data, id}:{data:any, id:string}) => {
+
+    const {mode} = data
+
+    let imageCard = null
+    
+    if( mode != null){
+      
+      switch(mode){
+        case "input":
+          imageCard = <ImageInputCard nodeId={id} />
+          break
+        case "base64":
+          imageCard = <ImageBase64Card nodeId={id} data={data}/>
+          break
+        case "display":
+          imageCard = <ImageDisplayCard nodeId={id} data={data} />
+          break  
+          
+      }
+
+    }
+
+    return imageCard;
+    
   }
   
   export default ImageCard ;

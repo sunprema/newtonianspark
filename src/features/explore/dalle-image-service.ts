@@ -1,17 +1,7 @@
 
 import 'server-only'
-import axios from 'axios'
 
-
-const headers ={
-  "content-type": "application/json",
-   Authorization:  "Bearer " + process.env.OPENAI_KEY,
-  }
-
-
-
-
-export const DallEImageService = async ( prompt:string, context:string | null) => {
+export const DallEImageService = async ( prompt:string ) => {
     
 
     const params = {

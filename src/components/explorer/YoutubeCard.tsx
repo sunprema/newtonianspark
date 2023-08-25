@@ -71,7 +71,7 @@ import { Label } from "@/components/ui/label"
               <Input id="title" placeholder="Title for this video" value={topic} onChange={(e) => setTopic(e.target.value)}/>
             </div>
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="framework">Summary</Label>
+              <Label htmlFor="summary">Summary</Label>
               <Input id="summary" placeholder="Summary" value={summary} onChange={(e) => setSummary(e.target.value)}/>              
             </div>
 

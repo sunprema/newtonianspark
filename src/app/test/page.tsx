@@ -35,9 +35,14 @@ const Page = () => {
             position: { x: 800, y: 200 },
             "type" : "youtube", 
             "data" : {"title" : "Attention is all you need", "summary" : "Attention is all you need", "videoId" : "XowwKOAWYoQ"}
-            }, 
+        },
+        {
+            "id" : "3",
+            position: { x: 1400, y: 200 },
+            "type" : "image", 
+            "data" : {"title" : "Attention is all you need", "summary" : "Attention is all you need", "imageURL" : "https://ahigyyftekmsrekybozx.supabase.co/storage/v1/object/public/explore_images/quantum.png?t=2023-08-24T21%3A36%3A34.195Z"}
+        }
     ]
-
     const edges:Edge[] = []
     
   return (

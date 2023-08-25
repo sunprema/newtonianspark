@@ -23,15 +23,17 @@ const Page = async() => {
     }
 
     return (
-        <div className="flex min-h-screen flex-wrap justify-center items-center gap-8 bg-slate-50 p-24 dark:bg-slate-600">
+        <section className="min-h-screen  dark:bg-slate-600">
+        <h3 className="border-b p-8 mb-8 text-2xl font-bold">Articles</h3>   
+        <div className="flex flex-wrap justify-center items-center gap-8 ">
             {
             data?.map( (d)=> {
                 return (
                 <Link key={d.flowKey} href={`/visit/${d.flowKey}`}>    
-                <Card className="h-[300px] w-[300px] rounded-none bg-slate-100 shadow-lg hover:border-orange-500  dark:bg-slate-700 dark:shadow-lg dark:hover:border-orange-500" >
+                <Card className="group h-[300px] w-[300px] rounded-none bg-slate-100 shadow-2xl hover:border-orange-500  dark:bg-slate-700 dark:shadow-lg dark:hover:border-orange-500" >
                     <CardHeader className="border-b border-solid border-slate-400">
                     <CardTitle >
-                    <h3 className="text-md scroll-m-20 font-bold tracking-tight ">
+                    <h3 className="text-md scroll-m-20 font-bold tracking-tight group-hover:text-orange-500 ">
                         {d.title}
                     </h3>
                     </CardTitle>                    
@@ -47,6 +49,7 @@ const Page = async() => {
             })
             } 
         </div>
+        </section>
     )
     
 }

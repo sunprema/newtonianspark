@@ -33,7 +33,7 @@ const AddNode = () => {
               <Plus />
             </Button>
             </PopoverTrigger>
-            <PopoverContent className="mx-8 shadow-2xl dark:bg-slate-700">
+            <PopoverContent className="mx-8 shadow-2xl border-orange-500 dark:border-orange-500 dark:bg-slate-700">
              <div className="flex flex-col space-y-4 box-border hover:cursor-grab active:cursor-grabbing">
               <Card draggable className="h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'youtube')}>
                 <CardContent className="flex items-center justify-between gap-4 align-middle">

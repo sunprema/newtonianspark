@@ -29,7 +29,6 @@ import { Textarea } from "@/components/ui/textarea"
 
     const [topic, setTopic] = useState("")
     const [summary, setSummary] = useState("")
-    const [imageData, setImageData] = useState("")
     const [selectedFile, setSelectedFile] = useState<File>()
     const [imageObtained, setImageObtained] = useState(false)
 
@@ -209,11 +208,10 @@ import { Textarea } from "@/components/ui/textarea"
   const ImageDisplayCard = ( {nodeId, data}:{nodeId:string, data:any} ) => {
     const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
     const {topic, summary, imageURL, mode} = data
-    const [showToolbar, setShowToolbar] = useState(false)
     return (
       <div>
         
-      <Card className= "shadow-2xl dark:bg-slate-700" onClick={() => setShowToolbar( () => !showToolbar)}>
+      <Card className= "shadow-2xl dark:bg-slate-700">
         <CardHeader>
           <CardTitle>{topic}</CardTitle>
           <CardDescription>{summary}</CardDescription>
@@ -236,13 +234,6 @@ import { Textarea } from "@/components/ui/textarea"
       <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
       <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
       <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />
-
-      <NodeToolbar isVisible={showToolbar} position={Position.Right} className='bg-muted-foreground flex flex-col  space-y-2 border p-1 shadow-lg'>
-           <Button size="icon" className='h-[4] w-[4]'><Trash2 strokeWidth={0.5} /></Button>
-           <Separator />
-           <Button size="icon" className='h-[4] w-[4]'><Trash2 strokeWidth={0.5} /></Button>
-      </NodeToolbar>    
-      
       </div>
     )
 

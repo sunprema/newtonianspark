@@ -190,7 +190,7 @@ import { Textarea } from "@/components/ui/textarea"
         </CardContent>
         
         <CardFooter className="flex justify-between">
-        <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id) }>explore more</Button>
+        <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(nodeId) }>explore more</Button>
         <Link href="/visit/cYHR0KnX6My0PZ30ciom3" target="_blank">
             <Button variant="link" >Go to</Button>
         </Link>

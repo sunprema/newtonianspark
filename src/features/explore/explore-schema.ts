@@ -1,7 +1,7 @@
 import {z} from "zod";
 
 export const BasicExploreSchema = z.object({
-    title: z.string().describe("The title of the AI response under 100 characters"),
+    title: z.string().describe("The title of the AI response under 200 characters"),
     summary: z.string().describe("The summary of the AI response under 500 characters"),
     topics:z
     .array(
@@ -11,8 +11,8 @@ export const BasicExploreSchema = z.object({
             questions: z
             .array(
                 z.object({
-                question: z.string().describe("Question that can be asked on the topic under 200 characters"),
-                answer:z.string().describe("Answer for the question"),            
+                question: z.string().describe("In order to understand related topics deeply, what questions can be asked. Question should be under 200 characters"),
+                answer:z.string().describe("Answer for the question under 500 characters"),            
                 })
             ).describe("Questions to explore on this content")
         })

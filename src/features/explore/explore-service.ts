@@ -16,7 +16,7 @@ const chatAI = new ChatOpenAI({
     maxRetries :2 ,
     maxConcurrency : 5,
     modelName: "gpt-3.5-turbo-0613", 
-    temperature: 0
+    temperature: 0.5
 });
 
 export const ExploreTopic = async ( {explore, context}:

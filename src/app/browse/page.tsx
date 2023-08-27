@@ -29,7 +29,7 @@ const Page = async() => {
             {
             data?.map( (d)=> {
                 return (
-                <Link key={d.flowKey} href={`/visit/${d.flowKey}`}>    
+                <Link key={d.flowKey} href={`/read/${d.flowKey}`}>    
                 <Card className="group h-[300px] w-[300px] rounded-none bg-slate-100 shadow-2xl hover:border-orange-500  dark:bg-slate-700 dark:shadow-lg dark:hover:border-orange-500" >
                     <CardHeader className="border-b border-solid border-slate-400">
                     <CardTitle >

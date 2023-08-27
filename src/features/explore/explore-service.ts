@@ -16,7 +16,7 @@ const chatAI = new ChatOpenAI({
     maxRetries :2 ,
     maxConcurrency : 5,
     modelName: "gpt-3.5-turbo-0613", 
-    temperature: 0
+    temperature: 0.5
 });
 
 export const ExploreTopic = async ( {explore, context}:
@@ -26,7 +26,7 @@ export const ExploreTopic = async ( {explore, context}:
     console.log(context)    
     const prompt = new ChatPromptTemplate({
         promptMessages:[
-            SystemMessagePromptTemplate.fromTemplate("Help explore the topic provided in the following message"),
+            SystemMessagePromptTemplate.fromTemplate("You are an expert and will help explore the topic provided in the following message. You will suggest more questions and answers that Users will be interested to deeply understand the topic."),
             HumanMessagePromptTemplate.fromTemplate("{inputText}"),
         ],
         inputVariables:["inputText"]

@@ -10,9 +10,8 @@ import {
 } from "@/components/ui/popover"
 
 import { Button } from "../ui/button"
-import { Plus } from "lucide-react"
 import { Card, CardContent } from "../ui/card"
-import { Youtube, LineChart, Image as Img } from "lucide-react"
+import { Youtube, LineChart, Image as Img, FunctionSquare, Plus, Database } from "lucide-react"
 
 
 
@@ -33,36 +32,56 @@ const AddNode = () => {
               <Plus />
             </Button>
             </PopoverTrigger>
-            <PopoverContent className="mx-8 shadow-2xl border-orange-500 dark:border-orange-500 dark:bg-slate-700">
-             <div className="flex flex-col space-y-4 box-border hover:cursor-grab active:cursor-grabbing">
-              <Card draggable className="h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'youtube')}>
+            <PopoverContent className="mx-8 border-orange-500 shadow-2xl dark:border-orange-500 dark:bg-slate-700">
+             <div className="box-border flex flex-col space-y-4 hover:cursor-grab active:cursor-grabbing">
+              <Card draggable className="group h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'youtube')}>
                 <CardContent className="flex items-center justify-between gap-4 align-middle">
-                  <Youtube color="#d11515" size={56}/>
+                  <Youtube color="#F97316" size={56}/>
                   <div>
-                    <h6 className="scroll-m-20 text-xs font-semibold tracking-tight">Video</h6>
-                    <p className="mt-4 scroll-m-20 text-xs font-extralight tracking-tight" >Use this to embed Youtube videos in your document</p>
+                    <h6 className="scroll-m-20 text-xs font-bold tracking-tight group-hover:text-orange-500 group-hover:dark:text-orange-500">Video</h6>
+                    <p className="mt-4 scroll-m-20 text-xs font-light tracking-tight" >Use this to embed Youtube videos in your document</p>
                   </div>
                 </CardContent>
               </Card>
-              <Card draggable className="h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'image')}>
+              <Card draggable className="group h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'image')}>
                 <CardContent className="flex items-center justify-between gap-4 align-middle">
-                <Img color="#d11515" size={56}/>
+                <Img color="#F97316" size={56}/>
                   <div>
-                    <h6 className="scroll-m-20 text-xs font-semibold tracking-tight">Image</h6>
-                    <p className="mt-4 scroll-m-20 text-xs font-extralight tracking-tight" >Upload/Generate Image and add it to your document</p>
+                    <h6 className="scroll-m-20 text-xs font-bold tracking-tight  group-hover:text-orange-500 group-hover:dark:text-orange-500" >Image</h6>
+                    <p className="mt-4 scroll-m-20 text-xs font-light tracking-tight" >Upload/Generate Image and add it to your document</p>
                   </div>
                 </CardContent>
               </Card>
-              <Card draggable  className="h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'chart')}>
+              <Card draggable  className="group h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'chart')}>
                 <CardContent className="flex items-center justify-between gap-4 align-middle">
-                <LineChart color="#d11515" size={56} />
+                <LineChart color="#F97316" size={36} />
                   <div>
-                    <h6 className="scroll-m-20 text-xs font-semibold tracking-tight">Chart</h6>
-                    <p className="mt-4 scroll-m-20 text-xs font-extralight tracking-tight" >Add chart to your document</p>
+                    <h6 className="scroll-m-20 text-xs font-bold tracking-tight  group-hover:text-orange-500 group-hover:dark:text-orange-500 ">Chart</h6>
+                    <p className="mt-4 scroll-m-20 text-xs font-light tracking-tight" >Add chart to your document</p>
                   </div>
                 </CardContent>
               </Card>
-              
+
+              <Card draggable  className="group h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'flow_chart')}>
+                <CardContent className="flex items-center justify-between gap-4 align-middle">
+                <FunctionSquare color="#F97316" size={56} />
+                  <div>
+                    <h6 className="scroll-m-20 text-xs font-bold tracking-tight  group-hover:text-orange-500 group-hover:dark:text-orange-500">Flow Chart</h6>
+                    <p className="mt-4 scroll-m-20 text-xs font-light tracking-tight" >Add a Flow chart to document your process</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card draggable  className="group h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'database_design')}>
+                <CardContent className="flex items-center justify-between gap-4 align-middle">
+                <Database color="#F97316" size={36} />
+                  <div>
+                    <h6 className="scroll-m-20 text-xs font-bold tracking-tight  group-hover:text-orange-500 group-hover:dark:text-orange-500">ER Diagram</h6>
+                    <p className="mt-4 scroll-m-20 text-xs font-light tracking-tight" >Work on your database design</p>
+                  </div>
+                </CardContent>
+              </Card>
+
              </div>
             </PopoverContent>
           </Popover>

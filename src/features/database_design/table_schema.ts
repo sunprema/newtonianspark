@@ -1,58 +1,5 @@
 import { z } from 'zod';
 
-interface Columns {
-    name:string, 
-    type:
-  | 'integer'
-  | 'bigint'
-  | 'decimal'
-  | 'numeric'
-  | 'real'
-  | 'double precision'
-  | 'smallserial'
-  | 'serial'
-  | 'bigserial'
-  | 'character'
-  | 'varchar'
-  | 'text'
-  | 'bytea'
-  | 'date'
-  | 'time'
-  | 'timestamp'
-  | 'timestamp with time zone'
-  | 'interval'
-  | 'boolean'
-  | 'enum'
-  | 'point'
-  | 'line'
-  | 'lseg'
-  | 'box'
-  | 'path'
-  | 'polygon'
-  | 'circle'
-  | 'inet'
-  | 'cidr'
-  | 'macaddr'
-  | 'macaddr8'
-  | 'bit'
-  | 'bit varying'
-  | 'tsvector'
-  | 'tsquery'
-  | 'uuid'
-  | 'json'
-  | 'jsonb'
-  | 'array'
-  | 'int4range'
-  | 'int8range'
-  | 'numrange'
-  | 'tsrange'
-  | 'tstzrange'
-  | 'daterange'
-  | 'any'
-  | 'anyelement'
-  | 'void';
-
- } 
 
 const ColumnSchema = z.object({
   name: z.string(),

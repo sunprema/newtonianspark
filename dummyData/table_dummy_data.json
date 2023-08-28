@@ -1,0 +1,47 @@
+[{
+    "table_name": "signup",
+    "columns": [
+      {
+        "name": "id",
+        "type": "serial",
+        "primary_key": true
+      },
+      {
+        "name": "username",
+        "type": "varchar",
+        "length": 50
+      },
+      {
+        "name": "email",
+        "type": "varchar",
+        "length": 100
+      },
+      {
+        "name": "password",
+        "type": "text"
+      },
+      {
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "default": "now()"
+      }
+    ],
+    "indexes": [
+      {
+        "name": "idx_username",
+        "columns": ["username"]
+      },
+      {
+        "name": "idx_email",
+        "columns": ["email"]
+      }
+    ],
+    "constraints": [
+      {
+        "name": "chk_valid_email",
+        "check": "email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$'"
+      }
+    ]
+  }
+]
+  

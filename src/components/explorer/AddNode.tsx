@@ -12,7 +12,7 @@ import {
 import { Button } from "../ui/button"
 import { Card, CardContent } from "../ui/card"
 import { Youtube, LineChart, Image as Img, FunctionSquare, Plus, Database } from "lucide-react"
-
+import {memo} from 'react'
 
 
 
@@ -76,7 +76,7 @@ const AddNode = () => {
                 <CardContent className="flex items-center justify-between gap-4 align-middle">
                 <Database color="#F97316" size={36} />
                   <div>
-                    <h6 className="scroll-m-20 text-xs font-bold tracking-tight  group-hover:text-orange-500 group-hover:dark:text-orange-500">ER Diagram</h6>
+                    <h6 className="scroll-m-20 text-xs font-bold tracking-tight  group-hover:text-orange-500 group-hover:dark:text-orange-500">Database design</h6>
                     <p className="mt-4 scroll-m-20 text-xs font-light tracking-tight" >Work on your database design</p>
                   </div>
                 </CardContent>
@@ -90,4 +90,4 @@ const AddNode = () => {
     )
 }
 
-export default AddNode
+export default memo(AddNode);

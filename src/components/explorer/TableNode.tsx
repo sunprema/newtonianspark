@@ -23,68 +23,69 @@ import {
     TableRow,
   } from "@/components/ui/table"
   
-  const tableData = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ]
+  
  
- interface Invoice {
-    invoice:string, paymentStatus:string, totalAmount:string, paymentMethod:string
+ interface Columns {
+    name:string, 
+    type:
+  | 'integer'
+  | 'bigint'
+  | 'decimal'
+  | 'numeric'
+  | 'real'
+  | 'double precision'
+  | 'smallserial'
+  | 'serial'
+  | 'bigserial'
+  | 'character'
+  | 'varchar'
+  | 'text'
+  | 'bytea'
+  | 'date'
+  | 'time'
+  | 'timestamp'
+  | 'timestamp with time zone'
+  | 'interval'
+  | 'boolean'
+  | 'enum'
+  | 'point'
+  | 'line'
+  | 'lseg'
+  | 'box'
+  | 'path'
+  | 'polygon'
+  | 'circle'
+  | 'inet'
+  | 'cidr'
+  | 'macaddr'
+  | 'macaddr8'
+  | 'bit'
+  | 'bit varying'
+  | 'tsvector'
+  | 'tsquery'
+  | 'uuid'
+  | 'json'
+  | 'jsonb'
+  | 'array'
+  | 'int4range'
+  | 'int8range'
+  | 'numrange'
+  | 'tsrange'
+  | 'tstzrange'
+  | 'daterange'
+  | 'any'
+  | 'anyelement'
+  | 'void';
+
+    
+    totalAmount:string, paymentMethod:string
 
  } 
 
  function TableDemo({invoices}:{invoices:Invoice[]}) {
     return (
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
+        <TableCaption>Customers</TableCaption>
         <TableBody>
           {invoices.map((invoice:Invoice) => (
             <TableRow key={invoice.invoice}>
@@ -123,7 +124,6 @@ import {
       
       </Card>
       <Handle id="1" type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-green-500"  />
-      <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
       <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
       <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />
       </div>

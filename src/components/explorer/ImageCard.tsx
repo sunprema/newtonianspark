@@ -22,7 +22,7 @@ import  Axios from 'axios';
 import { useToast } from '../ui/use-toast';
 import { Textarea } from "@/components/ui/textarea"
 
-  
+import {memo} from 'react'
 
 
   const ImageInputCard = ( {nodeId}:{nodeId:string} )=> {
@@ -267,4 +267,4 @@ import { Textarea } from "@/components/ui/textarea"
     
   }
   
-  export default ImageCard ;
+  export default memo(ImageCard) ;

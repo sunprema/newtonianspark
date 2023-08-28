@@ -19,7 +19,7 @@ import { Separator } from '../ui/separator';
 import { Input } from '../ui/input';
 import { Label } from "@/components/ui/label"
   
-
+import {memo} from 'react'
 
   const YoutubeInputCard = ( {nodeId}:{nodeId:string} )=> {
 
@@ -148,4 +148,4 @@ import { Label } from "@/components/ui/label"
       </div>
     )
   }
-  export default YoutubeCard ;
+  export default memo(YoutubeCard) ;

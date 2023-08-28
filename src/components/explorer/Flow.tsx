@@ -102,7 +102,7 @@ import ImageCard from "./ImageCard";
           }, edges)
         );
       },
-      [nodes, edges]
+      [nodes, edges, setEdges]
     );
 
     const onDrop = useCallback(

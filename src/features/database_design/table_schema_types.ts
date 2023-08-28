@@ -1,10 +1,10 @@
 export interface Column {
     name: string;
-    type: ColumnType;
+    type: string;
     length?: number;
     primary_key?: boolean;
     foreign_key?: {
-      table: string;
+      table_name: string;
       column: string;
     };
     default?: any;
@@ -22,6 +22,7 @@ export interface Column {
   
  export interface Table {
     table_name: string;
+    description:string;
     columns: Column[];
     indexes?: Index[];
     constraints?: Constraint[];

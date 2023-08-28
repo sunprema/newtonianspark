@@ -11,7 +11,7 @@ export default function IndexPage() {
   const router = useRouter()
 
   const handleSubmit = () => {
-    router.push(`/explore?topic=${encodeURIComponent(exploreTopic)}`)
+    router.push(`/ddl?topic=${encodeURIComponent(exploreTopic)}`)
   }
 
   return (

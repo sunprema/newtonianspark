@@ -41,7 +41,7 @@ export async function POST(request:NextRequest){
                 const foreignKeyData = column.foreign_key
                 edges.push( {
                     "id" : `edge-${table.table_name}-${column.name}`,
-                    "type" : "smoothstep",
+                    "type" : "default",
                     "animated" : true,
                     source:`table-${table.table_name}`,
                     target:`table-${foreignKeyData.table_name}`,

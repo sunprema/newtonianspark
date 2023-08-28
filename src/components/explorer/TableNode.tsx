@@ -19,20 +19,36 @@ const TableDisplay = ({data}:{data:Table}) => {
     <div>
       <ul className="space-y-2 divide-y dark:divide-slate-500">
       {
-        columns?.map( (column) => {
+        columns?.map( (column, index) => {
 
           return(
             <div className="nodrag flex w-[full] items-center p-2" key={column.name}> 
-              <Handle id={`handle-${data.table_name}-${column.name}` } className="relative -left-4 mx-4 h-2 w-2  rounded-full bg-green-600" type="source" position={Position.Right}></Handle>
-              <Handle id={`handle-${data.table_name}-${column.name}` } className="relative -left-4 mx-4 h-2 w-2  rounded-full bg-red-600" type="target" position={Position.Left}></Handle>
               
               <div className="w-[24px] shrink-0">{column.primary_key ? <KeyRound size={14} color="#0000ff" strokeWidth={2.5}/> : null }</div>
               <div className="flex-auto font-mono text-xs">{column.name}</div>
               <div className="text-right font-mono text-xs">{column.type}</div>
               <div className="relative -right-4 mx-4 h-2 w-2 rounded-full bg-red-400"></div>
+              { 
+                column.primary_key == true 
+                ? <Handle   
+                      id={`handle-${data.table_name}-${column.name}` }
+                      type="target"
+                      className="!h-6 !w-2 !rounded-none !bg-green-500"
+                      position={Position.Right} 
+                  /> 
+                : null
+              }
+
               {
-              //<Handle className="!h-6 !w-2 !rounded-none !bg-green-500"  id={`handle-${data.table_name}-${column.name}` } position={Position.Right} type="source" />
-              //<Handle className="!h-6 !w-2 !rounded-none !bg-red-500"  id={`handle-${data.table_name}-${column.name}` } position={Position.Left} type="target" />
+                column.foreign_key != null
+                ? <Handle
+                    id={`handle-${data.table_name}-${column.name}` } 
+                    type="source"
+                    className="!h-6 !w-2 !rounded-none !bg-red-500"
+                    position={Position.Left}
+                     />                     
+                : null
+                
               }
             </div>
           )

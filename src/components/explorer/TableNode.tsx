@@ -33,7 +33,7 @@ const TableDisplay = ({data}:{data:Table}) => {
                 ? <Handle   
                       id={`handle-${data.table_name}-${column.name}` }
                       type="target"
-                      className="relative -mr-5 !h-2 !w-2 !rounded-full !bg-green-500"
+                      className="relative -mr-5 !h-3 !w-3 !rounded-full !bg-green-500"
                       position={Position.Right} 
                   /> 
                 : null

@@ -16,12 +16,15 @@ import ReactFlow, {
     useEdgesState,
     ReactFlowInstance,
     XYPosition,
-    ControlButton
+    ControlButton,
+    useReactFlow
   } from "reactflow";
 import "reactflow/dist/style.css";
+
+import Dagre from '@dagrejs/dagre';
 import ExplorerNode from "./ExplorerNode";
 import TableNode from "./TableNode";
-import { SaveIcon } from "lucide-react";
+import { SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
 import Axios from 'axios';
 import { useToast } from "@/components/ui/use-toast"
 
@@ -45,7 +48,7 @@ import AddNode from "./AddNode";
 import ImageCard from "./ImageCard";
 
 
-
+const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
 
   const nodeTypes = {
     explorer: ExplorerNode,
@@ -58,6 +61,27 @@ import ImageCard from "./ImageCard";
     default: ButtonEdge
   }
   
+
+  type GraphOptions = {
+    direction:string;
+  }
+  const getLayoutedElements = (nodes:Node[], edges:Edge[], options:GraphOptions ) => {
+    g.setGraph({ rankdir: options.direction });
+  
+    edges.forEach((edge:Edge) => g.setEdge(edge.source, edge.target));
+    nodes.forEach((node:Node) => g.setNode(node.id, node));
+  
+    Dagre.layout(g);
+  
+    return {
+      nodes: nodes.map((node:Node) => {
+        const { x, y } = g.node(node.id);
+  
+        return { ...node, position: { x, y } };
+      }),
+      edges,
+    };
+  };
 
   const BasicFlow = ( 
     {initialNodes, initialEdges,initialTitle, initialSummary, flowKey}: 
@@ -78,6 +102,7 @@ import ImageCard from "./ImageCard";
     const [title, setTitle] = useState<string|null>(initialTitle)
     const [summary, setSummary] = useState<string|null>(initialSummary)
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
+    const { fitView } = useReactFlow();
     
     const onConnect = useCallback(
       (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
@@ -144,6 +169,20 @@ import ImageCard from "./ImageCard";
         event.dataTransfer.dropEffect = "move"
       } 
     }, []);
+
+    const onLayout = useCallback(
+      (direction:string) => {
+        const layouted = getLayoutedElements(nodes, edges, { direction });
+  
+        setNodes([...layouted.nodes]);
+        setEdges([...layouted.edges]);
+  
+        window.requestAnimationFrame(() => {
+          fitView();
+        });
+      },
+      [nodes, edges]
+    );
       
     //TODO: Refactor this, I dont think we need a new function when rfInstance, or key or toast changes each time.
     const onSave = useCallback(async ()=> {
@@ -191,7 +230,7 @@ import ImageCard from "./ImageCard";
 
     return (
       
-      <ReactFlowProvider>
+      <>
       <div ref={reactFlowWrapper} className="h-full">
       <ReactFlow
         nodes={nodes}
@@ -212,7 +251,13 @@ import ImageCard from "./ImageCard";
         <Controls>
           <ControlButton onClick={()=>setIsSaveDialogOpen(true)} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
             <SaveIcon size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
-          </ControlButton>  
+          </ControlButton> 
+          <ControlButton onClick={()=>onLayout('LR')} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
+            <UnfoldHorizontal size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
+          </ControlButton>
+          <ControlButton onClick={()=>onLayout('TB')} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
+            <UnfoldVertical size={32}  className="hover:stroke-green-500 dark:stroke-black"/>  
+          </ControlButton>     
           
         </Controls>  
         <Background className="bg-slate-50 dark:bg-slate-600" gap={24} />
@@ -254,13 +299,24 @@ import ImageCard from "./ImageCard";
 
           </DialogContent>
           </Dialog>
-      </ReactFlowProvider>
+          </>
       
     );
   };
   
-  export default BasicFlow ;
+  const BasicFlowWrapper = ({initialNodes, initialEdges,initialTitle, initialSummary, flowKey}: 
+    {initialNodes:Node[], 
+     initialEdges:Edge[],
+     initialTitle:(string|null), 
+     initialSummary:(string|null), 
+     flowKey:(string|null)
+       }) => {
+    return(
+    <ReactFlowProvider>
+      <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={initialTitle} initialSummary={initialSummary} flowKey={flowKey}  />
+    </ReactFlowProvider>
+    )
+  } ;
 
-function uuidv4() {
-  throw new Error("Function not implemented.");
-}
+  export default BasicFlowWrapper
+

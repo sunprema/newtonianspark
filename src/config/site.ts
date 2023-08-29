@@ -15,6 +15,10 @@ export const siteConfig = {
       href: "/browse",
     },
     {
+      title: "Database",
+      href: "/ddl_home",
+    },
+    {
       title: "Test",
       href: "/test",
     },

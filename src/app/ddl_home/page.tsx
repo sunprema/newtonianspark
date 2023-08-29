@@ -11,7 +11,7 @@ export default function IndexPage() {
   const router = useRouter()
 
   const handleSubmit = () => {
-    router.push(`/explore?topic=${encodeURIComponent(exploreTopic)}`)
+    router.push(`/ddl?topic=${encodeURIComponent(exploreTopic)}`)
   }
 
   return (
@@ -21,7 +21,7 @@ export default function IndexPage() {
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Explore the topics you always wanted to learn.
+          Design database schema..with plain English.
           <br className="hidden sm:inline" />          
         </h1>
         <p className="text-muted-foreground max-w-[700px] text-lg">        
@@ -34,7 +34,7 @@ export default function IndexPage() {
       <div className="flex h-[calc(100vh/3)]  w-full items-center justify-center ">
       <div className="flex">
         <div className="flex flex-col  space-x-4 space-y-5 sm:flex-row sm:space-y-0">
-          <Input className="w-full sm:w-[500px]" placeholder="What do you want to Explore!" value={exploreTopic} onChange={(e) => setExploreTopic(e.target.value) } />
+          <Input className="w-full sm:w-[500px]" placeholder="Detailed database instructions" value={exploreTopic} onChange={(e) => setExploreTopic(e.target.value) } />
           <Button onClick={handleSubmit}>Explore</Button>           
         </div>        
       </div>

@@ -25,8 +25,6 @@ const Page =() => {
       const callExploreService = async(topic:string|null) => {
         const response = await axios.post("/api/ddl", {explore:topic})
         const {nodes,edges, error} = response.data
-        window.zz_nodes = nodes
-        window.zz_edges = edges       
         if (error != null){
           setError(error)
         }else{

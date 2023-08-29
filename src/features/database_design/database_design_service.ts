@@ -17,14 +17,14 @@ const chatAI = new ChatOpenAI({
     maxRetries :2 ,
     maxConcurrency : 5,
     modelName: "gpt-3.5-turbo-0613", 
-    temperature: 0.5
+    temperature: 1
 });
 
 export const DatabaseDesignService = async ( {explore, context}:{ explore: string, context : object | null }) => {
     
     const prompt = new ChatPromptTemplate({
         promptMessages:[
-            SystemMessagePromptTemplate.fromTemplate("You are a database domain expert and will help design table schema that fits user requirements."),
+            SystemMessagePromptTemplate.fromTemplate("You are a database domain expert and will help design eloaborate table schema that fits user requirements."),
             HumanMessagePromptTemplate.fromTemplate("{inputText}"),
         ],
         inputVariables:["inputText"]
@@ -38,7 +38,8 @@ export const DatabaseDesignService = async ( {explore, context}:{ explore: strin
     let result = null
     let error = null
     try{
-        result = DUMMY_DATA// await chain.call({ inputText : explore})        
+        //result = DUMMY_DATA
+        result = await chain.call({ inputText : explore})        
         console.log(JSON.stringify(result, null, 2))
         return {
             result,

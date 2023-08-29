@@ -1,8 +1,7 @@
 import { DatabaseDesignService } from "@/features/database_design/database_design_service";
 import { Table } from "@/features/database_design/table_schema_types";
-import { Label } from "@radix-ui/react-label";
 import { NextResponse, NextRequest } from "next/server";
-import { v4 as uuidv4 } from 'uuid';
+
 
 export const runtime = 'edge'; // 'nodejs' is the default
 
@@ -36,7 +35,7 @@ export async function POST(request:NextRequest){
 
         //push all the edges
         
-        table.columns?.map(( column,index) => {
+        table.columns?.map(( column) => {
             if (column?.foreign_key != null){
                 const foreignKeyData = column.foreign_key
                 edges.push( {

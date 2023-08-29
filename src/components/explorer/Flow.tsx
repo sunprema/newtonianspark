@@ -15,7 +15,8 @@ import ReactFlow, {
     useNodesState,
     useEdgesState,
     ReactFlowInstance,
-    XYPosition
+    XYPosition,
+    ControlButton
   } from "reactflow";
 import "reactflow/dist/style.css";
 import ExplorerNode from "./ExplorerNode";
@@ -31,8 +32,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTitle  
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -49,7 +49,7 @@ import ImageCard from "./ImageCard";
 
   const nodeTypes = {
     explorer: ExplorerNode,
-    tableNode : TableNode,
+    table : TableNode,
     youtube: YoutubeCard,
     image: ImageCard,
   };
@@ -77,6 +77,7 @@ import ImageCard from "./ImageCard";
     const {toast} = useToast()
     const [title, setTitle] = useState<string|null>(initialTitle)
     const [summary, setSummary] = useState<string|null>(initialSummary)
+    const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
     
     const onConnect = useCallback(
       (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
@@ -101,7 +102,7 @@ import ImageCard from "./ImageCard";
           }, edges)
         );
       },
-      [nodes, edges]
+      [nodes, edges, setEdges]
     );
 
     const onDrop = useCallback(
@@ -208,22 +209,20 @@ import ImageCard from "./ImageCard";
         fitView
                 
       > 
-        <Controls style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            left: '1%',
-                            transform: 'translate(-50%, -50%)'
-                    }}
-                    
-         
-         >
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="link" className="h-8 rounded-none bg-white px-1">
-                <SaveIcon size={14} className=" hover:stroke-green-500 dark:stroke-black"/>
-              </Button>
-            </DialogTrigger>
-
+        <Controls>
+          <ControlButton onClick={()=>setIsSaveDialogOpen(true)} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
+            <SaveIcon size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
+          </ControlButton>  
+          
+        </Controls>  
+        <Background className="bg-slate-50 dark:bg-slate-600" gap={24} />
+        <MiniMap className="dark:bg-inherit"  zoomable pannable/>
+        <SideSheet />
+        
+      </ReactFlow>
+      </div>
+      <AddNode />
+      <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
               
               <DialogHeader>
@@ -254,17 +253,7 @@ import ImageCard from "./ImageCard";
               </DialogFooter>
 
           </DialogContent>
-
-            
           </Dialog>
-        </Controls>  
-        <Background className="bg-slate-50 dark:bg-slate-600" gap={24} />
-        <MiniMap className="dark:bg-inherit"  zoomable pannable/>
-        <SideSheet />
-        
-      </ReactFlow>
-      </div>
-      <AddNode />
       </ReactFlowProvider>
       
     );

@@ -7,125 +7,83 @@ import {
     CardHeader,
     CardTitle
   } from "@/components/ui/card"
-  import { Badge } from "@/components/ui/badge"
-  
+import { Badge } from "@/components/ui/badge"
+import { Column, Table } from "@/features/database_design/table_schema_types"
 
-  
-  import { Handle, Position } from 'reactflow';
-  
-  import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
-  
-  const tableData = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ]
- 
- interface Invoice {
-    invoice:string, paymentStatus:string, totalAmount:string, paymentMethod:string
+import { KeyRound } from "lucide-react"
+import { Handle, Position } from "reactflow"
 
- } 
+const TableDisplay = ({data}:{data:Table}) => {
+  const {columns}:{columns:Column[]|null} = data
+  return (
+    <div>
+      <ul className="space-y-2 divide-y dark:divide-slate-500">
+      {
+        columns?.map( (column) => {
 
- function TableDemo({invoices}:{invoices:Invoice[]}) {
-    return (
-      <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice:Invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          return(
+            <div className="nodrag relative flex w-[full] items-center p-2" key={column.name}> 
+              
+              <div className="w-[24px] shrink-0">{column.primary_key ? <KeyRound size={14} color="#0000ff" strokeWidth={2.5}/> : null }</div>
+              <div className="flex-auto font-mono text-xs">{column.name}</div>
+              <div className="text-right font-mono text-xs">{column.type}</div>
+              
+              { 
+                column.primary_key == true 
+                ? <Handle   
+                      id={`handle-${data.table_name}-${column.name}` }
+                      type="target"
+                      className="relative -mr-5 !h-2 !w-2 !rounded-full !bg-green-500"
+                      position={Position.Right} 
+                  /> 
+                : null
+              }
+
+              {
+                column.foreign_key != null
+                ? <Handle
+                    id={`handle-${data.table_name}-${column.name}` } 
+                    type="source"
+                    className="relative -ml-5 !h-3 !w-3 !rounded-full !bg-red-400"
+                    position={Position.Left}
+                     />                     
+                : null
+                
+              }
+            </div>
+          )
+          }
+        )
+      }
+      </ul>
+
+      
+    </div>  
     )
-  }
+ }
   
   
-  const TableNode = ({data}:{data:any}) => {
+  const TableNode = ({data}:{data:Table}) => {
     console.log(data)  
-    const {topic, summary} = data
+    const {table_name, description} = data
      
     return (
       <div>
-      <Card className="w-[500px]">
-        <CardHeader>
-          <CardTitle>{topic}</CardTitle>
-          <CardDescription>{summary}</CardDescription>
+      <Card className="group min-w-[400px] shadow-2xl border-orange-400 dark:border-orange-400 bg-slate-100 dark:bg-slate-700">
+        <CardHeader className="border-slate-500 border-b" >
+          <CardTitle className="text-center text-base font-semibold group-hover:text-orange-500 group-hover:dark:text-orange-500 ">{table_name}</CardTitle>
+          <CardDescription className="font-medium text-start text-sm">{description}</CardDescription>
         </CardHeader>
-  
-        <CardContent>
-        <TableDemo invoices = {tableData} />
-      </CardContent>
+        <CardContent className="mt-4">
+        <TableDisplay data={data} />
+        </CardContent>
         
       <CardFooter className="flex justify-between">
-        <Badge variant="outline">Cancel</Badge>
-        <Badge variant="outline" onClick={() => alert("Hi")}>Deploy</Badge>
+        <Badge variant="outline" onClick={()=> alert("Hi")} className="nodrag">Explore more</Badge>
       </CardFooter>
       
       </Card>
-      <Handle id="1" type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-green-500"  />
-      <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
-      <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
-      <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />
+      
       </div>
     )
   

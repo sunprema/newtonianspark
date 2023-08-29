@@ -1,0 +1,29 @@
+{
+    "nodes": [
+      { "id": '1', "type": "start", data:{"label": "Start"}, "position": { "x": 100, "y": 50 } },
+      { "id": '2', "type": "decision", data:{"label": "Is User a New User?"}, "position": { "x": 150, "y": 150 } },
+      { "id": '3', "type": "process", data:{"label": "Show Sign Up Form"}, "position": { "x": 250, "y": 250 } },
+      { "id": '4', "type": "process", data:{"label": "Show Login Form"}, "position": { "x": 250, "y": 450 } },
+      { "id": '5', "type": "end", data:{"label": "Sign Up Successful"}, "position": { "x": 450, "y": 250 } },
+      { "id": '6', "type": "end", data:{"label": "Login Successful"}, "position": { "x": 450, "y": 350 } },
+      { "id": '7', "type": "process", data:{"label": "Show Sign In Failure"}, "position": { "x": 450, "y": 450 } },
+      { "id": '8', "type": "decision", data:{"label": "Max Retries Exceeded?"}, "position": { "x": 650, "y": 550 } },
+      { "id": '9', "type": "process", data:{"label": "Show Forgot Password"}, "position": { "x": 850, "y": 650 } },
+      { "id": '10', "type": "end", data:{"label": "Password Reset Successful"}, "position": { "x": 1050, "y": 750 } },
+      { "id": 11, "type": "process", data:{ "label": "Verify Email"}, "position": { "x": 250, "y": 350 } },
+   
+    ],
+    "edges": [
+      { "id": "e1", "source": '1', "target": '2', type: 'smoothstep' },
+      { "id": "e2", "source": '2', "target": '3', type: 'smoothstep', "label": "Yes" },
+      { "id": "e3", "source": '2', "target": '4', type: 'smoothstep', "label": "No" },
+      { "id": "e4", "source": '3', "target": '5', type: 'smoothstep',},
+      { "id": "e5", "source": '4', "target": '6', type: 'smoothstep',},
+      { "id": "e6", "source": '4', "target": '7',type: 'smoothstep', "label": "Sign In Failed" },
+      { "id": "e7", "source": '7', "target": '8', type: 'smoothstep' },
+      { "id": "e8", "source": '8', "target": '9', type: 'smoothstep',"label": "Yes" },
+      { "id": "e9", "source": '8', "target": '4',type: 'smoothstep', "label": "No" },
+      { "id": "e10", "source": '9', "target": '10',type: 'smoothstep' },
+      { "id": "e12", "source": 3, "target": 11, type: 'smoothstep'  },
+    ]
+}

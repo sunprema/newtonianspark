@@ -14,11 +14,14 @@ export const siteConfig = {
       title: "Browse",
       href: "/browse",
     },
-    
-  ],
-  links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
-  },
+    {
+      title: "Database",
+      href: "/ddl_home",
+    },
+    {
+      title: "Test",
+      href: "/test",
+    },
+  ]
+  
 }

@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+
+import {memo} from 'react'
 
 import {
   Accordion,
@@ -71,4 +72,4 @@ const ExplorerNode = ({data , id}:{data:any, id:string}) => {
 
 }
 
-export default ExplorerNode ;
+export default memo(ExplorerNode) ;

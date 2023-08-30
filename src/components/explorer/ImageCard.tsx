@@ -12,7 +12,7 @@ import {
   import { Handle, NodeToolbar, Position, useReactFlow } from 'reactflow';
   import Link from "next/link";
   import { Button } from "../ui/button";
-  import useExploreStore from "@/config/store";
+  import useExploreStore from "@/config/exploreStore";
 import Image from "next/image";
 import { Trash2 } from 'lucide-react';
 import { Separator } from '../ui/separator';

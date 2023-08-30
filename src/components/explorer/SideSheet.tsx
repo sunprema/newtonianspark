@@ -9,7 +9,7 @@ import {
     SheetHeader,
     SheetTitle,    
   } from "@/components/ui/sheet"
-import useExploreStore from "@/config/store"
+import useExploreStore from "@/config/exploreStore"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { useToast } from '../ui/use-toast';

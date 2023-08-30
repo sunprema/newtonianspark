@@ -12,6 +12,8 @@ import { Column, Table } from "@/features/database_design/table_schema_types"
 
 import { KeyRound } from "lucide-react"
 import { Handle, Position } from "reactflow"
+import { Button } from "../ui/button"
+import useDDLStore from "@/config/ddlStore"
 
 const TableDisplay = ({data}:{data:Table}) => {
   const {columns}:{columns:Column[]|null} = data
@@ -63,9 +65,10 @@ const TableDisplay = ({data}:{data:Table}) => {
  }
   
   
-  const TableNode = ({data}:{data:Table}) => {
-    console.log(data)  
+  const TableNode = ({data, id}:{data:Table, id:string}) => {
     const {table_name, description} = data
+    const openSideSheetForNode = useDDLStore( (state) => state.openSideSheetForNode)
+    
      
     return (
       <div>
@@ -78,9 +81,11 @@ const TableDisplay = ({data}:{data:Table}) => {
         <TableDisplay data={data} />
         </CardContent>
         
-      <CardFooter className="flex justify-between">
-        <Badge variant="outline" onClick={()=> alert("Hi")} className="nodrag">Explore more</Badge>
-      </CardFooter>
+        <CardFooter className="flex justify-between">
+        <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id) }>more</Button>
+        
+        
+    </CardFooter>
       
       </Card>
       

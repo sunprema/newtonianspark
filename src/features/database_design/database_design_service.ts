@@ -34,6 +34,7 @@ export const DatabaseDesignService = async ( {explore, context}:{ explore: strin
     const chain = createStructuredOutputChainFromZod(TableDDLSchema, {
         prompt,
         llm: chatAI,
+        verbose: true
       });
     
     let result = null

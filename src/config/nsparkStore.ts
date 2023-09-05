@@ -27,11 +27,9 @@ interface NSparkState  {
 
 };
 
-// this is our useStore hook that we can use in our components to get parts of the store and call actions
+// this is our state hook that we can use in our components to get parts of the store and call actions
 
-
-
-const useNsparkState = create<NSparkState>((set, get) => ({
+const useNsparkState = create<NSparkState>((set,get) => ({
   
   sideSheetOpen:false,
   nodeIdSelectedForSideSheet: "",
@@ -59,20 +57,20 @@ const useNsparkState = create<NSparkState>((set, get) => ({
     )
    ),
    setNodes:(nodes:Array<Node>) => set(
-    (state) => (
+    () => (
         {
-            nodes: nodes
+            nodes
         }
     )
    ),
    setEdges:(edges:Array<Edge>) => set(
-    (state) => (
+    () => (
         {
             edges: edges
         }
     )
    ),
-   
+
 }));
 
 export default useNsparkState ;

@@ -5,7 +5,7 @@ const MindMapSchema = z.object({
   nodes:z
   .array(
     z.object({
-        id: z.string().describe("A UUID value to identify the node"),
+        id: z.string().describe("unique id to identify the node"),
 
         data:z.object({
             label:z.string().describe(""),
@@ -17,10 +17,9 @@ const MindMapSchema = z.object({
   edges:z
   .array(
     z.object({
-        id: z.string().describe("A UUID value to identify the edge"),
-        label:z.string().optional().describe("what is this edge for"),
-        source:z.string().describe("The UUID of the source Node"),
-        target:z.string().describe("The UUID of the target Node"),
+        id: z.string().describe("unique id to identify the edge"),
+        source:z.string().describe("id of source Node"),
+        target:z.string().describe("id of target Node"),
     })
   ).describe("Represents Edge in a reactflow mindmap"),
 

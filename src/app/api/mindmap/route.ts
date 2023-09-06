@@ -10,8 +10,20 @@ export async function POST(request:NextRequest){
     const {result, error} = await MindMapDesignService(req)
     const ai_response = result
     
-    const nodes:Node[]|undefined|null = result?.output?.nodes
+    const mindMapNodes:Node[]|undefined|null = result?.output?.nodes
     const edges:Edge[]|undefined|null = result?.output?.edges
+
+    //Adjust the nodes and add Position and node type
+    const nodes:Node[] = []
+
+    mindMapNodes?.map( (mindMapNode, index) => {
+        nodes.push({
+            ...mindMapNode,
+            type:'mindMap',
+            position: { x: (index * 500) + 20 * (index + 1), y: 50 }
+        })
+    })
+    
 
     if(error != null){
         return NextResponse.json( {nodes,error}, {status:400})

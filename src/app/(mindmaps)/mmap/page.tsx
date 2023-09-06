@@ -25,8 +25,8 @@ const Page =() => {
      
     useEffect(() => {
 
-      const callExploreService = async(topic:string|null) => {
-        const response = await axios.post("/api/ddl", {explore:topic})
+      const callMindMapService = async(topic:string|null) => {
+        const response = await axios.post("/api/mindmap", {explore:topic})
         const {nodes,edges,ai_response, error} = response.data ; //ai_response will be used as context.
         if (error != null){
           setError(error)
@@ -37,9 +37,9 @@ const Page =() => {
           
         }
       }
-      callExploreService(topic)
+      callMindMapService(topic)
 
-    },[topic] )
+    },[topic, setAIResponses] )
     
     if(error){
       return <h1> Error : {error} </h1>

@@ -8,7 +8,7 @@ const DUMMYDATA = {
         {
           "id": "1",
           "type" : "mindMap",
-          "position" : {x : 100, y:100},
+          "position" : {x : 650, y:121},
           "data": {
             "label": "Agile Project Management",
             "comment": "A project management approach that emphasizes flexibility, collaboration, and iterative development."
@@ -17,7 +17,7 @@ const DUMMYDATA = {
         {
           "id": "2",
           "type" : "mindMap",
-          "position" : {x : 200, y:100},
+          "position" : {x : 200, y:405},
           "data": {
             "label": "Scrum",
             "comment": "An agile framework that enables teams to collaborate and deliver incrementally."
@@ -26,7 +26,7 @@ const DUMMYDATA = {
         {
           "id": "3",
           "type" : "mindMap",
-          "position" : {x : 300, y:100},
+          "position" : {x : 650, y:402},
           "data": {
             "label": "Kanban",
             "comment": "A visual agile project management method that focuses on continuous delivery and flow."
@@ -35,7 +35,7 @@ const DUMMYDATA = {
         {
           "id": "4",
           "type" : "mindMap",
-          "position" : {x : 400, y:100},
+          "position" : {x : 1150, y:402},
           "data": {
             "label": "Lean",
             "comment": "A project management approach that aims to maximize value and minimize waste."

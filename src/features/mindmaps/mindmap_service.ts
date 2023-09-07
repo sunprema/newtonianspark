@@ -25,7 +25,7 @@ export const MindMapDesignService = async ( {explore, context}:{ explore: string
     
     const prompt = new ChatPromptTemplate({
         promptMessages:[
-            SystemMessagePromptTemplate.fromTemplate("You will help in brainstorm ideas requested by user as a mindmap that will work in reactflow."),
+            SystemMessagePromptTemplate.fromTemplate("You will help brainstorm ideas requested by user as a mindmap that will work in reactflow."),
             HumanMessagePromptTemplate.fromTemplate("{inputText}"),
         ],
         inputVariables:["inputText"]

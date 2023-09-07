@@ -9,6 +9,7 @@ interface DDLState  {
   //reducers
   toggleSideSheet: () => void
   openSideSheetForNode:(nodeId:string) => void
+  setAIResponses:(ai_response:object) => void
 
 };
 

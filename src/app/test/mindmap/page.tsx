@@ -1,6 +1,6 @@
 import BasicFlow from "@/components/explorer/Flow"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Edge } from "reactflow"
+import { Edge,Node} from "reactflow"
 
 const DUMMYDATA = {
     "output": {

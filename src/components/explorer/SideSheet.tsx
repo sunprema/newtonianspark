@@ -1,40 +1,67 @@
 'use client'
 
-import {useState} from 'react'
+import {useState, useEffect, useCallback} from 'react'
 import axios from 'axios';
 import {
     Sheet,
     SheetContent,
     SheetDescription,
     SheetHeader,
-    SheetTitle,    
+    SheetTitle,
+    SheetFooter,    
   } from "@/components/ui/sheet"
-import useExploreStore from "@/config/exploreStore"
+
+import useNsparkState from '@/config/nsparkStore';
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { useToast } from '../ui/use-toast';
-import { useReactFlow } from 'reactflow';
+import { Edge, Node, useReactFlow } from 'reactflow';
+import { Textarea } from '../ui/textarea';
 
 
 export default function SideSheet({}){
 
-    const sideSheetOpen = useExploreStore( (state) => state.sideSheetOpen)
-    const toggleSideSheet = useExploreStore( (state) => state.toggleSideSheet)
-    const nodeId = useExploreStore( (state) => state.nodeIdSelectedForSideSheet)
-    const [exploreTopic, setExploreTopic] = useState("")
-    const { getNode, setNodes, addNodes, setEdges } = useReactFlow();    
+    const sideSheetOpen = useNsparkState( (state) => state.sideSheetOpen)
+    const toggleSideSheet = useNsparkState( (state) => state.toggleSideSheet)
+    const nodeId = useNsparkState( (state) => state.nodeIdSelectedForSideSheet)
+    const nodeType = useNsparkState( (state) => state.nodeType)
     
+    const [topic, setTopic] = useState("")
+    const { getNode, addNodes, addEdges } = useReactFlow();    
     const {toast} = useToast()
+    const dataFromSelectedNode = "Somehow get the context from the selected node" ;
 
-    const dataFromSelectedNode = "This is the context of the Chera dynasty!" ;
-
-    const handleSubmit = async() => {
+    const handleSubmit = useCallback( async() => {
         const selectedNode  = getNode(nodeId)        
         const [x,y] = [selectedNode?.position.x || 20,selectedNode?.position.y || 20 ] 
         console.log(selectedNode)
-              
-        const response = await axios.post("/api/explore", {explore:exploreTopic, context:dataFromSelectedNode})
-        const {nodes,error} = response.data
+        //const nodeType = selectedNode?.type || "default"
+        let apiToCall = "explore" ; //assume its default
+        switch(nodeType){
+          case "explorer":
+             apiToCall = "explore"
+             break
+          case "table":
+            apiToCall = "ddl"
+            break
+          case "youtube":
+            apiToCall = "explore"
+            break
+          case "image":
+            apiToCall = "explore"
+            break
+
+          case "mindMap":
+            apiToCall = "mindmap"
+            break
+
+          default:
+            return;  
+
+        }     
+        const response = await axios.post(`/api/${apiToCall}`, 
+            {explore:topic, context:dataFromSelectedNode})
+        const {nodes,edges,error}:{ nodes:Node[]|null, edges:Edge[]|null,error:string } = response.data
         if(error != null || error !== ''){
             toast({
                 title: "Unexpected failure",
@@ -43,49 +70,45 @@ export default function SideSheet({}){
         }
 
         if(nodes != null){
+            addNodes( nodes)
+            if( edges != null){
+              addEdges(edges)
+            }
+            toggleSideSheet()
             toast({
-                title: "Some data is returned",
-                description: "Nodes returned",
+                title: "Success ",
+                description: `Nodes returned : ${nodes?.length} , Edges returned : ${edges?.length}`,
             })
-            //Now that I got the nodes, I'll find the existing nodes and add it to them, I'll also adjust the nodes position so that it shows next to current node Id
-            /*
-            const updatedNodes =  nodes.map( (n, i:number) => {
-                console.log(n)
-                n["width"] = "500";
-                n["height"] = "500";
-                n["position"] = {x : (x + 500) * i, y :y}
-            } )
-            console.log(nodes)
-            */
-            addNodes( nodes)            
-
-        }else{
+        }        
+        else{
+            toggleSideSheet()
             toast({
                 title: "No data",
                 description: "No data available",
             })
-
+            
         }
-    }
+    }, [nodeType, nodeId, toast, topic,getNode, addNodes, addEdges, toggleSideSheet])
     
-
     return (
 
     <Sheet open={sideSheetOpen} onOpenChange={() => toggleSideSheet() }>
       <SheetContent side="right" className={"w-[400px] sm:w-[540px]"}>
         
-        <SheetHeader>
+        <SheetHeader className="mb-20">
           <SheetTitle>Explore more</SheetTitle>
           
           <SheetDescription>
-            Using the context of the selected node, you can explore more.
+            Using the context of the selected node {nodeType}, you can explore more.
           </SheetDescription>
         </SheetHeader>
-
-        <div className="flex flex-col  space-x-4 space-y-5 sm:flex-row sm:space-y-0">
-          <Input className="w-full sm:w-[500px]" placeholder="What do you want to Explore!" value={exploreTopic} onChange={(e) => setExploreTopic(e.target.value) } />
+        <div className="flex flex-col space-x-4 space-y-5 sm:w-[300px]">
+          <Textarea className="w-full" placeholder="What do you want to Explore!" value={topic} onChange={(e) => setTopic(e.target.value) } rows={5} cols={10}/>
+          
           <Button onClick={handleSubmit}>Explore</Button>           
+        
         </div>
+        
 
       </SheetContent>
     </Sheet>

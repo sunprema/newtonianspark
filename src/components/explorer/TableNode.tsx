@@ -14,7 +14,7 @@ import { Column, Table } from "@/features/database_design/table_schema_types"
 import { KeyRound } from "lucide-react"
 import { Handle, Position } from "reactflow"
 import { Button } from "../ui/button"
-import useDDLStore from "@/config/ddlStore"
+import useNsparkStore from "@/config/nsparkStore"
 
 const TableDisplay = ({data}:{data:Table}) => {
   const {columns}:{columns:Column[]|null} = data
@@ -69,22 +69,22 @@ const TableDisplay = ({data}:{data:Table}) => {
   
   const TableNode = ({data, id}:{data:Table, id:string}) => {
     const {table_name, description} = data
-    const openSideSheetForNode = useDDLStore( (state) => state.openSideSheetForNode)
+    const openSideSheetForNode = useNsparkStore( (state) => state.openSideSheetForNode)
     
      
     return (
       <div>
-      <Card className="group min-w-[400px] shadow-2xl border-orange-400 dark:border-orange-400 bg-slate-100 dark:bg-slate-700">
-        <CardHeader className="border-slate-500 border-b" >
+      <Card className="group min-w-[400px] border-orange-400 bg-slate-100 shadow-2xl dark:border-orange-400 dark:bg-slate-700">
+        <CardHeader className="border-b border-slate-500" >
           <CardTitle className="text-center text-base font-semibold group-hover:text-orange-500 group-hover:dark:text-orange-500 ">{table_name}</CardTitle>
-          <CardDescription className="font-medium text-start text-sm">{description}</CardDescription>
+          <CardDescription className="text-start text-sm font-medium">{description}</CardDescription>
         </CardHeader>
         <CardContent className="mt-4">
         <TableDisplay data={data} />
         </CardContent>
         
         <CardFooter className="flex justify-between">
-        <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id) }>more</Button>
+        <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id, "table") }>more</Button>
         
         
     </CardFooter>

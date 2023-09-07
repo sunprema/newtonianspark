@@ -11,7 +11,7 @@ import {
     Node,   
     Edge,
   } from "reactflow";
-import useDDLStore from "@/config/ddlStore";
+
 
 const Page =() => {
     const searchParams = useSearchParams()
@@ -19,8 +19,6 @@ const Page =() => {
     const [initialNodes, setInitialNodes] = useState<Node[]|null>(null);
     const [initialEdges, setInitialEdges] = useState<Edge[]|null>(null);
     const [error, setError] = useState(null);
-    const [aiResponse, setAiResponses] = useState([]);
-    const setAIResponses = useDDLStore( (state) => state.setAIResponses)
 
      
     useEffect(() => {
@@ -33,13 +31,12 @@ const Page =() => {
         }else{
           setInitialNodes(nodes)
           setInitialEdges(edges)
-          setAIResponses(ai_response)
           
         }
       }
       callMindMapService(topic)
 
-    },[topic, setAIResponses] )
+    },[topic] )
     
     if(error){
       return <h1> Error : {error} </h1>

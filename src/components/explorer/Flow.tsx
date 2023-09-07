@@ -207,24 +207,30 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           const status = response.data['status']
           if (status === 'SAVED'){
             setKey(keySaved)
+            setIsSaveDialogOpen(false)
             toast({
               title: `Data saved for key ${keySaved}`,
               description: "This flow data is stored!",
+              
             })
 
           }else{
+            setIsSaveDialogOpen(false)
             toast({
               title: `FAILED TO save data for key ${keySaved}`,
               description: "Failed!",
+              variant:'destructive'
             })
 
           }
           
         }catch(error){
           console.log(error)
+          setIsSaveDialogOpen(false)
           toast({
             title: "FAILED TO save data",
             description: `Failed with error ${error}`,
+            variant:'destructive'
           })
         }
       }

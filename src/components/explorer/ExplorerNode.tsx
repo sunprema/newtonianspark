@@ -20,13 +20,13 @@ import {
 import { Handle, Position } from 'reactflow';
 import Link from "next/link";
 import { Button } from "../ui/button";
-import useExploreStore from "@/config/exploreStore";
+import useNsparkStore from "@/config/nsparkStore";
 
 
 
 const ExplorerNode = ({data , id}:{data:any, id:string}) => {
   const {topic, summary, questions} = data
-  const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
+  const openSideSheetForNode = useNsparkStore( (state) => state.openSideSheetForNode)
    
   return (
     <div>
@@ -55,10 +55,15 @@ const ExplorerNode = ({data , id}:{data:any, id:string}) => {
     </CardContent>
       
     <CardFooter className="flex justify-between">
-      <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id) }>explore more</Button>
+      <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id, "explorer") }>explore more</Button>
+      {
+      /*
       <Link href="/visit/cYHR0KnX6My0PZ30ciom3" target="_blank">
         <Button variant="link" >Go to</Button>
       </Link>
+      */
+      }
+
     </CardFooter>
     
     </Card>

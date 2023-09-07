@@ -46,6 +46,7 @@ import ButtonEdge from "./ButtonEdge";
 import YoutubeCard from "./YoutubeCard";
 import AddNode from "./AddNode";
 import ImageCard from "./ImageCard";
+import MindMapNode from "./MindMapNode";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -55,6 +56,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     table : TableNode,
     youtube: YoutubeCard,
     image: ImageCard,
+    mindMap: MindMapNode,
   };
 
   const edgeTypes = {

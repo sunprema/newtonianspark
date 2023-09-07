@@ -19,6 +19,10 @@ export const siteConfig = {
       href: "/ddl_home",
     },
     {
+      title: "Mind Maps",
+      href: "/mmap_home",
+    },
+    {
       title: "Test",
       href: "/test",
     },

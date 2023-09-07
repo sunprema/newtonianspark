@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { ColumnType } from './table_schema_types';
 
 const ColumnSchema = z.object({
   name: z.string(),
@@ -46,7 +45,6 @@ const TableDDLSchema = z.object({
         name:z.string().describe("Column name"),
         type:z.string().describe("SQL data type"),
         primary_key:z.boolean().optional().describe("If this is a primary key"),
-        
         foreign_key:z.object(
           { 
             table_name:z.string().describe('table used for foreign key reference'),

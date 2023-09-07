@@ -10,8 +10,11 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Column, Table } from "@/features/database_design/table_schema_types"
 
+
 import { KeyRound } from "lucide-react"
 import { Handle, Position } from "reactflow"
+import { Button } from "../ui/button"
+import useDDLStore from "@/config/ddlStore"
 
 const TableDisplay = ({data}:{data:Table}) => {
   const {columns}:{columns:Column[]|null} = data
@@ -24,31 +27,32 @@ const TableDisplay = ({data}:{data:Table}) => {
           return(
             <div className="nodrag relative flex w-[full] items-center p-2" key={column.name}> 
               
-              <div className="w-[24px] shrink-0">{column.primary_key ? <KeyRound size={14} color="#0000ff" strokeWidth={2.5}/> : null }</div>
+
+              <div className="w-[24px] shrink-0">
+                {column.primary_key ? 
+                  <KeyRound size={14} className=" stroke-green-600 dark:stroke-green-600" strokeWidth={3.0}/> 
+                  : column.foreign_key ? 
+                    <KeyRound size={14} className="stroke-slate-800 dark:stroke-slate-100" strokeWidth={3.0}/> : null 
+                }
+              </div>              
               <div className="flex-auto font-mono text-xs">{column.name}</div>
-              <div className="text-right font-mono text-xs">{column.type}</div>
+              <div className="text-right font-mono text-xs">{column.type}</div>              
               
-              { 
-                column.primary_key == true 
-                ? <Handle   
+              { column.primary_key? 
+              <Handle
                       id={`handle-${data.table_name}-${column.name}` }
                       type="target"
                       className="relative -mr-5 !h-3 !w-3 !rounded-full !bg-green-500"
                       position={Position.Right} 
                   /> 
-                : null
-              }
-
-              {
-                column.foreign_key != null
-                ? <Handle
+                :column.foreign_key != null ?
+                <Handle
                     id={`handle-${data.table_name}-${column.name}` } 
                     type="source"
                     className="relative -ml-5 !h-3 !w-3 !rounded-full !bg-red-400"
                     position={Position.Left}
-                     />                     
-                : null
-                
+                /> : null
+
               }
             </div>
           )
@@ -63,9 +67,10 @@ const TableDisplay = ({data}:{data:Table}) => {
  }
   
   
-  const TableNode = ({data}:{data:Table}) => {
-    console.log(data)  
+  const TableNode = ({data, id}:{data:Table, id:string}) => {
     const {table_name, description} = data
+    const openSideSheetForNode = useDDLStore( (state) => state.openSideSheetForNode)
+    
      
     return (
       <div>
@@ -78,9 +83,11 @@ const TableDisplay = ({data}:{data:Table}) => {
         <TableDisplay data={data} />
         </CardContent>
         
-      <CardFooter className="flex justify-between">
-        <Badge variant="outline" onClick={()=> alert("Hi")} className="nodrag">Explore more</Badge>
-      </CardFooter>
+        <CardFooter className="flex justify-between">
+        <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id) }>more</Button>
+        
+        
+    </CardFooter>
       
       </Card>
       

@@ -8,6 +8,7 @@ export const runtime = 'edge'; // 'nodejs' is the default
 export async function POST(request:NextRequest){
     const req = await request.json()
     const {result, error} = await DatabaseDesignService(req)
+    const ai_response = result
     const tables:Table[]|undefined|null = result?.output?.tables
 
     let nodes:object[] = []
@@ -54,5 +55,5 @@ export async function POST(request:NextRequest){
     }
     )
     
-    return NextResponse.json( {nodes,edges, error}, {status:200})    
+    return NextResponse.json( {nodes,edges, ai_response,  error}, {status:200})    
 }

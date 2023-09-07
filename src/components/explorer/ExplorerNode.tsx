@@ -20,7 +20,7 @@ import {
 import { Handle, Position } from 'reactflow';
 import Link from "next/link";
 import { Button } from "../ui/button";
-import useExploreStore from "@/config/store";
+import useExploreStore from "@/config/exploreStore";
 
 
 

@@ -18,14 +18,15 @@ const chatAI = new ChatOpenAI({
     maxConcurrency : 5,
     modelName: "gpt-3.5-turbo-0613", 
     //modelName: "gpt-4",
-    temperature: 1
+    temperature: 1,
+    maxTokens : -1
 });
 
 export const DatabaseDesignService = async ( {explore, context}:{ explore: string, context : object | null }) => {
     
     const prompt = new ChatPromptTemplate({
         promptMessages:[
-            SystemMessagePromptTemplate.fromTemplate("You are a database domain expert and will help design eloaborate table schema that fits user requirements."),
+            SystemMessagePromptTemplate.fromTemplate("Act as a Postgres expert. Create a database scheme that fits user requirements. Find out all the key entities required and provide the table design.Provide as many tables as required to cover many usecases."),
             HumanMessagePromptTemplate.fromTemplate("{inputText}"),
         ],
         inputVariables:["inputText"]
@@ -34,6 +35,7 @@ export const DatabaseDesignService = async ( {explore, context}:{ explore: strin
     const chain = createStructuredOutputChainFromZod(TableDDLSchema, {
         prompt,
         llm: chatAI,
+        verbose: true
       });
     
     let result = null

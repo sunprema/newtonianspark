@@ -42,7 +42,6 @@ export async function POST(request:NextRequest){
                 edges.push( {
                     "id" : `edge-${table.table_name}-${column.name}`,
                     "type" : "default",
-                    "animated" : true,
                     source:`table-${table.table_name}`,
                     target:`table-${foreignKeyData.table_name}`,
                     sourceHandle: `handle-${table.table_name}-${column.name}` ,

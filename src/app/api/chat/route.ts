@@ -19,8 +19,8 @@ const formatMessage = (message: VercelChatMessage) => {
     return `${message.role}: ${message.content}`;
   };
    
-  const TEMPLATE = `You are a database domain expert.You will help generate a expert level prompt based on user query. Users should be able to use that prompt to generate database schema.All responses must be extremely verbose.
-
+  const TEMPLATE = `You are a database domain expert.You will help generate a expert level prompt based on user query. Users should be able to use that prompt to generate database schema.
+  
   Current conversation:
   {chat_history}
  

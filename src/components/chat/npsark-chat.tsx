@@ -12,7 +12,7 @@ import { Textarea } from '../ui/textarea';
 
  
 export default function NSparkChat(props:{className?:string}) {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { messages,setMessages, input, handleInputChange, handleSubmit } = useChat();
   const {className} = props
   return (
     <div className="fixed bottom-80 right-4 mx-auto  hidden max-h-[500px] w-[500px] max-w-md md:visible md:flex md:flex-col">
@@ -20,7 +20,7 @@ export default function NSparkChat(props:{className?:string}) {
         <CardHeader className='border-b-1 border-slate-800 bg-white'>
         <div className='flex '>
           <h4 className='flex-1'>Chat</h4>
-          <Trash2 />
+          <Trash2 onClick={ () => setMessages([]) }/>
         </div>
         </CardHeader>  
         <CardContent className='mt-2'>    

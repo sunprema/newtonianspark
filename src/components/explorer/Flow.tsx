@@ -47,6 +47,7 @@ import YoutubeCard from "./YoutubeCard";
 import AddNode from "./AddNode";
 import ImageCard from "./ImageCard";
 import MindMapNode from "./MindMapNode";
+import NSparkChat from "../chat/npsark-chat";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -275,6 +276,9 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       </ReactFlow>
       </div>
       <AddNode />
+      
+      <NSparkChat/>
+      
       <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
               

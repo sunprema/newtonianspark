@@ -75,7 +75,7 @@ if(nodes != null){
           </p>
           </div>
           {m.role === "assistant" && m.content.toLowerCase().includes("prompt") && !isLoading
-          ? <div ><Badge variant="default" className="text-xs dark:bg-gray-400" onClick={() => handleUsePrompt( m.content, mode)}>use prompt</Badge> </div>
+          ? <div ><Badge variant="default" className="text-xs dark:bg-gray-400" onClick={() => handleUsePrompt( m.content, mode ?? "explore")}>use prompt</Badge> </div>
           :null
           }
 
@@ -156,7 +156,7 @@ const NSparkHomeChat =  ({mode}:{mode?:string}) => {
           </p>
           </div>
           {m.role === "assistant" && m.content.toLowerCase().includes("prompt") && !isLoading
-          ? <div ><Badge variant="default" className="text-xs dark:bg-gray-400" onClick={() => handleUsePrompt( m.content, mode)}>use prompt</Badge> </div>
+          ? <div ><Badge variant="default" className="text-xs dark:bg-gray-400" onClick={() => handleUsePrompt( m.content, mode ?? "explore")}>use prompt</Badge> </div>
           :null
           }
 

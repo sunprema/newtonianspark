@@ -25,7 +25,7 @@ const Page =() => {
 
       const callMindMapService = async(topic:string|null) => {
         const response = await axios.post("/api/mindmap", {explore:topic})
-        const {nodes,edges,ai_response, error} = response.data ; //ai_response will be used as context.
+        const {nodes,edges, error} = response.data ; //ai_response will be used as context.
         if (error != null){
           setError(error)
         }else{
@@ -54,6 +54,7 @@ const Page =() => {
                 initialTitle={"Database Design"} 
                 initialSummary={""} 
                 flowKey={""}
+                mode={"mindmap"}
             />
           }
           

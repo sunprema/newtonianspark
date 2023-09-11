@@ -222,13 +222,6 @@ import {memo} from 'react'
               <Image src={imageURL} width={500} height={400} alt={topic} />
             </div>
         </CardContent>
-        
-        <CardFooter className="flex justify-between">
-        <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(nodeId) }>explore more</Button>
-        <Link href="/visit/cYHR0KnX6My0PZ30ciom3" target="_blank">
-            <Button variant="link" >Go to</Button>
-        </Link>
-        </CardFooter>
       </Card>
       <Handle id="1" type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-green-500"  />
       <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />

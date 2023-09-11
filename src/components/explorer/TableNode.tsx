@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Column, Table } from "@/features/database_design/table_schema_types"
 
 
-import { KeyRound } from "lucide-react"
+import { KeyRound, Settings } from "lucide-react"
 import { Handle, Position } from "reactflow"
 import { Button } from "../ui/button"
 import useNsparkStore from "@/config/nsparkStore"
@@ -47,7 +47,8 @@ const TableDisplay = ({data}:{data:Table}) => {
                   /> 
                 :column.foreign_key != null ?
                 <Handle
-                    id={`handle-${data.table_name}-${column.name}` } 
+                    id={`handle-${data.table_name}-${column.name}` }
+                     
                     type="source"
                     className="relative -ml-6 !h-4 !w-4 !rounded-full !bg-orange-500 ring ring-orange-100"
                     position={Position.Left}
@@ -73,22 +74,19 @@ const TableDisplay = ({data}:{data:Table}) => {
     
      
     return (
-      <div>
-      <Card className="group rounded-xl min-w-[400px] border-orange-400 bg-slate-100 shadow-2xl dark:border-orange-400 dark:bg-slate-700">
-        <CardHeader className="border-b border-slate-500" >
-          <CardTitle className="text-xl font-semibold group-hover:text-orange-500 group-hover:dark:text-orange-500 uppercase">{table_name}</CardTitle>
+      <div >
+      <Card className="group min-w-[400px] rounded-xl border-orange-400 bg-slate-100 shadow-2xl dark:border-orange-400 dark:bg-slate-700">
+        <CardHeader className="m-2 border-b border-slate-500 pb-4 dark:border-slate-100" >
+          <CardTitle className="flex justify-between text-xl font-semibold uppercase group-hover:text-orange-500 group-hover:dark:text-orange-500">
+            <div>{table_name}</div>
+            <Settings className="nodrag z-50 hover:cursor-pointer"  onClick={()=> openSideSheetForNode(id, "table") }/>  
+          </CardTitle>
           {/*<CardDescription className="text-start text-lg font-medium">{description}</CardDescription> */}
+          
         </CardHeader>
         <CardContent className="mt-4">
         <TableDisplay data={data} />
         </CardContent>
-        
-        <CardFooter className="flex justify-between">
-        <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id, "table") }>more</Button>
-        
-        
-    </CardFooter>
-      
       </Card>
       
       </div>

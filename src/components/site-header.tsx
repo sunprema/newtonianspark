@@ -7,7 +7,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 
 export function SiteHeader() {
   return (
-    <header className="bg-slate-200 sticky top-0 z-40 w-full border-b dark:bg-slate-800 shadow-lg rounded-none">
+    <header className="sticky top-0 z-40 w-full rounded-none border-b bg-slate-200 shadow-lg dark:bg-slate-800">
       <div className="flex h-16 items-center space-x-4 px-4 sm:justify-between sm:space-x-0">
         <MainNav items={siteConfig.mainNav} />
           <ThemeToggle />

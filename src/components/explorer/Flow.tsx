@@ -47,6 +47,7 @@ import YoutubeCard from "./YoutubeCard";
 import AddNode from "./AddNode";
 import ImageCard from "./ImageCard";
 import MindMapNode from "./MindMapNode";
+import NSparkChat from "../chat/npsark-chat";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -86,12 +87,13 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
   };
 
   const BasicFlow = ( 
-    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey}: 
+    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey, mode}: 
     {initialNodes:Node[], 
      initialEdges:Edge[],
-     initialTitle:(string|null), 
-     initialSummary:(string|null), 
-     flowKey:(string|null),     
+     initialTitle?:string, 
+     initialSummary?:string, 
+     flowKey?:string,
+     mode?:string     
 
     }
     ) => {
@@ -99,10 +101,10 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     const [nodes,setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
     const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null >(null);
-    const [key, setKey] = useState<string|null>(flowKey);
+    const [key, setKey] = useState<string>(flowKey ?? "");
     const {toast} = useToast()
-    const [title, setTitle] = useState<string|null>(initialTitle)
-    const [summary, setSummary] = useState<string|null>(initialSummary)
+    const [title, setTitle] = useState<string>(initialTitle ?? "No Title")
+    const [summary, setSummary] = useState<string>(initialSummary ?? "No Summary")
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
     const { fitView } = useReactFlow();
     
@@ -157,12 +159,12 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           id: v4(),
           type: nodeType,
           position,
-          data: { mode : 'input'},
+          data: { mode : mode},
         };
   
         setNodes((nds) => nds.concat(newNode));
       },
-      [rfInstance, setNodes]
+      [rfInstance, setNodes, mode]
     );
 
     const onDragOver = useCallback((event:React.DragEvent) => {
@@ -183,10 +185,9 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           fitView();
         });
       },
-      [nodes, edges]
+      [nodes, edges, fitView, setEdges, setNodes]
     );
       
-    //TODO: Refactor this, I dont think we need a new function when rfInstance, or key or toast changes each time.
     const onSave = useCallback(async ()=> {
       if(rfInstance){
         const flow = rfInstance.toObject();
@@ -275,6 +276,9 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       </ReactFlow>
       </div>
       <AddNode />
+      
+      <NSparkChat  mode={mode}/>
+      
       <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
               
@@ -312,16 +316,17 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     );
   };
   
-  const BasicFlowWrapper = ({initialNodes, initialEdges,initialTitle, initialSummary, flowKey}: 
+  const BasicFlowWrapper = ({initialNodes, initialEdges,initialTitle, initialSummary, flowKey , mode}: 
     {initialNodes:Node[], 
      initialEdges:Edge[],
-     initialTitle:(string|null), 
-     initialSummary:(string|null), 
-     flowKey:(string|null)
-       }) => {
+     initialTitle?:string, 
+     initialSummary?:string, 
+     flowKey?:string,
+     mode?:string
+     }) => {
     return(
     <ReactFlowProvider>
-      <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={initialTitle} initialSummary={initialSummary} flowKey={flowKey}  />
+      <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={initialTitle} initialSummary={initialSummary} flowKey={flowKey} mode={mode} />
     </ReactFlowProvider>
     )
   } ;

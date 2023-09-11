@@ -28,10 +28,7 @@ const MindMapNode = ({data, id}:{data:{label:string, comment?:string}, id:string
             <CardContent className="mt-4">
             <p>{comment}</p>
             </CardContent>
-         : null }   
-        <CardFooter className="flex justify-between">
-            <Button variant="outline" size="sm" onClick={()=> openSideSheetForNode(id, "mindMap") }>more</Button>
-        </CardFooter>        
+         : null }
       </Card>
       <Handle
                     

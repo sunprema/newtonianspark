@@ -32,6 +32,7 @@
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "@vercel/kv": "^0.2.2",
+    "ai": "^2.2.12",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "base64-arraybuffer": "^1.0.2",

@@ -12,7 +12,7 @@ import {
     Edge,
   } from "reactflow";
 
-import useNsparkStore from "@/config/nsparkStore";
+
 
 const Page =() => {
     const searchParams = useSearchParams()
@@ -20,9 +20,6 @@ const Page =() => {
     const [initialNodes, setInitialNodes] = useState<Node[]|null>(null);
     const [initialEdges, setInitialEdges] = useState<Edge[]|null>(null);
     const [error, setError] = useState(null);
-    const [aiResponse, setAiResponses] = useState([]);
-    
-
      
     useEffect(() => {
 
@@ -58,6 +55,7 @@ const Page =() => {
                 initialTitle={"Database Design"} 
                 initialSummary={""} 
                 flowKey={""}
+                mode="table"
             />
           }
           

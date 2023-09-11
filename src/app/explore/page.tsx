@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import BasicFlow from "@/components/explorer/Flow";
+import BasicFlow from "@/components/nodes/Flow";
 import { useSearchParams } from 'next/navigation'
 
 import axios from 'axios';

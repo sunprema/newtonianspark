@@ -1,6 +1,6 @@
 'use client'
 
-import BasicFlow from "@/components/explorer/Flow"
+import BasicFlow from "@/components/nodes/Flow"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 import {

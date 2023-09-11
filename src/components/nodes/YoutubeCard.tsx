@@ -9,13 +9,11 @@ import {
     CardTitle
   } from "@/components/ui/card"
   
-  import { Handle, NodeToolbar, Position, useReactFlow } from 'reactflow';
-  import Link from "next/link";
+  import { Handle, Position, useReactFlow } from 'reactflow';
   import { Button } from "../ui/button";
   import useExploreStore from "@/config/exploreStore";
 import Image from "next/image";
-import { Trash2 } from 'lucide-react';
-import { Separator } from '../ui/separator';
+
 import { Input } from '../ui/input';
 import { Label } from "@/components/ui/label"
   
@@ -36,6 +34,7 @@ import {memo} from 'react'
           // it's important that you create a new object here
           // in order to notify react flow about the change
           node.data = {
+            mode:"video",
             topic,
             summary,
             videoId : getVideoId()
@@ -97,8 +96,7 @@ import {memo} from 'react'
 
   const YoutubeCard = ({data, id}:{data:any, id:string}) => {
 
-    const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
-    const {topic, summary, videoId, mode} = data
+    const {topic, summary, videoId, action} = data
     const [ videoIsOpen, setVideoIsOpen] = useState(false)
     
     const getEmbedHtml = (videoId:string) => {
@@ -107,7 +105,7 @@ import {memo} from 'react'
       allowfullscreen></iframe>`
     }
     
-    if( mode != null && mode === 'input'){
+    if( action != null && action === "input"){
       return (
         <YoutubeInputCard nodeId={id} />
       )

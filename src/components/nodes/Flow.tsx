@@ -159,7 +159,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           id: v4(),
           type: nodeType,
           position,
-          data: { mode : mode},
+          data: { mode : mode, action:"input"},
         };
   
         setNodes((nds) => nds.concat(newNode));

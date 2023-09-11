@@ -17,6 +17,7 @@ import { Button } from "../ui/button"
 import { useToast } from '../ui/use-toast';
 import { Edge, Node, useReactFlow } from 'reactflow';
 import { Textarea } from '../ui/textarea';
+import NSparkChat from '../chat/npsark-chat';
 
 
 export default function SideSheet({}){
@@ -102,6 +103,8 @@ export default function SideSheet({}){
             Using the context of the selected node {nodeType}, you can explore more.
           </SheetDescription>
         </SheetHeader>
+
+        <NSparkChat />
         <div className="flex flex-col space-x-4 space-y-5 sm:w-[300px]">
           <Textarea className="w-full" placeholder="What do you want to Explore!" value={topic} onChange={(e) => setTopic(e.target.value) } rows={5} cols={10}/>
           

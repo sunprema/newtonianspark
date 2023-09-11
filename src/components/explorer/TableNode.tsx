@@ -74,9 +74,9 @@ const TableDisplay = ({data}:{data:Table}) => {
     
      
     return (
-      <div>
+      <div >
       <Card className="group min-w-[400px] rounded-xl border-orange-400 bg-slate-100 shadow-2xl dark:border-orange-400 dark:bg-slate-700">
-        <CardHeader className="m-2 pb-4 border-b border-slate-500 pb-4 dark:border-slate-100" >
+        <CardHeader className="m-2 border-b border-slate-500 pb-4 dark:border-slate-100" >
           <CardTitle className="flex justify-between text-xl font-semibold uppercase group-hover:text-orange-500 group-hover:dark:text-orange-500">
             <div>{table_name}</div>
             <Settings className="nodrag z-50 hover:cursor-pointer"  onClick={()=> openSideSheetForNode(id, "table") }/>  

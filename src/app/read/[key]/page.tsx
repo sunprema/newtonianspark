@@ -1,4 +1,4 @@
-import ExplorerNodeReadable from "@/components/explorer/ExplorerNodeReadable";
+import ExplorerNodeReadable from "@/components/nodes/ExplorerNodeReadable";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { getValue } from "@/features/explore/store-service"
 
@@ -6,7 +6,7 @@ import {
     Node,
     Edge,    
   } from "reactflow";
-import { ImageCardReadable } from "@/components/explorer/ImageCardReadable";
+import { ImageCardReadable } from "@/components/nodes/ImageCardReadable";
 
 type Topic = {
     title :string,

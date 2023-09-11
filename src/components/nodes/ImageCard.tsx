@@ -9,13 +9,12 @@ import {
     CardTitle
   } from "@/components/ui/card"
   
-  import { Handle, NodeToolbar, Position, useReactFlow } from 'reactflow';
-  import Link from "next/link";
+  import { Handle, Position, useReactFlow } from 'reactflow';
+  
   import { Button } from "../ui/button";
   import useExploreStore from "@/config/exploreStore";
 import Image from "next/image";
-import { Trash2 } from 'lucide-react';
-import { Separator } from '../ui/separator';
+
 import { Input } from '../ui/input';
 import { Label } from "@/components/ui/label"
 import  Axios from 'axios';
@@ -29,8 +28,7 @@ import {memo} from 'react'
 
     const [topic, setTopic] = useState("")
     const [summary, setSummary] = useState("")
-    const [selectedFile, setSelectedFile] = useState<File>()
-    const [imageObtained, setImageObtained] = useState(false)
+  
 
     const { setNodes } = useReactFlow(); 
     const {toast} = useToast()  
@@ -52,7 +50,8 @@ import {memo} from 'react'
                 topic,
                 summary,
                 imageData,
-                mode:'base64'
+                mode: "image",
+                action:'base64'
           };
         }
 
@@ -70,7 +69,7 @@ import {memo} from 'react'
       }
     
     }
-
+    /*
     const fileUploadHandler = (event:React.ChangeEvent<HTMLInputElement>) => {
       if( event?.target?.files != null){
         setSelectedFile(event.target.files[0])
@@ -80,7 +79,9 @@ import {memo} from 'react'
           description : 'Image will be uplaoded and added to the node... Its to be implemented.'
         })
       }
-    } 
+      
+    }
+    */ 
     
 
     return (
@@ -102,10 +103,6 @@ import {memo} from 'react'
               <Label htmlFor="summary">Image Summary</Label>
               <Textarea id="summary" className="nodrag nopan" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)} />              
             </div>
-            <div>
-              <Label htmlFor="file_upload">Upload File</Label>
-              <Input type="file" id="file_upload" placeholder="Select image file" onChange={fileUploadHandler}/>  
-            </div>
           </div>  
       </CardContent>
 
@@ -122,7 +119,7 @@ import {memo} from 'react'
 
   const ImageBase64Card = ( {nodeId, data}:{nodeId:string, data:any} )=> {
     
-    const {topic, summary, imageData, mode} = data
+    const {topic, summary, imageData} = data
     const { setNodes } = useReactFlow(); 
     const {toast} = useToast()
     
@@ -143,8 +140,9 @@ import {memo} from 'react'
               node.data = {
                 topic,
                 summary,
+                mode:"image",
                 "imageURL": imageURL ,
-                mode:'display'
+                action:'display'
           };
         }
         return node;
@@ -205,9 +203,8 @@ import {memo} from 'react'
 
   }
 
-  const ImageDisplayCard = ( {nodeId, data}:{nodeId:string, data:any} ) => {
-    const openSideSheetForNode = useExploreStore( (state) => state.openSideSheetForNode)
-    const {topic, summary, imageURL, mode} = data
+  const ImageDisplayCard = ( {data}:{nodeId:string, data:any} ) => {
+    const {topic, summary, imageURL} = data
     return (
       <div>
         
@@ -218,7 +215,7 @@ import {memo} from 'react'
         </CardHeader>
         
         <CardContent>
-            <div className="nodrag container w-[full] mx-auto">            
+            <div className="nodrag container mx-auto w-[full]">            
               <Image src={imageURL} width={500} height={400} alt={topic} />
             </div>
         </CardContent>
@@ -233,15 +230,12 @@ import {memo} from 'react'
   }
 
 
-  const ImageCard = ({data, id}:{data:any, id:string}) => {
+  const ImageCard = ({data, id}:{data:{action:'input'|'base64'|'display'}, id:string}) => {
 
-    const {mode} = data
+    const {action} = data
 
     let imageCard = null
-    
-    if( mode != null){
-      
-      switch(mode){
+    switch(action){
         case "input":
           imageCard = <ImageInputCard nodeId={id} />
           break
@@ -250,14 +244,10 @@ import {memo} from 'react'
           break
         case "display":
           imageCard = <ImageDisplayCard nodeId={id} data={data} />
-          break  
-          
-      }
-
+          break            
     }
-
-    return imageCard;
     
+    return imageCard ;
   }
   
   export default memo(ImageCard) ;

@@ -48,6 +48,7 @@ import AddNode from "./AddNode";
 import ImageCard from "./ImageCard";
 import MindMapNode from "./MindMapNode";
 import NSparkChat from "../chat/npsark-chat";
+import TextNode from "./TextNode";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -58,6 +59,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     youtube: YoutubeCard,
     image: ImageCard,
     mindMap: MindMapNode,
+    text_heading:TextNode
   };
 
   const edgeTypes = {

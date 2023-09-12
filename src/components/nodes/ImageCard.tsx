@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react'
-
+import { Grip } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -208,7 +208,7 @@ import {memo} from 'react'
     return (
       <div>
         
-      <Card className= "shadow-2xl dark:bg-slate-700">
+      <Card className= "relative shadow-2xl dark:bg-slate-700">
         <CardHeader>
           <CardTitle>{topic}</CardTitle>
           <CardDescription>{summary}</CardDescription>
@@ -224,6 +224,7 @@ import {memo} from 'react'
       <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
       <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
       <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />
+      <Grip className='drag_handle absolute -left-5 top-1 dark:stroke-orange-500' />
       </div>
     )
 

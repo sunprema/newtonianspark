@@ -22,7 +22,8 @@ export async function POST(request:NextRequest){
             id: uuidv4(),
             type: 'explorer',
             data: topic,
-            position: { x: (index * 500) + 20 * (index + 1), y: 50 }
+            position: { x: (index * 500) + 20 * (index + 1), y: 50 },
+            drag_handle: '.drag_handle'
         })
     )
     

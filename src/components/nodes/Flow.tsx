@@ -21,6 +21,14 @@ import ReactFlow, {
   } from "reactflow";
 import "reactflow/dist/style.css";
 
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  ContextMenuShortcut,
+} from "@/components/ui/context-menu"
+
 import Dagre from '@dagrejs/dagre';
 import ExplorerNode from "./ExplorerNode";
 import TableNode from "./TableNode";
@@ -243,6 +251,8 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       
       <>
       <div ref={reactFlowWrapper} className="h-full">
+      <ContextMenu>
+      <ContextMenuTrigger>   
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -276,6 +286,18 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
         <SideSheet />
         
       </ReactFlow>
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-64">
+        <ContextMenuItem inset>
+          Copy
+          <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+        </ContextMenuItem>
+        <ContextMenuItem inset>
+          YouT
+          <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+        </ContextMenuItem>
+      </ContextMenuContent>  
+      </ContextMenu>
       </div>
       <AddNode />
       

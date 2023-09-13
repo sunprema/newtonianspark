@@ -21,6 +21,14 @@ import ReactFlow, {
   } from "reactflow";
 import "reactflow/dist/style.css";
 
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  ContextMenuShortcut,
+} from "@/components/ui/context-menu"
+
 import Dagre from '@dagrejs/dagre';
 import ExplorerNode from "./ExplorerNode";
 import TableNode from "./TableNode";
@@ -48,6 +56,8 @@ import AddNode from "./AddNode";
 import ImageCard from "./ImageCard";
 import MindMapNode from "./MindMapNode";
 import NSparkChat from "../chat/npsark-chat";
+import TextNode from "./TextNode";
+import GridNode from "./GridNode";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -58,6 +68,8 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     youtube: YoutubeCard,
     image: ImageCard,
     mindMap: MindMapNode,
+    text_heading:TextNode,
+    grid: GridNode
   };
 
   const edgeTypes = {
@@ -241,6 +253,8 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       
       <>
       <div ref={reactFlowWrapper} className="h-full">
+      <ContextMenu>
+      <ContextMenuTrigger>   
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -274,6 +288,18 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
         <SideSheet />
         
       </ReactFlow>
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-64">
+        <ContextMenuItem inset>
+          Copy
+          <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+        </ContextMenuItem>
+        <ContextMenuItem inset>
+          YouT
+          <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+        </ContextMenuItem>
+      </ContextMenuContent>  
+      </ContextMenu>
       </div>
       <AddNode />
       

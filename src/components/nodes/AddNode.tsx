@@ -11,8 +11,9 @@ import {
 
 import { Button } from "../ui/button"
 import { Card, CardContent } from "../ui/card"
-import { Youtube, LineChart, Image as Img, FunctionSquare, Plus, Database } from "lucide-react"
+import { Youtube, LineChart, Image as Img, FunctionSquare, Plus, Database, Text } from "lucide-react"
 import {memo} from 'react'
+import { ScrollArea } from "../ui/scroll-area"
 
 
 
@@ -33,6 +34,7 @@ const AddNode = () => {
             </Button>
             </PopoverTrigger>
             <PopoverContent className="mx-8 border-orange-500 shadow-2xl dark:border-orange-500 dark:bg-slate-700">
+             <ScrollArea className="max-h-screen">
              <div className="box-border flex flex-col space-y-4 hover:cursor-grab active:cursor-grabbing">
               <Card draggable className="group h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'youtube')}>
                 <CardContent className="flex items-center justify-between gap-4 align-middle">
@@ -82,7 +84,17 @@ const AddNode = () => {
                 </CardContent>
               </Card>
 
+              <Card draggable  className="group h-[100px] rounded-none border-none p-4 shadow-none hover:border-solid hover:border-orange-500 dark:bg-inherit dark:hover:border-orange-500" onDragStart={(event) => onDragStart(event, 'text_heading')}>
+                <CardContent className="flex items-center justify-between gap-4 align-middle">
+                <Text color="#F97316" size={36} />
+                  <div>
+                    <h6 className="scroll-m-20 text-xs font-bold tracking-tight  group-hover:text-orange-500 group-hover:dark:text-orange-500">Text Heading</h6>
+                    <p className="mt-4 scroll-m-20 text-xs font-light tracking-tight" >Add a text heading</p>
+                  </div>
+                </CardContent>
+              </Card>
              </div>
+             </ScrollArea> 
             </PopoverContent>
           </Popover>
           

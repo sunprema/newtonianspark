@@ -7,7 +7,7 @@ import {
   } from "@/components/ui/card"
 
 import { Column, Table } from "@/features/database_design/table_schema_types"
-
+import { useToast } from '../ui/use-toast';
 
 import { KeyRound, Settings } from "lucide-react"
 import { Handle, Node, Position, useReactFlow } from "reactflow"
@@ -15,6 +15,7 @@ import { Handle, Node, Position, useReactFlow } from "reactflow"
 import useNsparkStore from "@/config/nsparkStore"
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger, ContextMenuContent, ContextMenuSeparator } from "../ui/context-menu"
 import { nanoid } from "nanoid"
+import  Axios from "axios"
 
 const TableDisplay = ({data}:{data:Table}) => {
   const {columns}:{columns:Column[]|null} = data
@@ -72,20 +73,60 @@ const TableDisplay = ({data}:{data:Table}) => {
     const {table_name} = data
     const openSideSheetForNode = useNsparkStore( (state) => state.openSideSheetForNode)
     const {addNodes, getNode, setNodes, setEdges} = useReactFlow()
+    const {toast} = useToast()  
     
     const handleDupe = () => {
       const currentNode = getNode(id)
       if (currentNode){
         const newNode:Node = { 
           ...currentNode,
-          //override the position & id
           id: nanoid(5), 
           position:{ x:currentNode.position.x + 500, y:currentNode.position.y }
         }
         addNodes( newNode)
       }
-     }
+    }
 
+
+    const handleDummyData = async() => {
+      const currentNode = getNode(id)
+      if (currentNode){
+        try{
+          const response = await Axios.post('/api/contextual', 
+          {
+            "systemPromptFromUser" : `You are a database domain expert. User will provide a table scheme as JSON string. 
+            You will provide dummy data for that request. The response should only be a JSON with "dummy_data" as key and value as list of records for the table.`,
+            "humanMessage":JSON.stringify(currentNode.data),
+            
+          });
+          console.log(response.data)
+          const {result, error} = response.data
+          const resultJSON = JSON.parse(result.text)
+          const dummyData = resultJSON?.dummy_data ?? []  
+
+          if(error){
+            toast({
+              title: "Dummy data generation failed, Please try again later",
+              variant: "destructive" ,
+              description: `error : ${error}`,
+            })
+          }
+          const newNode:Node = { 
+            type: "grid",
+            data: { "dummyData" : dummyData , "columns" : currentNode.data.columns},
+            id: nanoid(5), 
+            position:{ x:currentNode.position.x + 500, y:currentNode.position.y }
+          }
+          addNodes( newNode)
+        }catch(error){
+          toast({
+            title: "Dummy data generation call failed, Please try again later",
+            variant: "destructive" ,
+            description: `error : ${error}`,
+          })
+      }
+    }
+   }
 
     const handleDelete = () => {
       setNodes( (nodes) => nodes.filter( (node) => node.id !== id))
@@ -113,6 +154,9 @@ const TableDisplay = ({data}:{data:Table}) => {
 
       </ContextMenuTrigger>
       <ContextMenuContent className="w-64">
+        <ContextMenuItem inset onClick={handleDummyData}>
+          Create dummy data
+        </ContextMenuItem>
         <ContextMenuItem inset onClick={handleDupe}>
           Duplicate
         </ContextMenuItem>

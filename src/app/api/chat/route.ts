@@ -57,36 +57,40 @@ const formatMessage = (message: VercelChatMessage) => {
   export async function POST(req: NextRequest) {
     const body = await req.json();
     const messages = body.messages ?? [];
+    const systemPromptFromUser = body.systemPrompt;
     const mode = body.mode ?? "explore";
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
     let prompt = null;
 
-    switch(mode){
 
-      case "explore":
-        
-        prompt = PromptTemplate.fromTemplate(EXPLORE_PROMPT_TEMPLATE);
-        break;
+    if ( systemPromptFromUser ){
+      prompt = PromptTemplate.fromTemplate(systemPromptFromUser);
+    }else{
+      switch(mode){
 
-      case "mindmap":
-        prompt = PromptTemplate.fromTemplate(MINDMAP_PROMPT_TEMPLATE);
-        break;
-
-      case "table":
-        prompt = PromptTemplate.fromTemplate(DATABASE_PROMPT_TEMPLATE);
-        break;
-
-      case "image":  
-        prompt = PromptTemplate.fromTemplate(IMAGE_PROMPT_TEMPLATE);
-        break;
-
-      default:
-        prompt = PromptTemplate.fromTemplate(EXPLORE_PROMPT_TEMPLATE);
-        break;
+        case "explore":
+          
+          prompt = PromptTemplate.fromTemplate(EXPLORE_PROMPT_TEMPLATE);
+          break;
+  
+        case "mindmap":
+          prompt = PromptTemplate.fromTemplate(MINDMAP_PROMPT_TEMPLATE);
+          break;
+  
+        case "table":
+          prompt = PromptTemplate.fromTemplate(DATABASE_PROMPT_TEMPLATE);
+          break;
+  
+        case "image":  
+          prompt = PromptTemplate.fromTemplate(IMAGE_PROMPT_TEMPLATE);
+          break;
+  
+        default:
+          prompt = PromptTemplate.fromTemplate(EXPLORE_PROMPT_TEMPLATE);
+          break;
+      }
     }
-    
-
     
     const outputParser = new BytesOutputParser();
     const chain = prompt?.pipe(chatAI).pipe(outputParser);

@@ -58,6 +58,7 @@ import MindMapNode from "./MindMapNode";
 import NSparkChat from "../chat/npsark-chat";
 import TextNode from "./TextNode";
 import GridNode from "./GridNode";
+import SideToolbar from "../side-toolbar";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -254,6 +255,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       <>
       <div ref={reactFlowWrapper} className="h-full">
       <ContextMenu>
+      
       <ContextMenuTrigger>   
       <ReactFlow
         nodes={nodes}
@@ -271,7 +273,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
         fitView
                 
       > 
-        <Controls>
+        <Controls className="absolute left-8 bottom-4">
           <ControlButton onClick={()=>setIsSaveDialogOpen(true)} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
             <SaveIcon size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
           </ControlButton> 
@@ -301,7 +303,8 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       </ContextMenuContent>  
       </ContextMenu>
       </div>
-      <AddNode />
+      
+      <SideToolbar />
       
       <NSparkChat  mode={mode} systemPromptFromUser="You are an expert assistant. You will assist user query"/>
       

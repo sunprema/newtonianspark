@@ -1,6 +1,6 @@
 'use client'
 
-import {useState, useEffect, useCallback} from 'react'
+import {useState, useCallback} from 'react'
 import axios from 'axios';
 import {
     Sheet,
@@ -8,11 +8,9 @@ import {
     SheetDescription,
     SheetHeader,
     SheetTitle,
-    SheetFooter,    
   } from "@/components/ui/sheet"
 
 import useNsparkState from '@/config/nsparkStore';
-import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { useToast } from '../ui/use-toast';
 import { Edge, Node, useReactFlow } from 'reactflow';
@@ -104,7 +102,7 @@ export default function SideSheet({}){
           </SheetDescription>
         </SheetHeader>
 
-        <NSparkChat />
+        <NSparkChat mode={nodeType} systemPromptFromUser='You are an expert assistant' />
         <div className="flex flex-col space-x-4 space-y-5 sm:w-[300px]">
           <Textarea className="w-full" placeholder="What do you want to Explore!" value={topic} onChange={(e) => setTopic(e.target.value) } rows={5} cols={10}/>
           

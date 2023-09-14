@@ -92,7 +92,7 @@ const TableDisplay = ({data}:{data:Table}) => {
       const currentNode = getNode(id)
       if (currentNode){
         try{
-          const response = await Axios.post('/api/contextual', 
+          const response = await Axios.post('/api/contextual/table', 
           {
             "systemPromptFromUser" : `You are a database domain expert. User will provide a table scheme as JSON string. 
             You will provide dummy data for that request. The response should only be a JSON with "dummy_data" as key and value as list of records for the table.`,
@@ -113,7 +113,7 @@ const TableDisplay = ({data}:{data:Table}) => {
           }
           const newNode:Node = { 
             type: "grid",
-            data: { "dummyData" : dummyData , "columns" : currentNode.data.columns},
+            data: { "rows" : dummyData , "columns" : currentNode.data.columns, "caption" : table_name},
             id: nanoid(5), 
             position:{ x:currentNode.position.x + 500, y:currentNode.position.y }
           }

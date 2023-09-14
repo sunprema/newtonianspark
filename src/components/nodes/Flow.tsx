@@ -105,7 +105,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
      initialTitle?:string, 
      initialSummary?:string, 
      flowKey?:string,
-     mode?:string     
+     mode:string     
 
     }
     ) => {
@@ -303,7 +303,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       </div>
       <AddNode />
       
-      <NSparkChat  mode={mode}/>
+      <NSparkChat  mode={mode} systemPromptFromUser="You are an expert assistant. You will assist user query"/>
       
       <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
@@ -348,7 +348,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
      initialTitle?:string, 
      initialSummary?:string, 
      flowKey?:string,
-     mode?:string
+     mode:string
      }) => {
     return(
     <ReactFlowProvider>

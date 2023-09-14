@@ -87,6 +87,21 @@ const TableDisplay = ({data}:{data:Table}) => {
       }
     }
 
+    //Node to handle crud screen
+    const handleCRUDScreen = () => {
+      const currentNode = getNode(id)
+      if (currentNode){
+        const newNode:Node = { 
+          type: "dynamicFormNode",
+          data: { tableData: data,  },
+          id: nanoid(5), 
+          position:{ x:currentNode.position.x + 500, y:currentNode.position.y }
+          
+        }
+        addNodes( newNode)
+      }
+    }
+
 
     const handleDummyData = async() => {
       const currentNode = getNode(id)
@@ -164,6 +179,12 @@ const TableDisplay = ({data}:{data:Table}) => {
         <ContextMenuItem inset onClick={handleDelete}>
           Delete
         </ContextMenuItem>
+
+        <ContextMenuItem inset onClick={handleCRUDScreen}>
+        Create UI for this table
+        </ContextMenuItem>
+
+        
 
       </ContextMenuContent>
         

@@ -59,6 +59,7 @@ import NSparkChat from "../chat/npsark-chat";
 import TextNode from "./TextNode";
 import GridNode from "./GridNode";
 import SideToolbar from "../side-toolbar";
+import DynamicFormNode from "./code/DynamicFormNode";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -70,7 +71,8 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     image: ImageCard,
     mindMap: MindMapNode,
     text_heading:TextNode,
-    grid: GridNode
+    grid: GridNode,
+    dynamicFormNode: DynamicFormNode
   };
 
   const edgeTypes = {

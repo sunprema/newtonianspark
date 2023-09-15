@@ -1,4 +1,4 @@
-import { NSparkHomeChat } from '@/components/chat/npsark-chat'
+
 
 export default function IndexPage() {
 
@@ -23,7 +23,7 @@ export default function IndexPage() {
       <div className="flex">
         <div>
           
-          <NSparkHomeChat mode="explore" />
+          
         </div>        
       </div>
       </div>

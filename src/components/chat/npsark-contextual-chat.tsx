@@ -2,25 +2,16 @@
 
 import {memo} from 'react'
 import { useChat, Message } from 'ai/react';
+import {useRouter} from 'next/navigation'
 import { Card, CardContent, CardHeader } from '../ui/card';
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from '../ui/button';
 import { Sparkle, Sparkles, Trash2, User2 } from 'lucide-react';
-
 import { Label } from "@/components/ui/label"
 import { Textarea } from '../ui/textarea';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { Badge } from "../ui/badge";
-import axios from 'axios';
-import { Edge, Node, useReactFlow } from 'reactflow';
-import { useToast } from '../ui/use-toast';
 
-const NSparkChatWindow =  ({mode, systemPromptFromUser}:{mode:string, systemPromptFromUser:string}) => {
-
+const NSparkContextualChat = ({mode, systemPromptFromUser}:{mode:string, systemPromptFromUser:string}) => {
   const systemPromptMessage:Message =
     {
     id: "1",
@@ -28,43 +19,20 @@ const NSparkChatWindow =  ({mode, systemPromptFromUser}:{mode:string, systemProm
     content:systemPromptFromUser, 
     createdAt: new Date()}
   
-  const { addNodes, addEdges } = useReactFlow();
-  const {toast} = useToast()
-
   const { messages,setMessages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    "api" :"/api/chat",
-    initialMessages : [systemPromptMessage,]
-
+      "api" :"/api/chat",
+      initialMessages : [systemPromptMessage,]  
   });
   
-  const handleUsePrompt = async(promptMessage:string, mode:string) => {
+  const router = useRouter()
+
+  const handleUsePrompt = (promptMessage:string, mode:string) => {
     const apiToCall = mode === 'table' ? 'ddl' : mode
-    const response = await axios.post(`/api/${apiToCall}`,{explore:promptMessage})
-    const {nodes,edges,error}:{ nodes:Node[]|null, edges:Edge[]|null,error:string } = response.data
-    
-    if(error != null || error !== ''){
-    toast({
-        title: "Unexpected failure",
-        description: error,
-      })
-}
-
-if(nodes != null){
-    addNodes( nodes)
-    if( edges != null){
-      addEdges(edges)
-    }
-    
-    toast({
-        title: "Success ",
-        description: `Nodes returned : ${nodes?.length} , Edges returned : ${edges?.length}`,
-    })
-}  
-
-}
+    router.push(`/${apiToCall}?topic=${encodeURIComponent(promptMessage)}`)    
+  }
 
   return (
-    <div className="flex w-[full] min-w-[300px] flex-col p-0">
+    <div className="container flex flex-col border border-orange-500 p-0  shadow-2xl dark:border-orange-500 dark:bg-slate-700 sm:min-w-[800px]">
         <Card className="rounded-none border-none p-0 shadow-none outline-none dark:bg-inherit">
         <CardHeader >
         <div className='flex'>
@@ -81,7 +49,7 @@ if(nodes != null){
           
           {m.role === 'user' ? <div> <User2 size={16}/> </div>: <div> <Sparkle size={16} /> </div>}
 
-          <p className="p-2 text-xs font-light">
+          <p className="p-2 text-sm font-normal">
           {m.content}
           </p>
           </div>
@@ -99,7 +67,11 @@ if(nodes != null){
         <form onSubmit={handleSubmit}>
         <div className="flex w-full flex-col gap-2">
           <Label htmlFor="explore" className="text-xs font-bold">Make my {mode} prompt better!</Label>
-          <Textarea id="explore" placeholder="Ask your question!" value={input} onChange={handleInputChange} 
+          <Textarea id="explore" 
+            placeholder={mode === "table" 
+            ? "Detailed database instructions!" 
+            :  "Explore your ideas"}  
+            value={input} onChange={handleInputChange} 
             rows={1}
             className="flex-1 resize rounded-none border-gray-100 text-sm outline-none"/>
           <Button variant={"secondary"}  className='shrink-0 text-xs'><Sparkles className='mr-2'/>Send</Button>
@@ -116,23 +88,5 @@ if(nodes != null){
   );
 }
 
-const NSparkChat = ({mode,systemPromptFromUser }:{mode:string, systemPromptFromUser:string}) => {
-  return(
-    <div className="absolute right-8 top-8">
-    <Popover>
-      <PopoverTrigger>
-        <Button size="icon" className="relative h-[24px] w-[24px] rounded-full bg-orange-500 shadow-2xl dark:bg-orange-500" >
-        <Sparkles size={32} />
-      </Button>
-      </PopoverTrigger>
-      <PopoverContent className="mr-8 min-h-[500px] min-w-[450px]  border-orange-500 shadow-2xl dark:border-orange-500 dark:bg-slate-700">
-      <NSparkChatWindow mode={mode} systemPromptFromUser={systemPromptFromUser}/>
-      </PopoverContent>
-    </Popover>
-    </div>
-  )
-}
+export default memo(NSparkContextualChat)
 
-
-
-export default memo(NSparkChat) ;

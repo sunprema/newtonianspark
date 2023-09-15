@@ -16,7 +16,7 @@ const chatAI = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_KEY,
     maxRetries :2 ,
     maxConcurrency : 5,
-    modelName: "gpt-3.5-turbo-0613", 
+    modelName: "gpt-4", 
     //modelName: "gpt-4",
     temperature: 1,
     maxTokens : -1
@@ -42,7 +42,8 @@ export const DatabaseDesignService = async ( {explore, context}:{ explore: strin
     let error = null
     try{
         //result = DUMMY_DATA
-        result = await chain.call({ inputText : explore})        
+        chain.verbose = true
+        result = await chain.call({ inputText : explore })        
         console.log(JSON.stringify(result, null, 2))
         return {
             result,

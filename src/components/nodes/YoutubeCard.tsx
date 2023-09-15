@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react'
+import { useState} from 'react'
 
 import {
     Card,
@@ -11,7 +11,7 @@ import {
   
   import { Handle, Position, useReactFlow } from 'reactflow';
   import { Button } from "../ui/button";
-  import useExploreStore from "@/config/exploreStore";
+  
 import Image from "next/image";
 
 import { Input } from '../ui/input';
@@ -55,8 +55,8 @@ import {memo} from 'react'
     }
 
     return (
-    <div className="w-[500px] shadow-2xl dark:bg-slate-700">
-      <Card>
+    
+      <Card className="w-[500px] shadow-2xl dark:bg-slate-700">
 
       <CardHeader>
         <CardTitle>Add a video</CardTitle>
@@ -82,12 +82,11 @@ import {memo} from 'react'
       </CardContent>
 
       <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button onClick={ ()=> addYoutubeVideoToNodes()}>Apply</Button>
+        <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> addYoutubeVideoToNodes()}>Apply</Button>
       </CardFooter>
 
       </Card>
-    </div>
+    
 
     )
 

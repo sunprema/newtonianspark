@@ -4,7 +4,6 @@ import { getTopics } from "@/features/explore/store-service";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
@@ -24,8 +23,8 @@ const Page = async() => {
 
     return (
         <section className="min-h-screen  dark:bg-slate-600">
-        <h3 className="border-b p-8 mb-8 text-2xl font-bold">Articles</h3>   
-        <div className="flex flex-wrap justify-center items-center gap-8 ">
+        <h3 className="mb-8 border-b p-8 text-2xl font-bold">Articles</h3>   
+        <div className="flex flex-wrap items-center justify-center gap-8 ">
             {
             data?.map( (d)=> {
                 return (

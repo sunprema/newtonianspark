@@ -54,7 +54,8 @@ const Page = () => {
                 initialEdges={edges}
                 initialTitle={"test"} 
                 initialSummary={"test_summary"} 
-                flowKey={"123"} 
+                flowKey={"123"}
+                mode="exploree" 
                 />
             </div>
             </ScrollArea>

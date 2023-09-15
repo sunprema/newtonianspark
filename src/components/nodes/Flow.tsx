@@ -52,12 +52,13 @@ import { v4 } from 'uuid';
 import SideSheet from "./SideSheet";
 import ButtonEdge from "./ButtonEdge";
 import YoutubeCard from "./YoutubeCard";
-import AddNode from "./AddNode";
 import ImageCard from "./ImageCard";
 import MindMapNode from "./MindMapNode";
 import NSparkChat from "../chat/npsark-chat";
 import TextNode from "./TextNode";
 import GridNode from "./GridNode";
+import SideToolbar from "../side-toolbar";
+import DynamicFormNode from "./code/DynamicFormNode";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -69,7 +70,8 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     image: ImageCard,
     mindMap: MindMapNode,
     text_heading:TextNode,
-    grid: GridNode
+    grid: GridNode,
+    dynamicFormNode: DynamicFormNode
   };
 
   const edgeTypes = {
@@ -105,7 +107,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
      initialTitle?:string, 
      initialSummary?:string, 
      flowKey?:string,
-     mode?:string     
+     mode:string     
 
     }
     ) => {
@@ -254,6 +256,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       <>
       <div ref={reactFlowWrapper} className="h-full">
       <ContextMenu>
+      
       <ContextMenuTrigger>   
       <ReactFlow
         nodes={nodes}
@@ -271,7 +274,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
         fitView
                 
       > 
-        <Controls>
+        <Controls className="absolute left-8 bottom-4">
           <ControlButton onClick={()=>setIsSaveDialogOpen(true)} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
             <SaveIcon size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
           </ControlButton> 
@@ -295,15 +298,16 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           <ContextMenuShortcut>⌘[</ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuItem inset>
-          YouT
+          Delete
           <ContextMenuShortcut>⌘[</ContextMenuShortcut>
         </ContextMenuItem>
       </ContextMenuContent>  
       </ContextMenu>
       </div>
-      <AddNode />
       
-      <NSparkChat  mode={mode}/>
+      
+      
+      <NSparkChat  mode={mode} systemPromptFromUser="You are an expert assistant. You will assist user query"/>
       
       <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
             <DialogContent className="sm:max-w-[500px]">
@@ -348,11 +352,18 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
      initialTitle?:string, 
      initialSummary?:string, 
      flowKey?:string,
-     mode?:string
+     mode:string
      }) => {
     return(
     <ReactFlowProvider>
+      <div className="flex">
+      <div className="h-[calc(100vh-74px)] w-[80px]  border-r bg-white dark:bg-slate-500">
+        <SideToolbar />  
+      </div>
+      <div className="flex-1">
       <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={initialTitle} initialSummary={initialSummary} flowKey={flowKey} mode={mode} />
+      </div>
+      </div>
     </ReactFlowProvider>
     )
   } ;

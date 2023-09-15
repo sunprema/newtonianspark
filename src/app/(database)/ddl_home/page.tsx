@@ -1,4 +1,5 @@
-import { NSparkHomeChat } from '@/components/chat/npsark-chat'
+import NpsarkContextualChat from "@/components/chat/npsark-contextual-chat";
+
 export default function IndexPage() {
 
   return (
@@ -22,7 +23,14 @@ export default function IndexPage() {
       <div className="flex">
         <div>
           
-          <NSparkHomeChat mode="table" />
+          <NpsarkContextualChat 
+          mode="table" 
+          systemPromptFromUser={`You are a postgres database domain expert. User want to create a database requirement document.
+          You will help refine user request and create a database scheme requirement.
+          It should include all the entities that will be required for users request to cover the main use cases as well as the edge cases that you think are required. Don't ask questions more than two times.
+          If you are satisfied with your response, prefix the response with "PROMPT".
+          `}
+          />
         </div>        
       </div>
       </div>

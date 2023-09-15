@@ -14,26 +14,25 @@ import {
 import {
     Card,
     CardContent,
-    CardHeader,
-    CardTitle
   } from "@/components/ui/card"
 
 const GridNode = (
     {data, id}
     :{data:
-        {"dummyData"?:object[],
-        "columns"?: Column[] }, 
+        {"rows"?:object[],
+        "columns"?: Column[],
+      "caption"?:string }, 
      id:string}
 
 
 ) => {
-  const {dummyData, columns} = data
+  const {rows, columns, caption} = data
   return (
     <>
     <Card className="group min-w-[400px] rounded-xl border-orange-400 bg-slate-100 shadow-2xl dark:border-orange-400 dark:bg-slate-700">
       <CardContent>  
       <Table>
-      <TableCaption>Dummy Data</TableCaption>
+      <TableCaption>{caption}</TableCaption>
       <TableHeader>
         <TableRow>
           {columns?.map((column, index) => (
@@ -45,7 +44,7 @@ const GridNode = (
         </TableRow>
       </TableHeader>
       <TableBody>
-        {dummyData?.map((dd:any,index) => (
+        {rows?.map((dd:any,index) => (
           <TableRow key={index}>
             { columns?.map((column, index) => (
                 <TableCell key={`c-${index}`} 

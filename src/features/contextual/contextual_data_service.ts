@@ -17,7 +17,7 @@ const chatAI = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_KEY,
     maxRetries :2 ,
     maxConcurrency : 5,
-    modelName: "gpt-3.5-turbo-0613", 
+    modelName: "gpt-4", 
     temperature: 1,
     maxTokens : -1
 });

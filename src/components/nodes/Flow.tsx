@@ -52,7 +52,6 @@ import { v4 } from 'uuid';
 import SideSheet from "./SideSheet";
 import ButtonEdge from "./ButtonEdge";
 import YoutubeCard from "./YoutubeCard";
-import AddNode from "./AddNode";
 import ImageCard from "./ImageCard";
 import MindMapNode from "./MindMapNode";
 import NSparkChat from "../chat/npsark-chat";
@@ -299,14 +298,14 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           <ContextMenuShortcut>⌘[</ContextMenuShortcut>
         </ContextMenuItem>
         <ContextMenuItem inset>
-          YouT
+          Delete
           <ContextMenuShortcut>⌘[</ContextMenuShortcut>
         </ContextMenuItem>
       </ContextMenuContent>  
       </ContextMenu>
       </div>
       
-      <SideToolbar />
+      
       
       <NSparkChat  mode={mode} systemPromptFromUser="You are an expert assistant. You will assist user query"/>
       
@@ -357,7 +356,14 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
      }) => {
     return(
     <ReactFlowProvider>
+      <div className="flex">
+      <div className="h-[calc(100vh-74px)] w-[80px]  border-r bg-white dark:bg-slate-500">
+        <SideToolbar />  
+      </div>
+      <div className="flex-1">
       <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={initialTitle} initialSummary={initialSummary} flowKey={flowKey} mode={mode} />
+      </div>
+      </div>
     </ReactFlowProvider>
     )
   } ;

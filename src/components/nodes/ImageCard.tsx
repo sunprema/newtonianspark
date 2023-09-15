@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react'
+import React, {useState} from 'react'
 import { Grip } from 'lucide-react';
 import {
     Card,
@@ -12,8 +12,7 @@ import {
   import { Handle, Position, useReactFlow } from 'reactflow';
   
   import { Button } from "../ui/button";
-  import useExploreStore from "@/config/exploreStore";
-import Image from "next/image";
+  import Image from "next/image";
 
 import { Input } from '../ui/input';
 import { Label } from "@/components/ui/label"
@@ -107,8 +106,7 @@ import {memo} from 'react'
       </CardContent>
 
       <CardFooter className="flex justify-between">
-        <Button variant="outline">Cancel</Button>
-        <Button onClick={ ()=> generateImage()}>DallE, make me an image!</Button>
+        <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> generateImage()}>DallE, make me an image!</Button>
       </CardFooter>
 
       </Card>

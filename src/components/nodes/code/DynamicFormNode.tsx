@@ -6,22 +6,22 @@ import {
     CardDescription,
     CardTitle
 } from "@/components/ui/card"
-import { KeyRound, Settings } from "lucide-react"
+import { Settings } from "lucide-react"
 
-import { Column, Table } from "@/features/database_design/table_schema_types"
+import { Table } from "@/features/database_design/table_schema_types"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
 interface TableUIData {
     tableData: Table
-    layoutData?:{} //This should hold element data
+    layoutData?:object //This should hold element data
 
 }
 
 const DynamicFormDisplay = ({data, id}:{data:TableUIData, id:string}) => {
 
-    const {tableData, layoutData} = data
-    const {table_name, columns, description} = tableData
+    const {tableData} = data
+    const { columns} = tableData
     return (
         
         <div className="grid w-full items-center gap-4">

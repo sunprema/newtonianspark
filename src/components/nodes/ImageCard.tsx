@@ -250,3 +250,32 @@ import {memo} from 'react'
   }
   
   export default memo(ImageCard) ;
+
+
+  export  const ImageCardPresentationMode = ( {id, data}:{id:string, data:any} ) => {
+  const {topic, summary, imageURL, mode} = data
+  
+  if(!imageURL){
+    return <h1> No Image</h1>
+  }  
+   return (
+     <div>
+       
+     <Card className= "shadow-2xl dark:bg-slate-700">
+       <CardHeader>
+         <CardTitle>{topic}</CardTitle>
+         <CardDescription>{summary}</CardDescription>
+       </CardHeader>
+       
+       <CardContent>
+           <div className="container w-[full] mx-auto">            
+             <Image src={imageURL} width={500} height={400} alt={topic} />
+           </div>
+       </CardContent>
+       
+       
+     </Card>
+      </div>
+   )
+
+ }

@@ -14,7 +14,7 @@ export const UnsplashImageService = async ( prompt:string ) => {
               }
        )
        if( response.ok) {
-        const {data} = await response.json()
+        const data = await response.json()
         const imageData = data.results 
         return imageData ;
 

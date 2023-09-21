@@ -8,6 +8,13 @@ import {
     CardHeader,
     CardTitle
   } from "@/components/ui/card"
+
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"  
   
   import { Handle, Position, useReactFlow } from 'reactflow';
   
@@ -30,7 +37,51 @@ import {memo} from 'react'
   
 
     const { setNodes } = useReactFlow(); 
-    const {toast} = useToast()  
+    const {toast} = useToast()
+    
+    
+    const searchImage = async() => {
+      try{
+        const response = await Axios.post('/api/imageSearch' , {"prompt" : summary})
+        const imageData = response.data['imageData']
+      
+        if(imageData){
+          console.log(imageData)
+
+        
+        
+          /*  
+        setNodes((nds) =>
+          nds.map((node) => {
+            if (node.id === nodeId) {
+              node.data = {
+                topic,
+                summary,
+                mode:"image",
+                "imageURL": imageURL ,
+                action:'display'
+          };
+        }
+        return node;
+        })
+        ); 
+        */
+      }else{
+        toast({
+          title: "Image search failed, Please try again later",
+          variant: "destructive" ,
+          description: "public URL couldnt be obtained",
+        })
+      }
+
+      }catch(error){
+        toast({
+          title: "Image search failed, Please try again later",
+          variant: "destructive" ,
+          description: `error : ${error}`,
+        })
+      }
+    }
 
     const generateImage = async() => {
       
@@ -98,16 +149,40 @@ import {memo} from 'react'
               <Label htmlFor="title">Title</Label>
               <Input id="title" placeholder="Title for this image" value={topic} onChange={(e) => setTopic(e.target.value)}/>
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="summary">Image Summary</Label>
-              <Textarea id="summary" className="nodrag nopan" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)} />              
+
+            <div>
+              <Tabs defaultValue="search" className="w-[400px]">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="search">Search</TabsTrigger>
+                  <TabsTrigger value="generate">Generate</TabsTrigger>
+                </TabsList>
+                <TabsContent value="search">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="summary">Search</Label>
+                  <Input id="summary" className="nodrag nopan" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)} />              
+                </div>
+                <CardFooter className="flex justify-between">
+                    <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> searchImage()}>Unsplash, search me an image!</Button>
+                </CardFooter>
+                </TabsContent>
+
+                <TabsContent value="generate">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="summary">Image Summary</Label>
+                  <Textarea id="summary" className="nodrag nopan" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)} />              
+                </div>
+                <CardFooter className="flex justify-between">
+                    <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> generateImage()}>DallE, make me an image!</Button>
+                </CardFooter>
+                </TabsContent>
+
+              </Tabs>  
             </div>
+            
           </div>  
       </CardContent>
 
-      <CardFooter className="flex justify-between">
-        <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> generateImage()}>DallE, make me an image!</Button>
-      </CardFooter>
+      
 
       </Card>
       

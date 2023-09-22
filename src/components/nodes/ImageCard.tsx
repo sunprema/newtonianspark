@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable @next/next/no-img-element */
 import React, {useState} from 'react'
-import { Grip } from 'lucide-react';
+import { CheckCircle, Grip, TicketIcon } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -8,6 +10,13 @@ import {
     CardHeader,
     CardTitle
   } from "@/components/ui/card"
+
+import {
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+} from "@/components/ui/tabs"  
   
   import { Handle, Position, useReactFlow } from 'reactflow';
   
@@ -22,15 +31,78 @@ import { Textarea } from "@/components/ui/textarea"
 
 import {memo} from 'react'
 
+type UnsplashImageType = {
+  urls: {
+    regular:string
+  }
+}
+
 
   const ImageInputCard = ( {nodeId}:{nodeId:string} )=> {
 
     const [topic, setTopic] = useState("")
     const [summary, setSummary] = useState("")
+    const [imageSearchResult, setImageSearchResult] = useState<UnsplashImageType[]>()
+    const [ selectedImage, setSelectedImage] = useState<string|null>();
+    
   
 
     const { setNodes } = useReactFlow(); 
-    const {toast} = useToast()  
+    const {toast} = useToast()
+    
+    const clearSearch =() => {
+      setSummary("")
+      setSelectedImage(null)
+      setImageSearchResult([])
+
+    }
+
+    const saveSelectedImage = () => {
+        
+        setNodes((nds) =>
+          nds.map((node) => {
+            if (node.id === nodeId) {
+              node.data = {
+                topic,
+                summary,
+                mode:"image",
+                "imageURL": selectedImage ,
+                action:'display'
+          };
+        }
+        return node;
+        })
+        ); 
+        
+    }
+    
+    const searchImage = async() => {
+      try{
+        const response = await Axios.post('/api/imageSearch' , {"prompt" : summary})
+        const imageData = response.data['imageData']
+      
+        if(imageData){
+          console.log(imageData)
+          setImageSearchResult(imageData)
+        
+        
+          
+      }else{
+        toast({
+          title: "Image search failed, Please try again later",
+          variant: "destructive" ,
+          description: "public URL couldnt be obtained",
+        })
+      }
+
+      }catch(error){
+        toast({
+          title: "Image search failed, Please try again later",
+          variant: "destructive" ,
+          description: `error : ${error}`,
+        })
+      }
+    }
 
     const generateImage = async() => {
       
@@ -98,16 +170,67 @@ import {memo} from 'react'
               <Label htmlFor="title">Title</Label>
               <Input id="title" placeholder="Title for this image" value={topic} onChange={(e) => setTopic(e.target.value)}/>
             </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="summary">Image Summary</Label>
-              <Textarea id="summary" className="nodrag nopan" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)} />              
+
+            <div>
+              <Tabs defaultValue="search" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="search">Search</TabsTrigger>
+                  <TabsTrigger value="generate">Generate</TabsTrigger>
+                </TabsList>
+                <TabsContent value="search">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="summary">Search</Label>
+                  {
+                    imageSearchResult ? 
+                    <div className='grid grid-cols-4 gap-1 nodrag'>
+                      {imageSearchResult?.map((imsr, index) =>
+                        <div className='relative'> 
+                        <img src={imsr?.urls?.regular} key={index} width={300} height={300} className='nodrag hover:cursor-pointer' onClick={()=> setSelectedImage(imsr.urls.regular)}/>
+                        {
+                          selectedImage === imsr.urls.regular ?
+                          <div className='absolute top-0 left-0'><CheckCircle className='bg-transparent m-2' color='orange' size={32} /></div>
+                          : null
+                        }
+                        </div>
+                      )
+                      }
+                      </div>
+                    
+                    : <Input id="summary" className="nodrag nopan" placeholder="Search your image" value={summary} onChange={(e) => setSummary(e.target.value)} />
+                  }
+                                
+                </div>
+                <CardFooter className='mt-5 p-0'>
+                    {
+                      selectedImage ?
+                      <div className='flex justify-around w-full'>
+                        <Button className="dark:bg-slate-800 dark:text-white" variant="secondary" onClick={ ()=> clearSearch()}>Clear search</Button>    
+                        <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> saveSelectedImage()}>Save selected Image</Button>  
+                      </div>
+                      :
+                      <Button className="w-full dark:bg-slate-800 dark:text-white" onClick={ ()=> searchImage()}>Unsplash, search me an image!</Button>  
+                    }                  
+                    
+                </CardFooter>
+                </TabsContent>
+
+                <TabsContent value="generate">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="summary">Image Summary</Label>
+                  <Textarea id="summary" className="nodrag nopan" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)} />              
+                </div>
+                <CardFooter  className='mt-5 p-0'>
+                    <Button className="w-full dark:bg-slate-800 dark:text-white" onClick={ ()=> generateImage()}>DallE, make me an image!</Button>
+                </CardFooter>
+                </TabsContent>
+
+              </Tabs>  
             </div>
+            
           </div>  
       </CardContent>
 
-      <CardFooter className="flex justify-between">
-        <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> generateImage()}>DallE, make me an image!</Button>
-      </CardFooter>
+      
 
       </Card>
       
@@ -250,3 +373,32 @@ import {memo} from 'react'
   }
   
   export default memo(ImageCard) ;
+
+
+  export  const ImageCardPresentationMode = ( {id, data}:{id:string, data:any} ) => {
+  const {topic, summary, imageURL, mode} = data
+  
+  if(!imageURL){
+    return <h1> No Image</h1>
+  }  
+   return (
+     <div>
+       
+     <Card className= "shadow-2xl dark:bg-slate-700">
+       <CardHeader>
+         <CardTitle>{topic}</CardTitle>
+         <CardDescription>{summary}</CardDescription>
+       </CardHeader>
+       
+       <CardContent>
+           <div className="container w-[full] mx-auto">            
+             <Image src={imageURL} width={500} height={400} alt={topic} />
+           </div>
+       </CardContent>
+       
+       
+     </Card>
+      </div>
+   )
+
+ }

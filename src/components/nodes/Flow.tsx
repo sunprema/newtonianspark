@@ -36,6 +36,7 @@ import TableNode from "./TableNode";
 import { Play, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
 import Axios from 'axios';
 import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from 'next/navigation'
 
 import { Button } from "@/components/ui/button"
 import {
@@ -123,6 +124,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     const [summary, setSummary] = useState<string>(initialSummary ?? "No Summary")
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
     const { fitView } = useReactFlow();
+    const router = useRouter();
     
     const onConnect = useCallback(
       (params: Edge | Connection) => setEdges((els) => addEdge(params, els)),
@@ -253,6 +255,10 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       }
     },[rfInstance,key, toast, title, summary]) 
 
+    const onRefresh = () => {
+      router.refresh()
+    }
+
     return (
       
       <>
@@ -304,13 +310,13 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       </ReactFlow>
       </ContextMenuTrigger>
       <ContextMenuContent className="w-64">
-        <ContextMenuItem inset>
-          Copy
-          <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+        <ContextMenuItem inset onClick={()=> setIsSaveDialogOpen(true)}>
+          Save
+          <ContextMenuShortcut>⌘S</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem inset>
-          Delete
-          <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+        <ContextMenuItem inset onClick={ () => onRefresh()}>
+          Refresh
+          <ContextMenuShortcut>⌘R</ContextMenuShortcut>
         </ContextMenuItem>
       </ContextMenuContent>  
       </ContextMenu>

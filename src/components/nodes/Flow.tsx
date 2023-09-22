@@ -17,7 +17,8 @@ import ReactFlow, {
     ReactFlowInstance,
     XYPosition,
     ControlButton,
-    useReactFlow
+    useReactFlow,
+    Panel
   } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -32,7 +33,7 @@ import {
 import Dagre from '@dagrejs/dagre';
 import ExplorerNode from "./ExplorerNode";
 import TableNode from "./TableNode";
-import { SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
+import { Play, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
 import Axios from 'axios';
 import { useToast } from "@/components/ui/use-toast"
 
@@ -59,6 +60,7 @@ import TextNode from "./TextNode";
 import GridNode from "./GridNode";
 import SideToolbar from "../side-toolbar";
 import DynamicFormNode from "./code/DynamicFormNode";
+import Link from "next/link";
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -274,7 +276,16 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
         fitView
                 
       > 
-        <Controls className="absolute left-8 bottom-4">
+      {
+      key &&
+      <Panel position="top-right" >
+        <Button className="mr-52" > 
+        <Play className="mr-2" color="#5fe407"/>
+        <Link href={`/present/${key}`}>Present</Link></Button>
+      </Panel>  
+      }
+      
+        <Controls className="absolute bottom-4 left-8">
           <ControlButton onClick={()=>setIsSaveDialogOpen(true)} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
             <SaveIcon size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
           </ControlButton> 

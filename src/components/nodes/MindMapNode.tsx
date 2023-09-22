@@ -45,8 +45,26 @@ const MindMapNode = ({data, id}:{data:{label:string, comment?:string}, id:string
         />
       </div>
     )
-  
-  
   }
   
   export default MindMapNode;
+
+
+  export const MindMapNodePresentationMode = ({data, id}:{data:{label:string, comment?:string}, id:string}) => {
+    const {label, comment} = data
+    return (
+
+    <div className="w-3/4 dark:bg-slate-700">
+    <div className="flex justify-between gap-12">
+      <div className="w-1/3">
+        <h1 className="text-2xl font-bold mb-8"> {label}</h1>        
+      </div>
+      <div className="flex-1 flex flex-col">
+        <div className="w-[2/3]">
+          <h4 className="font-semibold mb-4">{comment}</h4>
+         </div>
+      </div>
+    </div>
+    </div>  
+    )
+  }

@@ -14,7 +14,7 @@ const SideToolbar = () => {
                 <h6 className="text-sm font-bold">Tools</h6>
             </div>
 
-            <div className="flex flex-col justify-center items-center mx-auto space-y-4 hover:cursor-grab active:cursor-grabbing">
+            <div className="mx-auto flex flex-col items-center justify-center space-y-4 hover:cursor-grab active:cursor-grabbing">
             <Card draggable  
                 className="group 
                 rounded-none border-none 

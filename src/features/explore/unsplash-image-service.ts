@@ -4,7 +4,7 @@ import 'server-only'
 export const UnsplashImageService = async ( prompt:string ) => {
     
     try{
-       const response = await fetch(`https://api.unsplash.com/search/photos/?query=${encodeURIComponent(prompt)}`,
+       const response = await fetch(`https://api.unsplash.com/search/photos/?orientation=portrait&query=${encodeURIComponent(prompt)}`,
               {
                 "headers" : {
                   "Authorization":  `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`,

@@ -23,14 +23,16 @@ export const getValue = async ( key:string) => {
     
 }
 
-export const setValue= async(key:string, value:string, title:string, summary:string) => {
+export const setValue= async(key:string, value:string, title:string, summary:string, coverImageURL?:string) => {
     try{
         await kv.set(key, value)
+
+        console.log(`----------${coverImageURL}`)
         
         const response = await supabase
             .from('topics')
             .upsert(
-                {title, summary,flowKey : key },
+                {title, summary,flowKey : key, coverImageURL },
                 {'onConflict' : 'flowKey', ignoreDuplicates : false })
         console.log(response)
         return "SAVED"

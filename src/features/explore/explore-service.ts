@@ -9,14 +9,14 @@ import {
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
   } from "langchain/prompts";
-import { BasicExploreSchema } from './explore-schema';
+import { BasicExploreSchema, BasicExploreNodeSchema } from './explore-schema';
 
 const chatAI = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_KEY,
     maxRetries :2 ,
     maxConcurrency : 5,
-    modelName: "gpt-3.5-turbo-0613", 
-    temperature: 0.5
+    modelName: "gpt-4", 
+    temperature: 1.0
 });
 
 export const ExploreTopic = async ( {explore, context}:
@@ -51,4 +51,35 @@ export const ExploreTopic = async ( {explore, context}:
     }
     return {result, error}
     
+}
+
+export const ExploreNodeGenerate = async({explore, context}:{ explore: string, context : object | null }) => {
+
+    const prompt = new ChatPromptTemplate({
+        promptMessages:[
+            SystemMessagePromptTemplate.fromTemplate("You are an expert and will help explore the topic provided in the following message. You will suggest more questions and answers that Users will be interested to deeply understand the topic."),
+            HumanMessagePromptTemplate.fromTemplate("{inputText}"),
+        ],
+        inputVariables:["inputText"]
+    });
+
+    const chain = createStructuredOutputChainFromZod(BasicExploreNodeSchema, {
+        prompt,
+        llm: chatAI,
+      });
+    
+    let result = null
+    let error = null
+    try{
+        result = await chain.call({ inputText : explore})        
+        console.log(JSON.stringify(result, null, 2))
+        return {
+            result,
+            error : null
+        }
+    }catch(errorz){
+        error = errorz
+    }
+    return {result, error}
+
 }

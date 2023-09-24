@@ -11,8 +11,8 @@ export async function POST(request:NextRequest){
     const {data} = req
     try{
         key = key || nanoid()
-        const {title, summary} = data
-        const result = await setValue(key,data, title, summary)
+        const {title, summary, coverImageURL} = data
+        const result = await setValue(key,data, title, summary, coverImageURL)
         
         console.log(`Title : ${title}, Summary: ${summary}`)
         //update in postgres, the key, title, summary, created_at etc, 

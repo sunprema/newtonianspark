@@ -8,7 +8,7 @@ import {
   CardTitle
 } from "@/components/ui/card"
 
-import {memo, useCallback, useState} from 'react'
+import {memo, useState} from 'react'
 
 import {
   Accordion,
@@ -26,6 +26,9 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Button } from "../ui/button";
+import { Sparkles } from "lucide-react";
+
+import axios from 'axios';
 
 type QuestionsAndAnswer = {
   question?:string
@@ -88,10 +91,6 @@ const ExplorerNode = ({data , id}:{data:any, id:string}) => {
   }
   
   return (
-
-
-
-
     <div>
     <ContextMenu>
     <ContextMenuTrigger>  
@@ -157,6 +156,9 @@ const ExplorerNodeInputMode = ({id}:{id:string}) => {
   const [answer, setAnswer] = useState<string>()
   const [questions, setQuestions] = useState<QuestionsAndAnswer[]>([])
 
+  const [generatePrompt, setGeneratePrompt] = useState<string>();
+  const [isAiGenerated, setIsAiGenerated ] = useState<boolean>(false)
+
   const {setNodes} = useReactFlow()
 
   const saveQuestion = () => {
@@ -168,12 +170,43 @@ const ExplorerNodeInputMode = ({id}:{id:string}) => {
     setAnswer("")
   }
 
+  const handleGenerateNodeRequest = async() => {
+    setIsAiGenerated(false)
+    //handle the request, then set setIsAiGenerated to true
+    try{
+      const response = await axios.post("/api/contextual/explore", {explore:generatePrompt})
+      const {topic, summary, questions, error}:
+            {topic:string, summary:string, questions?:QuestionsAndAnswer[], error:string} = response.data
+      
+      if(error){
+        console.log(error)
+        return 
+      }
+      setTopic(topic)
+      setSummary(summary)
+      setQuestions(questions ?? [])
+      setIsAiGenerated(true)
+      
+
+    }catch(error){
+      console.log(error)
+    }
+    
+    
+
+
+    return null;
+  }
+
   const clearNode = () => {
     setTopic("")
     setSummary("")
     setQuestion("")
     setAnswer("")
     setQuestions([])
+    setIsAiGenerated(false)
+    setGeneratePrompt("")
+
   }
 
   const saveNode =() => {
@@ -193,8 +226,8 @@ const ExplorerNodeInputMode = ({id}:{id:string}) => {
   }
 
   return (
-    <div>
-      <Card className="min-h-[600px] min-w-[600px] shadow-2xl dark:bg-slate-700">
+    <div className="p-2">
+      <Card className="min-h-[600px] min-w-[600px] max-w-[800px] shadow-2xl dark:bg-slate-700">
       <Tabs defaultValue="manual" className="w-full">
 
         <TabsList className="grid w-full grid-cols-2">
@@ -252,16 +285,80 @@ const ExplorerNodeInputMode = ({id}:{id:string}) => {
         </TabsContent>
 
         <TabsContent value="generate">
-            <h1> TBD Generate</h1>
+            <div className="p-5">
+
+            {/* conditional value based on If generated Text */}
+            { isAiGenerated &&
+              <>
+              <CardHeader >
+              <CardTitle className="mb-2">
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="topic">Topic </Label>
+                <Input id="topic" placeholder="Topic for this" value={topic} onChange={(e) => setTopic(e.target.value)}/>
+              </div>
+              </CardTitle>
+              <CardDescription>
+              <div className="flex flex-col space-y-1.5 text-sm">
+                <Label htmlFor="topic">Summary</Label>
+                <Textarea id="summary" placeholder="Write the summary" value={summary} onChange={(e) => setSummary(e.target.value)} />
+                
+              </div>
+              
+              </CardDescription>
+              </CardHeader>
+          
+              <CardContent>
+              <Accordion type="single" collapsible className="my-4 w-full">
+            {
+              questions?.map( 
+                ( {question, answer}:QuestionsAndAnswer,
+                  index:number
+                ) => 
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-start"> {question}</AccordionTrigger>
+                  <AccordionContent>
+                    {answer}
+                  </AccordionContent>
+                </AccordionItem>
+              )
+
+              }
+              </Accordion>
+              </CardContent>
+              </>
+            }
+
+              {/* ----- this is for generate */}
+              <CardHeader >
+              <CardTitle className="mb-2">
+                <div className="flex flex-col gap-4">
+                <Label htmlFor="topic">Explore:</Label>
+                <Textarea id="summary" 
+                    placeholder="I want to explore..." 
+                    rows={3}
+                    value={generatePrompt} 
+                    onChange={(e) => setGeneratePrompt(e.target.value)} />
+
+                <Button variant={"outline"}  className='shrink-0 text-xs' onClick={handleGenerateNodeRequest}>
+                  <Sparkles className='mr-2'/>Generate
+                </Button>
+                </div>
+
+              </CardTitle>
+              </CardHeader>
+            </div>
         </TabsContent>
 
       </Tabs>
 
       <CardFooter>
+        {
+          topic && summary &&
         <div className="flex w-full justify-between">
         <Button onClick= {clearNode}>Reset</Button>
         <Button onClick={saveNode}>Create Node</Button>
         </div>
+        }
       </CardFooter>
 
       </Card>

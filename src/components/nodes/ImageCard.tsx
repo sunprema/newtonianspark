@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, {useState} from 'react'
-import { CheckCircle, Grip, TicketIcon } from 'lucide-react';
+import { CheckCircle} from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -182,13 +182,13 @@ type UnsplashImageType = {
                   <Label htmlFor="summary">Search</Label>
                   {
                     imageSearchResult ? 
-                    <div className='grid grid-cols-4 gap-1 nodrag'>
+                    <div className='nodrag grid grid-cols-4 gap-1'>
                       {imageSearchResult?.map((imsr, index) =>
                         <div className='relative'> 
                         <img src={imsr?.urls?.regular} key={index} width={300} height={300} className='nodrag hover:cursor-pointer' onClick={()=> setSelectedImage(imsr.urls.regular)}/>
                         {
                           selectedImage === imsr.urls.regular ?
-                          <div className='absolute top-0 left-0'><CheckCircle className='bg-transparent m-2' color='orange' size={32} /></div>
+                          <div className='absolute left-0 top-0'><CheckCircle className='m-2 bg-transparent' color='orange' size={32} /></div>
                           : null
                         }
                         </div>
@@ -203,7 +203,7 @@ type UnsplashImageType = {
                 <CardFooter className='mt-5 p-0'>
                     {
                       selectedImage ?
-                      <div className='flex justify-around w-full'>
+                      <div className='flex w-full justify-around'>
                         <Button className="dark:bg-slate-800 dark:text-white" variant="secondary" onClick={ ()=> clearSearch()}>Clear search</Button>    
                         <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> saveSelectedImage()}>Save selected Image</Button>  
                       </div>
@@ -375,7 +375,7 @@ type UnsplashImageType = {
 
 
   export  const ImageCardPresentationMode = ( {id, data}:{id:string, data:any} ) => {
-  const {topic, summary, imageURL, mode} = data
+  const {topic, summary, imageURL } = data
   
   if(!imageURL){
     return <h1> No Image</h1>
@@ -390,7 +390,7 @@ type UnsplashImageType = {
        </CardHeader>
        
        <CardContent>
-           <div className="container w-[full] mx-auto">            
+           <div className="container mx-auto w-[full]">            
              <Image src={imageURL} width={500} height={400} alt={topic} />
            </div>
        </CardContent>

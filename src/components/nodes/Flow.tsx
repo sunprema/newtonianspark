@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useCallback, useState, useRef } from "react";
 import ReactFlow, {
@@ -33,7 +34,7 @@ import {
 import Dagre from '@dagrejs/dagre';
 import ExplorerNode from "./ExplorerNode";
 import TableNode from "./TableNode";
-import { Play, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
+import { CheckCircle, Play, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
 import Axios from 'axios';
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from 'next/navigation'
@@ -42,7 +43,6 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle  
@@ -122,6 +122,8 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     const {toast} = useToast()
     const [title, setTitle] = useState<string>(initialTitle ?? "No Title")
     const [summary, setSummary] = useState<string>(initialSummary ?? "No Summary")
+
+    const [coverImageURL, setCoverImageURL] = useState<string>()
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
     const { fitView } = useReactFlow();
     const router = useRouter();
@@ -151,6 +153,16 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       },
       [nodes, edges, setEdges]
     );
+    
+    const getImagesFromNodes = useCallback(() => {
+        return nodes.map( (node) => {
+          if (node.type === "image" && node.data?.imageURL ){
+            return node.data.imageURL
+          }
+        }
+      )
+    }, [nodes])
+
 
     const onDrop = useCallback(
       (event:React.DragEvent) => {
@@ -209,17 +221,13 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     const onSave = useCallback(async ()=> {
       if(rfInstance){
         const flow = rfInstance.toObject();
-        console.log(JSON.stringify(flow, null, 2))
-        if(key== null){
-          //This is the first time this is getting saved. Ask for a title and summary for this.
-
-        }
         try{
           const response = await Axios.post('/api/visit',{'key' :key,
           data:
           { title,
             summary,
-            flow
+            flow,
+            coverImageURL
           }}
           )
           const keySaved = response.data['key']
@@ -253,7 +261,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           })
         }
       }
-    },[rfInstance,key, toast, title, summary]) 
+    },[rfInstance,key, toast, title, summary, coverImageURL]) 
 
     const onRefresh = () => {
       router.refresh()
@@ -327,30 +335,49 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
       <NSparkChat  mode={mode} systemPromptFromUser="You are an expert assistant. You will assist user query"/>
       
       <Dialog open={isSaveDialogOpen} onOpenChange={setIsSaveDialogOpen}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="min-w-[500px]">
               
               <DialogHeader>
                 <DialogTitle>Save Topic</DialogTitle>
-                <DialogDescription>
-                  Make changes to this topic ${key}. Click save when you are done.
-                </DialogDescription>
+                
               </DialogHeader>
 
-              <div className="grid gap-4 py-4">
-                
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="title" className="text-right">
+              <div className="flex flex-col gap-4 py-4">
+                  <Label htmlFor="title" >
                     Title
                   </Label>
                   <Input id="title" placeholder="Enter the title for this topic" value={title || ''} className="col-span-3" onChange={(e) => setTitle(e.target.value) } />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="summary" className="text-right">
+                  <Label htmlFor="summary">
                     Summary
                   </Label>
                   <Textarea id="summary" placeholder="Type the summary of the topic." value={summary || ''} className="col-span-3"onChange={(e) => setSummary(e.target.value) } />
+                  <Label htmlFor="summary" >
+                    Select cover image:
+                  </Label>
+                  <div className='nodrag grid w-full grid-cols-4 gap-1'>
+                  {
+                    getImagesFromNodes().map((imageURL:string, index) => 
+                      
+                      imageURL &&
+                      <div key={index} className='relative'> 
+                      { <img  src={imageURL} width = {300} height={300} alt="cover image"
+                        onClick={ () => setCoverImageURL(imageURL)}
+                      />
+                      }
+                      {
+                          coverImageURL === imageURL ?
+                          <div className='absolute left-0 top-0'><CheckCircle className='m-2 bg-transparent' color='orange' size={32} /></div>
+                          : null
+                      }
+                      </div>
+                      
+                    )
+                  }
+                  </div>
                 </div>
-              </div>
+
+
+              
               
               <DialogFooter>
                 <Button type="submit" onClick={onSave}>Save changes</Button>

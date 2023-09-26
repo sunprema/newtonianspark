@@ -1,67 +1,81 @@
 'use client'
 
-import BasicFlow from "@/components/nodes/Flow"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { UUID } from "crypto";
-import {
-    Node,
-    Edge,    
-  } from "reactflow";
 
-type Topic = {
-    title :string,
-    summary: string,
-    id: UUID|null,
-    flow: NodesAndEdges
-}  
-type NodesAndEdges = {
-    nodes : Node[],
-    edges: Edge[],
-    
-}
+import { Button } from "@/components/ui/button"
+import { useState } from "react"
 
 const Page = () => {
 
-    const initialNodes:Node[] = [
-        {
-        "id" : "1",
-        position: { x: 100, y: 200 },
-        "type" : "youtube", 
-        "data" : {"title" : "Quantum Mechanics", "summary" : "Simplified explanation of Quantum Mechanics", "videoId" : "5hVmeOCJjOU"}
-        }, 
+    
+    const [startTime, setStartTime] = useState<string>()
+    const [data, setData] = useState<string>()
+    const [endTime, setEndTime] = useState<string>()
 
-        {
-            "id" : "2",
-            position: { x: 800, y: 200 },
-            "type" : "youtube", 
-            "data" : {"title" : "Attention is all you need", "summary" : "Attention is all you need", "videoId" : "XowwKOAWYoQ"}
-        },
-        {
-            "id" : "3",
-            position: { x: 1400, y: 200 },
-            "type" : "image", 
-            "data" : {"title" : "Attention is all you need", "summary" : "Attention is all you need", "imageURL" : "https://ahigyyftekmsrekybozx.supabase.co/storage/v1/object/public/explore_images/quantum.png?t=2023-08-24T21%3A36%3A34.195Z"}
+    const handleStreamingResponse = async() => {
+        
+        const response = await fetch('/api/streaming',{
+            'method':'POST',
+            'body' : JSON.stringify({'name':'sundar'}),
+            'headers' :{
+                'Content-Type' : 'application/json'
+            }
+
+        })
+        const stream = response.body
+        let chunkSize = 0
+        const chunks:string[] = []
+
+        function processStreamingData(stream:ReadableStream<Uint8Array>){
+            const reader = stream.getReader()
+            
+            function processData({done, value}:{ done: boolean, value?: Uint8Array }){
+                if(done){
+                    console.log("Stream completed , current chunk size", chunkSize)
+                    console.log(chunks)
+                    if(chunks){
+                        const completeResponse = chunks.join("")
+                        console.log(`COMPLETED_RESPONSE : ${completeResponse}`)
+                        const _startTime = completeResponse.substring( completeResponse.indexOf("<startTime>"), completeResponse.indexOf("</startTime>"))
+                        const _data = completeResponse.substring( completeResponse.indexOf("<data>"), completeResponse.indexOf("</data>"))
+                        const _endTime = completeResponse.substring( completeResponse.indexOf("<endTime>"), completeResponse.indexOf("</endTime>"))
+
+                        setStartTime(_startTime)
+                        setEndTime(_endTime)
+                        setData(_data)
+                    }
+                    return;                     
+                }
+                const text = new TextDecoder().decode(value)
+                console.log('Received chunk' , text)
+                chunks.push(text)
+                chunkSize++;
+                console.log("current chunk size : ", chunkSize)
+                reader.read().then(processData)
+            }
+
+            reader.read().then(processData)
+            console.log( chunks) 
+            
+
         }
-    ]
-    const edges:Edge[] = []
-    
-  return (
-        <section>
-            <ScrollArea >
-            <div className="h-[calc(100vh-80px)] w-full">
-                <BasicFlow 
-                initialNodes={initialNodes} 
-                initialEdges={edges}
-                initialTitle={"test"} 
-                initialSummary={"test_summary"} 
-                flowKey={"123"}
-                mode="exploree" 
-                />
-            </div>
-            </ScrollArea>
-        </section>
-    )
-    
+
+        if(stream != null){
+            processStreamingData(stream)
+        }
+        
+        
+        
+    }
+
+    return <div className="container mx-auto mt-32">
+        <Button onClick={ handleStreamingResponse}> Get Streaming Response </Button>
+        <h4> Hello: {startTime} </h4>
+        <h6>{endTime}</h6>
+        <code>
+            {data}
+        </code>
+    </div>
+
 }
 
 export default Page

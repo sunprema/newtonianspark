@@ -1,4 +1,4 @@
-import { Youtube, Image as Img,Text } from "lucide-react"
+import { Youtube, Image as Img,Text, Paintbrush } from "lucide-react"
 import { Card,CardContent } from "./ui/card";
 
 const SideToolbar = () => {
@@ -51,11 +51,20 @@ const SideToolbar = () => {
             </div>
             </CardContent>
             </Card>
-            
+
+            <Card draggable  
+                className="group 
+                rounded-none border-none 
+                shadow-none dark:bg-inherit" onDragStart={(event) => onDragStart(event, 'whiteboard')}>
+            <CardContent className="flex items-center justify-between gap-4 align-middle">
+            <div>
+                <Paintbrush color="#F97316" size={32}/>    
+                <h6 className="scroll-m-20 text-xs font-light tracking-tight group-hover:text-orange-500 group-hover:dark:text-orange-500">board</h6>
+            </div>
+            </CardContent>
+            </Card>
 
             </div>
-            
-
             </div>
 
         

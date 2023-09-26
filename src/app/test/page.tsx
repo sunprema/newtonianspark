@@ -2,11 +2,14 @@
 
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
 import { useState } from "react"
 
 const Page = () => {
 
-    
+    const [explore,setExplore] = useState<string>()
     const [startTime, setStartTime] = useState<string>()
     const [data, setData] = useState<string>()
     const [endTime, setEndTime] = useState<string>()
@@ -15,7 +18,7 @@ const Page = () => {
         
         const response = await fetch('/api/streaming',{
             'method':'POST',
-            'body' : JSON.stringify({'name':'sundar'}),
+            'body' : JSON.stringify({explore}),
             'headers' :{
                 'Content-Type' : 'application/json'
             }
@@ -68,9 +71,14 @@ const Page = () => {
     }
 
     return <div className="container mx-auto mt-32">
-        <Button onClick={ handleStreamingResponse}> Get Streaming Response </Button>
-        <h4> Hello: {startTime} </h4>
-        <h6>{endTime}</h6>
+        <div className="flex flex-col gap-4 mb-5">
+            <Label> Enter Exploration Topic</Label>
+            <Input placeholder="Enter explore topic" value={explore} onChange={(e)=> setExplore(e.target.value)}/>
+            <Button onClick={ handleStreamingResponse}> Get Streaming Response </Button>
+            
+        </div>
+        <h4> StartTime: {startTime} </h4>
+        <h6>EndTime: {endTime}</h6>
         <code>
             {data}
         </code>

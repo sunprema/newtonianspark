@@ -38,7 +38,10 @@ export async function POST(req: NextRequest) {
         }
     })
 
-    return new Response(customReadable, {'headers' : {'Content-Type' : 'application/json'}})
+    return new Response(customReadable, {'headers' : {
+        'Content-Type' : 'application/json',
+        'X-Content-Type-Options': 'nosniff',
+         }})
     
 
 }

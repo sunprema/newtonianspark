@@ -71,7 +71,7 @@ const Page = () => {
     }
 
     return <div className="container mx-auto mt-32">
-        <div className="flex flex-col gap-4 mb-5">
+        <div className="mb-5 flex flex-col gap-4">
             <Label> Enter Exploration Topic</Label>
             <Input placeholder="Enter explore topic" value={explore} onChange={(e)=> setExplore(e.target.value)}/>
             <Button onClick={ handleStreamingResponse}> Get Streaming Response </Button>

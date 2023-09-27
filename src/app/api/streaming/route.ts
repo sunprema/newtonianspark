@@ -17,7 +17,14 @@ export async function POST(req: NextRequest) {
             controller.enqueue(encoder.encode(`<startTime>${moment().format('MMMM Do YYYY, h:mm:ss a')}</startTime>`))
             async function GetExploreData(){
                 controller.enqueue(encoder.encode( `<topic>${explore}</topic>`))
+                const intervalId = setInterval( () => {
+                    controller.enqueue(encoder.encode( `<processing>${moment().format('MMMM Do YYYY, h:mm:ss a')}</processing>`))
+                    
+                        
+                }, 2000)
+
                 const {result, error} = await ExploreTopic({explore, context:null})
+                clearInterval(intervalId)
                 if(error!= null){
                     controller.enqueue(encoder.encode( `<error>${error}</error>`))
                 }

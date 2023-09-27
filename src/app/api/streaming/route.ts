@@ -19,11 +19,9 @@ export async function POST(req: NextRequest) {
                 controller.enqueue(encoder.encode( `<topic>${explore}</topic>`))
                 const intervalId = setInterval( () => {
                     controller.enqueue(encoder.encode( `<processing>${moment().format('MMMM Do YYYY, h:mm:ss a')}</processing>`))
-                    
-                        
-                }, 2000)
+                }, 5000)
 
-                const {result, error} = await ExploreTopic({explore, context:null})
+                const {result, error} = await ExploreTopic({explore, context:null, variant: 'multiple'})
                 clearInterval(intervalId)
                 if(error!= null){
                     controller.enqueue(encoder.encode( `<error>${error}</error>`))
@@ -48,7 +46,7 @@ export async function POST(req: NextRequest) {
     return new Response(customReadable, {'headers' : {
         'Content-Type' : 'application/json',
         'X-Content-Type-Options': 'nosniff',
-         }})
+    }})
     
 
 }

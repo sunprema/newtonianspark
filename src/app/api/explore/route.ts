@@ -1,4 +1,4 @@
-import { ExploreTopic } from "@/features/explore/explore-service";
+import { ExploreTopic as service_function} from "@/features/explore/explore-service";
 import { NextRequest } from 'next/server';
 import moment from 'moment';
 
@@ -16,13 +16,13 @@ export async function POST(request:NextRequest){
         
         async start(controller) {
             controller.enqueue(encoder.encode(`<startTime>${moment().format('MMMM Do YYYY, h:mm:ss a')}</startTime>`))
-            async function GetExploreData(){
+            async function StreamingFunction(){
                 controller.enqueue(encoder.encode( `<topic>${explore}</topic>`))
                 const intervalId = setInterval( () => {
                     controller.enqueue(encoder.encode( `<processing>${moment().format('MMMM Do YYYY, h:mm:ss a')}</processing>`))
                 }, 10000)
 
-                const {result, error} = await ExploreTopic({explore, context, variant: variant ?? "multiple" })
+                const {result, error} = await service_function({explore, context, variant: variant ?? "multiple" })
                 clearInterval(intervalId)
                 if(error!= null){
                     controller.enqueue(encoder.encode( `<error>${error}</error>`))
@@ -32,7 +32,7 @@ export async function POST(request:NextRequest){
             }
             
             try{
-                await GetExploreData()
+                await StreamingFunction()
             }catch(e){
                 console.log(e)
                 controller.enqueue(encoder.encode(`${e}`))

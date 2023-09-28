@@ -10,7 +10,7 @@ import {
     HumanMessagePromptTemplate,
     AIMessagePromptTemplate,
   } from "langchain/prompts";
-import { BasicExploreSchema, BasicExploreNodeSchema } from './explore-schema';
+import { SingleExploreSchema as singleSchema, MultipleExploreSchema as multipleSchema } from './explore-schema';
 
 const chatAI = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_KEY,
@@ -40,7 +40,7 @@ export const ExploreTopic = async ( {explore, context, variant = "multiple"}:
     });
 
     const chain = createStructuredOutputChainFromZod(
-        variant === 'multiple' ? BasicExploreSchema : BasicExploreNodeSchema, {
+        variant === 'multiple' ? multipleSchema : singleSchema, {
         prompt,
         llm: chatAI,
       });

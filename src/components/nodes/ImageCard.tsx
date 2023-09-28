@@ -245,9 +245,6 @@ type UnsplashImageType = {
     const {toast} = useToast()
     
     const convertImageToFileAndStore = async() => {
-      alert("Image will be stored here.")
-      //use axios post to post the image data, pass the nodeId. NodeId will be used as the file Name
-      //that way, when we delete the node, the associated file can be deleted as well.
       try{
       const response = await Axios.post('/api/imageStorage', {nodeId, 'b64_json':imageData})
       const imageURL = response.data['imageURL']

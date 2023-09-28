@@ -13,7 +13,7 @@ export default function IndexPage() {
           <br className="hidden sm:inline" />          
         </h1>
         <p className="text-muted-foreground max-w-[700px] text-lg subpixel-antialiased">        
-        Exciting world of possibilities, enabled by LLM.
+        Provide your db requirements and refine it using AI.
         </p>
       </div>
     </section>
@@ -22,15 +22,7 @@ export default function IndexPage() {
       <div className="flex w-full items-center justify-center ">
       <div className="flex">
         <div>
-          
-          <NpsarkContextualChat 
-          mode="table" 
-          systemPromptFromUser={`You are a postgres database domain expert. User want to create a database requirement document.
-          You will help refine user request and create a database scheme requirement.
-          It should include all the entities that will be required for users request to cover the main use cases as well as the edge cases that you think are required. Don't ask questions more than two times.
-          If you are satisfied with your response, prefix the response with "PROMPT".
-          `}
-          />
+          <NpsarkContextualChat mode="table" />
         </div>        
       </div>
       </div>

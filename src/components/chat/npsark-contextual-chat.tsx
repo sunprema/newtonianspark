@@ -11,17 +11,12 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from '../ui/textarea';
 import { Badge } from "../ui/badge";
 
-const NSparkContextualChat = ({mode, systemPromptFromUser}:{mode:string, systemPromptFromUser:string}) => {
-  const systemPromptMessage:Message =
-    {
-    id: "1",
-    role: "system", 
-    content:systemPromptFromUser, 
-    createdAt: new Date()}
+const NSparkContextualChat = ({mode}:{mode:string}) => {
   
   const { messages,setMessages, input, handleInputChange, handleSubmit, isLoading } = useChat({
       "api" :"/api/chat",
-      initialMessages : [systemPromptMessage,]  
+      "body": {mode},
+      initialMessages : []  
   });
   
   const router = useRouter()
@@ -43,7 +38,7 @@ const NSparkContextualChat = ({mode, systemPromptFromUser}:{mode:string, systemP
         <CardContent className='mt-2 flex-1'>    
         <ScrollArea className="h-[400px] w-[full]">
         <ul className="space-y-4 divide-y dark:divide-slate-500"> 
-        {messages.map(m => (
+        {messages.map((m:Message) => (
         <div key={m.id}>
           <div className="flex items-center align-middle">
           
@@ -53,8 +48,8 @@ const NSparkContextualChat = ({mode, systemPromptFromUser}:{mode:string, systemP
           {m.content}
           </p>
           </div>
-          {m.role === "assistant" && m.content.toLowerCase().includes("prompt") && !isLoading
-          ? <div ><Badge variant="default" className="text-xs dark:bg-gray-400" onClick={() => handleUsePrompt( m.content, mode ?? "explore")}>use prompt</Badge> </div>
+          {m.role === "assistant" && m.content.includes("<prompt>") && !isLoading
+          ? <div ><Badge variant="default" className="text-xs dark:bg-gray-400" onClick={() => handleUsePrompt( m.content, mode ?? "explore")}>Generate DB Schema</Badge> </div>
           :null
           }
 

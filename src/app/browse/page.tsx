@@ -5,10 +5,14 @@ import { getTopics } from "@/features/explore/store-service";
 import {
     Card,
     CardContent,
+    CardFooter,
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import ClipboardContextMenuItem from "@/components/client/ClipboardContextMenuItem";
+
 
 const Page = async() => {
 
@@ -29,14 +33,16 @@ const Page = async() => {
             {
             data?.map( (d)=> {
                 return (
-                <div key={d.flowKey} className="w-[250px] min-h-[250px]">    
-                <Link  href={`/visit/${d.flowKey}`}>    
-                <Card className="group rounded-md bg-slate-100 shadow-2xl hover:border-orange-500  dark:bg-slate-700 dark:shadow-lg dark:hover:border-orange-500" >
+                <div key={d.flowKey} className="min-h-[250px] w-[250px] group">    
+                
+                
+                <Card className=" rounded-md bg-slate-100 shadow-2xl hover:border-orange-500  dark:bg-slate-700 dark:shadow-lg dark:hover:border-orange-500">
+                    <Link  href={`/visit/${d.flowKey}`}>
                     <CardHeader className="p-0">
                     <div className="flex flex-col space-y-2">
-                    <img src={d.coverImageURL ?? './thoughts.svg' } alt="cover image" className="object-cover h-[150px] w-[full]" loading="lazy" />
+                    <img src={d.coverImageURL ?? './thoughts.svg' } alt="cover image" className="h-[150px] w-[full] object-cover" loading="lazy" />
                     <CardTitle className="p-5">
-                        <h3 className="text-sm scroll-m-20 font-bold tracking-tight group-hover:text-orange-500 ">
+                        <h3 className="scroll-m-20 text-sm font-bold tracking-tight group-hover:text-orange-500 ">
                             {d.title}
                         </h3>
                     </CardTitle>
@@ -48,8 +54,13 @@ const Page = async() => {
                         {d.summary}
                         </p>
                     </CardContent>
+                    </Link>
+                    <CardFooter>
+                    <div className="hidden group-hover:block">
+                        <ClipboardContextMenuItem copyText={JSON.stringify({title:d.title, summary:d.summary, coverImageURL:d.coverImageURL, flowKey:d.flowKey})} />
+                    </div>    
+                    </CardFooter>
                 </Card>
-                </Link>
                 </div>
                 )
             })

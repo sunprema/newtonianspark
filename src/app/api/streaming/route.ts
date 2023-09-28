@@ -17,7 +17,12 @@ export async function POST(req: NextRequest) {
             controller.enqueue(encoder.encode(`<startTime>${moment().format('MMMM Do YYYY, h:mm:ss a')}</startTime>`))
             async function GetExploreData(){
                 controller.enqueue(encoder.encode( `<topic>${explore}</topic>`))
-                const {result, error} = await ExploreTopic({explore, context:null})
+                const intervalId = setInterval( () => {
+                    controller.enqueue(encoder.encode( `<processing>${moment().format('MMMM Do YYYY, h:mm:ss a')}</processing>`))
+                }, 5000)
+
+                const {result, error} = await ExploreTopic({explore, context:null, variant: 'multiple'})
+                clearInterval(intervalId)
                 if(error!= null){
                     controller.enqueue(encoder.encode( `<error>${error}</error>`))
                 }
@@ -38,7 +43,10 @@ export async function POST(req: NextRequest) {
         }
     })
 
-    return new Response(customReadable, {'headers' : {'Content-Type' : 'application/json'}})
+    return new Response(customReadable, {'headers' : {
+        'Content-Type' : 'application/json',
+        'X-Content-Type-Options': 'nosniff',
+    }})
     
 
 }

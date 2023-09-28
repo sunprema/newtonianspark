@@ -4,42 +4,102 @@ import { useEffect, useState } from "react";
 import BasicFlow from "@/components/nodes/Flow";
 import { useSearchParams } from 'next/navigation'
 
-import axios from 'axios';
-
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
     Node,   
     Edge,
   } from "reactflow";
+import { useToast } from "@/components/ui/use-toast";
+import { nanoid } from "nanoid";
 
 const Page =() => {
     const searchParams = useSearchParams()
-    const topic =  searchParams.get("topic")
+    const explore =  searchParams.get("topic")
     const [initialNodes, setInitialNodes] = useState<Node[]|null>(null);
-    const [initialEdges, setInitialEdges] = useState<Edge[]|[]>([]);
-    const [error, setError] = useState(null);
-
+    const [initialEdges] = useState<Edge[]|[]>([]);
+    const {toast} = useToast()
      
     useEffect(() => {
 
-      const callExploreService = async(topic:string|null) => {
-        const response = await axios.post("/api/explore", {explore:topic})
-        const {nodes,error} = response.data
-        
-        if (error != null){
-          setError(error)
-        }else{
-          setInitialNodes(nodes)
-          setInitialEdges([])
-        }
-      }
-      callExploreService(topic)
+      const callExploreService = async(explore:string|null) => {
 
-    },[topic] )
+        const response = await fetch('/api/explore',{
+            'method':'POST',
+            'body' : JSON.stringify({explore}),
+            'headers' :{
+                'Content-Type' : 'application/json'
+            }
+
+        })
+        const stream = response.body
+        let chunkSize = 0
+        const chunks:string[] = []
+        
+        function processStreamingData(stream:ReadableStream<Uint8Array>){
+          const reader = stream.getReader()
+          
+          function processData({done, value}:{ done: boolean, value?: Uint8Array }){
+              if(done){
+                  console.log("Stream completed , current chunk size", chunkSize)
+                  console.log(chunks)
+                  if(chunks){
+                      const completeResponse = chunks.join("")
+                      console.log(`COMPLETED_RESPONSE : ${completeResponse}`)
+                      
+                      const _data = completeResponse.substring( completeResponse.indexOf("<data>")+6, completeResponse.indexOf("</data>"))
+                      try {
+                        const topics = JSON.parse(_data)
+                        
+                        const nodes:Node[] = []
+                        topics.map((topic:any, index : number) =>
+                            nodes.push(
+                                {   
+                                    id: nanoid(5),
+                                    type: 'explorer',
+                                    data: topic,
+                                    position: { x: (index * 500) + 20 * (index + 1), y: 50 },
+                                    //drag_handle: '.drag_handle'
+                                })
+                            )
+                        if(nodes){
+                          setInitialNodes(nodes)
+                        }    
+                        
+                      }catch(error){
+                        toast({
+                          title: "Getting Explore data failed.",
+                          variant: "destructive" ,
+                          description: `${error}`,
+                        })
+                      }
+                  }
+                  return;                     
+              }
+              const text = new TextDecoder().decode(value)
+              console.log('Received chunk' , text)
+              chunks.push(text)
+              chunkSize++;
+              console.log("current chunk size : ", chunkSize)
+              reader.read().then(processData)
+          }
+
+          reader.read().then(processData)
+          console.log( chunks) 
+          
+
+      }
+
+      if(stream != null){
+        processStreamingData(stream)
+      }
     
-    if(error){
-      return <h1> Error : {error} </h1>
     }
+
+      callExploreService(explore)
+
+    },[explore, toast] )
+    
+    
     
     return (
     <section>

@@ -1,22 +1,64 @@
-import { ExploreTopic } from "@/features/explore/explore-service";
-import { NextResponse, NextRequest } from "next/server";
-import { v4 as uuidv4 } from 'uuid';
+import { ExploreTopic as service_function} from "@/features/explore/explore-service";
+import { NextRequest } from 'next/server';
+import moment from 'moment';
 
 export const runtime = 'edge'; // 'nodejs' is the default
 
+
+
 export async function POST(request:NextRequest){
     const req = await request.json()
-    const {result, error} = await ExploreTopic(req)
-    const {topics}:{topics:[]} = result?.output
-    let nodes:object[] = []
-
-    if(error != null){
-        return NextResponse.json( {nodes,error}, {status:400})
-    }else{
-        nodes = []
-    }
+    const {explore,context, variant} = req
     
-    topics.map((topic, index) =>
+    const encoder = new TextEncoder()
+
+    const customReadable = new ReadableStream({
+        
+        async start(controller) {
+            controller.enqueue(encoder.encode(`<startTime>${moment().format('MMMM Do YYYY, h:mm:ss a')}</startTime>`))
+            async function StreamingFunction(){
+                controller.enqueue(encoder.encode( `<topic>${explore}</topic>`))
+                const intervalId = setInterval( () => {
+                    controller.enqueue(encoder.encode( `<processing>${moment().format('MMMM Do YYYY, h:mm:ss a')}</processing>`))
+                }, 10000)
+
+                const {result, error} = await service_function({explore, context, variant: variant ?? "multiple" })
+                clearInterval(intervalId)
+                if(error!= null){
+                    controller.enqueue(encoder.encode( `<error>${error}</error>`))
+                }
+                const {topics}:{topics:[]} = result?.output
+                controller.enqueue(encoder.encode( `<data>${JSON.stringify(topics )}</data>`))
+            }
+            
+            try{
+                await StreamingFunction()
+            }catch(e){
+                console.log(e)
+                controller.enqueue(encoder.encode(`${e}`))
+            }finally{
+                controller.enqueue(encoder.encode(`<endTime>${moment().format('MMMM Do YYYY, h:mm:ss a')}</endTime>`))
+                controller.close()
+            }
+            
+        }
+    })
+
+    return new Response(customReadable, {'headers' : {
+        'Content-Type' : 'application/json',
+        'X-Content-Type-Options': 'nosniff',
+    }})
+    
+    
+    
+
+
+
+    
+}
+/*
+let nodes:object[] = []
+topics.map((topic, index) =>
     nodes.push(
         {   
             id: uuidv4(),
@@ -26,10 +68,4 @@ export async function POST(request:NextRequest){
             drag_handle: '.drag_handle'
         })
     )
-    
-    return NextResponse.json( {nodes,error}, {status:200})
-
-
-
-    
-}
+*/

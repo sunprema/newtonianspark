@@ -8,8 +8,9 @@ import {
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
+    AIMessagePromptTemplate,
   } from "langchain/prompts";
-import { BasicExploreSchema, BasicExploreNodeSchema } from './explore-schema';
+import { SingleExploreSchema as singleSchema, MultipleExploreSchema as multipleSchema } from './explore-schema';
 
 const chatAI = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_KEY,
@@ -19,20 +20,27 @@ const chatAI = new ChatOpenAI({
     temperature: 1.0
 });
 
-export const ExploreTopic = async ( {explore, context}:
+
+const systemPrompt = SystemMessagePromptTemplate.fromTemplate("You are an expert and will help explore the topic provided in the following message. You will suggest more questions and answers that Users will be interested to deeply understand the topic.")
+
+export const ExploreTopic = async ( {explore, context, variant = "multiple"}:
     
-    { explore: string, context : object | null }) => {
+    { explore: string, context : string | null, variant : "single" | "multiple" }) => {
 
     console.log(context)    
+    const promptMessages = [systemPrompt]
+    if (context){
+        promptMessages.push( AIMessagePromptTemplate.fromTemplate(context))
+    }
+    promptMessages.push(HumanMessagePromptTemplate.fromTemplate("{inputText}"))
+
     const prompt = new ChatPromptTemplate({
-        promptMessages:[
-            SystemMessagePromptTemplate.fromTemplate("You are an expert and will help explore the topic provided in the following message. You will suggest more questions and answers that Users will be interested to deeply understand the topic."),
-            HumanMessagePromptTemplate.fromTemplate("{inputText}"),
-        ],
+        promptMessages,
         inputVariables:["inputText"]
     });
 
-    const chain = createStructuredOutputChainFromZod(BasicExploreSchema, {
+    const chain = createStructuredOutputChainFromZod(
+        variant === 'multiple' ? multipleSchema : singleSchema, {
         prompt,
         llm: chatAI,
       });
@@ -51,35 +59,4 @@ export const ExploreTopic = async ( {explore, context}:
     }
     return {result, error}
     
-}
-
-export const ExploreNodeGenerate = async({explore, context}:{ explore: string, context : object | null }) => {
-
-    const prompt = new ChatPromptTemplate({
-        promptMessages:[
-            SystemMessagePromptTemplate.fromTemplate("You are an expert and will help explore the topic provided in the following message. You will suggest more questions and answers that Users will be interested to deeply understand the topic."),
-            HumanMessagePromptTemplate.fromTemplate("{inputText}"),
-        ],
-        inputVariables:["inputText"]
-    });
-
-    const chain = createStructuredOutputChainFromZod(BasicExploreNodeSchema, {
-        prompt,
-        llm: chatAI,
-      });
-    
-    let result = null
-    let error = null
-    try{
-        result = await chain.call({ inputText : explore})        
-        console.log(JSON.stringify(result, null, 2))
-        return {
-            result,
-            error : null
-        }
-    }catch(errorz){
-        error = errorz
-    }
-    return {result, error}
-
 }

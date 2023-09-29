@@ -62,8 +62,8 @@ import GridNode from "./GridNode";
 import SideToolbar from "../side-toolbar";
 import DynamicFormNode from "./code/DynamicFormNode";
 import Link from "next/link";
-import TLDrawNode from "./TLDrawNode";
 import LinkCard from "./LinkCard";
+
 
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre graph
@@ -77,7 +77,6 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     text_heading:TextNode,
     grid: GridNode,
     dynamicFormNode: DynamicFormNode,
-    whiteboard: TLDrawNode,
     linkCard: LinkCard
   };
 
@@ -403,6 +402,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
      mode:string
      }) => {
     return(
+     
     <ReactFlowProvider>
       <div className="flex">
       <div className="h-[calc(100vh-74px)] w-[80px]  border-r bg-white dark:bg-slate-500">

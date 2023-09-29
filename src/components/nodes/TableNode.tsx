@@ -3,21 +3,83 @@ import {
     Card,
     CardContent,
     CardHeader,
-    CardTitle
+    CardTitle,
+    CardDescription,
+    CardFooter,
   } from "@/components/ui/card"
+
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"  
+
+import { Checkbox } from "@/components/ui/checkbox"
 
 import { Column, Table } from "@/features/database_design/table_schema_types"
 import { useToast } from '../ui/use-toast';
 
-import { KeyRound, Settings } from "lucide-react"
+import { KeyRound } from "lucide-react"
 import { Handle, Node, Position, useReactFlow } from "reactflow"
-
-import useNsparkStore from "@/config/nsparkStore"
 import { ContextMenu, ContextMenuItem, ContextMenuTrigger, ContextMenuContent, ContextMenuSeparator } from "../ui/context-menu"
 import { nanoid } from "nanoid"
 import  Axios from "axios"
+import { memo, useState } from "react";
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "../ui/button";
 
-const TableDisplay = ({data}:{data:Table}) => {
+
+const columnTypes = [
+  'integer',
+  'bigint',
+  'smallint',
+  'numeric(precision, scale)',
+  'real',
+  'double precision',
+  'character varying(n)',
+  'character(n)',
+  'text',
+  'bytea',
+  'timestamp',
+  'date',
+  'time',
+  'interval',
+  'boolean',
+  'enum',
+  'uuid',
+  'bit(n)',
+  'bit varying(n)',
+  'tsvector',
+  'tsquery',
+] 
+
+
+const DataTypeSelector = ({selectedValue, onValueChange}:{selectedValue?:string, onValueChange:(a:string)=>void}) => {  
+    
+  return(
+    <Select value={selectedValue} onValueChange={onValueChange}>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="DataType" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Data Types</SelectLabel>
+          {columnTypes.map((c,index) =>
+            <SelectItem key={index} value={c}>{c}</SelectItem>
+          )}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  )
+
+}
+
+const ColumnsDisplay = ({data}:{data:Table}) => {
   const {columns}:{columns:Column[]|null} = data
   return (
     <div>
@@ -69,9 +131,8 @@ const TableDisplay = ({data}:{data:Table}) => {
  }
   
   
-  const TableNode = ({data, id}:{data:Table, id:string}) => {
+  const TableDisplayCard = ({data, id}:{data:Table, id:string}) => {
     const {table_name} = data
-    const openSideSheetForNode = useNsparkStore( (state) => state.openSideSheetForNode)
     const {addNodes, getNode, setNodes, setEdges} = useReactFlow()
     const {toast} = useToast()  
     
@@ -156,14 +217,11 @@ const TableDisplay = ({data}:{data:Table}) => {
       <Card className="group min-w-[400px] rounded-xl border-orange-400 bg-slate-100 shadow-2xl dark:border-orange-400 dark:bg-slate-700">
         <CardHeader className="m-2 border-b border-slate-500 pb-4 dark:border-slate-100" >
           <CardTitle className="flex justify-between text-xl font-semibold uppercase group-hover:text-orange-500 group-hover:dark:text-orange-500">
-            <div>{table_name}</div>
-            <Settings className="nodrag z-50 hover:cursor-pointer"  onClick={()=> openSideSheetForNode(id, "table") }/>  
+            <div>{table_name}</div>            
           </CardTitle>
-          {/*<CardDescription className="text-start text-lg font-medium">{description}</CardDescription> */}
-          
         </CardHeader>
         <CardContent className="mt-4">
-        <TableDisplay data={data} />
+        <ColumnsDisplay data={data} />
         </CardContent>
       </Card>
 
@@ -183,18 +241,163 @@ const TableDisplay = ({data}:{data:Table}) => {
         <ContextMenuItem inset onClick={handleCRUDScreen}>
         Create UI for this table
         </ContextMenuItem>
-
-        
-
       </ContextMenuContent>
-        
-      </ContextMenu>  
-      
-      
+      </ContextMenu>
       </div>
     )
-  
-  
   }
+
+
+
+  const TableInputCard = ({id}:{id:string}) => {
+    const [ tableName, setTableName] = useState<string>()
+    const [ description, setDescription] = useState<string>()
+    const [ columns, setColumns ] = useState<Column[]>()
+    const { getNode, setNodes } = useReactFlow()
+
+    const addColumn =() => {
+      const newColumns = []
+      
+      if(columns)
+      for(let i = 0 ; i < (columns?.length ?? 0) ; i++){
+        newColumns.push(columns[i])
+      }
+      newColumns.push({ name:"", type:"" })   
+      setColumns(newColumns)   
+    }
+    
+    const handleColumnName = (index:number, name:string) => {
+       const newColumns = columns?.map( (c , cindex) => {
+          if ( cindex === index){
+            c.name = name
+          }
+          return c
+       })
+       setColumns(newColumns)
+
+    }
+
+    const handleColumnType = (index:number, ctype:string) => {
+      const newColumns = columns?.map( (c , cindex) => {
+        if ( cindex === index){
+          c.type = ctype
+        }
+        return c
+     })
+
+     setColumns(newColumns)
+    }
+
+    const handleClear =() => {
+      setTableName("")
+      setDescription("")
+      setColumns([])
+    }
+
+    const handleSave =() => {
+      const currentNode = getNode(id)
+      if(currentNode && tableName){
+
+        const newNode:Node = {
+          "id": tableName,
+          "data": {"action":"display", "table_name": tableName , description, columns},
+          "position" : currentNode.position,
+          "type" : "table"
+        }
   
-  export default TableNode;
+        setNodes( (nodes) => {
+          const otherNodes = nodes.filter( (node) => node.id !== id)
+          otherNodes.push(newNode)
+          return otherNodes
+  
+  
+        })
+      }
+      
+    }
+
+    const handlePrimaryKey = (index:number) =>{
+      const newColumns = columns?.map( (c , cindex) => {
+        if ( cindex === index){
+          c.primary_key = c.primary_key ? !c.primary_key : true
+        }
+        return c
+     })
+
+     setColumns(newColumns)
+    }
+    
+
+    return (
+      <div className="w-[500px] shadow-2xl bg-slate-50 dark:bg-slate-700">
+        <CardHeader>
+          <CardTitle>Add a Table</CardTitle>
+          <CardDescription>You can add a table</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-3">
+              <Label htmlFor="tableName">Table Name</Label>
+              <Input id="title" placeholder="Enter table name" value={tableName} onChange={(e) => setTableName(e.target.value)}/>
+              <Label htmlFor="description">Description</Label>
+              <Input id="title" placeholder="Enter description" value={description} onChange={(e) => setDescription(e.target.value)}/>
+              <div className='flex w-full gap-2 m-2 mt-4 py-5'>
+                <Label className="flex-1">Column Name</Label>
+                <Label>Data Type</Label>
+                <Label>PK</Label>
+                <Label>FK</Label>
+              </div>
+              {
+                columns?.map( (column, index) => (
+                  <div key={index} className='flex w-full gap-2'>
+
+                    <Input id="columnName" placeholder="column name" value={column.name} onChange={(e) => handleColumnName(index, e.target.value)}/>
+                    <DataTypeSelector selectedValue={column.type} onValueChange={(value) => handleColumnType( index, value)}/>
+                    <Checkbox checked={column.primary_key} onCheckedChange={()=>handlePrimaryKey(index)}></Checkbox>
+                    
+                  </div>  
+                ))
+              }
+              <Button onClick={addColumn}> Add Column </Button>
+            </div>
+          </div>  
+        </CardContent>     
+        <CardFooter>
+          <div className="flex w-full justify-around">
+            <Button onClick={handleClear}>Clear</Button>
+            <Button onClick={handleSave}>Save</Button>
+          </div>
+
+        </CardFooter>
+      
+      </div>
+
+    )
+  }
+
+  const TableNode = ({data, id}:{data:Table, id:string}) => {
+    const {action} = data
+
+    let tableCard = null
+    switch(action){
+        case "input":
+          tableCard = <TableInputCard id={id} />
+          break
+        
+        case null:  
+        case "display":
+          tableCard = <TableDisplayCard id={id} data={data} />
+          break 
+
+        default:
+          tableCard = tableCard ??  <TableDisplayCard id={id} data={data} />
+          break              
+    }
+    
+
+    return tableCard ;
+  }
+
+  
+  
+  export default memo(TableNode);

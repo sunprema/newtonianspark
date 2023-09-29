@@ -21,6 +21,7 @@ export interface Column {
   }
   
  export interface Table {
+    action?:'input'|'display';
     table_name: string;
     description:string;
     columns: Column[];

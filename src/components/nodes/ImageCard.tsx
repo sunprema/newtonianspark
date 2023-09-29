@@ -208,7 +208,7 @@ type UnsplashImageType = {
                         <Button className="dark:bg-slate-800 dark:text-white" onClick={ ()=> saveSelectedImage()}>Save selected Image</Button>  
                       </div>
                       :
-                      <Button className="w-full dark:bg-slate-800 dark:text-white" onClick={ ()=> searchImage()}>Unsplash, search me an image!</Button>  
+                      <Button className="w-full dark:bg-slate-800 dark:text-white" onClick={ ()=> searchImage()}>Search!</Button>  
                     }                  
                     
                 </CardFooter>
@@ -220,7 +220,7 @@ type UnsplashImageType = {
                   <Textarea id="summary" className="nodrag nopan" placeholder="Describe what you want the image to be." value={summary} onChange={(e) => setSummary(e.target.value)} />              
                 </div>
                 <CardFooter  className='mt-5 p-0'>
-                    <Button className="w-full dark:bg-slate-800 dark:text-white" onClick={ ()=> generateImage()}>DallE, make me an image!</Button>
+                    <Button className="w-full dark:bg-slate-800 dark:text-white" onClick={ ()=> generateImage()}>Create!</Button>
                 </CardFooter>
                 </TabsContent>
 

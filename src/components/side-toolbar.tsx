@@ -1,4 +1,4 @@
-import { Youtube, Image as Img,Text, Paintbrush, Gem } from "lucide-react"
+import { Youtube, Image as Img,Text, Paintbrush, Gem, Table } from "lucide-react"
 import { Card,CardContent } from "./ui/card";
 
 const SideToolbar = () => {
@@ -52,17 +52,7 @@ const SideToolbar = () => {
             </CardContent>
             </Card>
 
-            <Card draggable  
-                className="group 
-                rounded-none border-none 
-                shadow-none dark:bg-inherit" onDragStart={(event) => onDragStart(event, 'whiteboard')}>
-            <CardContent className="flex items-center justify-between gap-4 align-middle">
-            <div>
-                <Paintbrush color="#F97316" size={32}/>    
-                <h6 className="scroll-m-20 text-xs font-light tracking-tight group-hover:text-orange-500 group-hover:dark:text-orange-500">board</h6>
-            </div>
-            </CardContent>
-            </Card>
+            
 
             <Card draggable  
                 className="group 
@@ -72,6 +62,18 @@ const SideToolbar = () => {
             <div>
                 <Gem color="#F97316" size={32}/>    
                 <h6 className="scroll-m-20 text-xs font-light tracking-tight group-hover:text-orange-500 group-hover:dark:text-orange-500">Link</h6>
+            </div>
+            </CardContent>
+            </Card>
+
+            <Card draggable  
+                className="group 
+                rounded-none border-none 
+                shadow-none dark:bg-inherit" onDragStart={(event) => onDragStart(event, 'table')}>
+            <CardContent className="flex items-center justify-between gap-4 align-middle">
+            <div>
+                <Table color="#F97316" size={32}/>    
+                <h6 className="scroll-m-20 text-xs font-light tracking-tight group-hover:text-orange-500 group-hover:dark:text-orange-500">Table</h6>
             </div>
             </CardContent>
             </Card>

@@ -18,7 +18,7 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"  
   
-  import { Handle, Position, useReactFlow } from 'reactflow';
+  import { Handle, Position, useReactFlow, NodeResizer} from 'reactflow';
   
   import { Button } from "../ui/button";
   import Image from "next/image";
@@ -321,7 +321,7 @@ type UnsplashImageType = {
 
   }
 
-  const ImageDisplayCard = ( {data}:{nodeId:string, data:any} ) => {
+  const ImageDisplayCard = ( {data, nodeId, selected}:{nodeId:string, data:any, selected:boolean} ) => {
     const {topic, summary, imageURL} = data
     return (
       <div>
@@ -341,14 +341,15 @@ type UnsplashImageType = {
       <Handle id="1" type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-green-500"  />
       <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
       <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
-      <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />      
+      <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" /> 
+      <NodeResizer  isVisible={selected} minWidth={100} minHeight={30} />     
       </div>
     )
 
   }
 
 
-  const ImageCard = ({data, id}:{data:{action:'input'|'base64'|'display'}, id:string}) => {
+  const ImageCard = ({data, id, selected}:{data:{action:'input'|'base64'|'display'}, id:string, selected:boolean}) => {
 
     const {action} = data
 
@@ -361,7 +362,7 @@ type UnsplashImageType = {
           imageCard = <ImageBase64Card nodeId={id} data={data}/>
           break
         case "display":
-          imageCard = <ImageDisplayCard nodeId={id} data={data} />
+          imageCard = <ImageDisplayCard nodeId={id} data={data} selected={selected} />
           break            
     }
     

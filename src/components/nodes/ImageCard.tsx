@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
+
 import React, {useState} from 'react'
 import { CheckCircle} from 'lucide-react';
 import {
@@ -140,21 +139,7 @@ type UnsplashImageType = {
       }
     
     }
-    /*
-    const fileUploadHandler = (event:React.ChangeEvent<HTMLInputElement>) => {
-      if( event?.target?.files != null){
-        setSelectedFile(event.target.files[0])
-        setImageObtained(true)
-        toast({
-          title: 'TBD: Image will be uploaded here',
-          description : 'Image will be uplaoded and added to the node... Its to be implemented.'
-        })
-      }
-      
-    }
-    */ 
     
-
     return (
     
       <Card className="w-[500px] shadow-2xl dark:bg-slate-700">
@@ -185,7 +170,7 @@ type UnsplashImageType = {
                     <div className='nodrag grid grid-cols-4 gap-1'>
                       {imageSearchResult?.map((imsr, index) =>
                         <div className='relative'> 
-                        <img src={imsr?.urls?.regular} key={index} width={300} height={300} className='nodrag hover:cursor-pointer' onClick={()=> setSelectedImage(imsr.urls.regular)}/>
+                        <Image src={imsr?.urls?.regular} key={index} width={300} height={300} className='nodrag hover:cursor-pointer' onClick={()=> setSelectedImage(imsr.urls.regular)}/>
                         {
                           selectedImage === imsr.urls.regular ?
                           <div className='absolute left-0 top-0'><CheckCircle className='m-2 bg-transparent' color='orange' size={32} /></div>
@@ -303,8 +288,7 @@ type UnsplashImageType = {
               <Textarea disabled id="summary" className="nodrag nopan" value={summary}/>              
             </div>
             <div className="nodrag">            
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={500} height={400} alt={"Image"} />
+              <Image className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={500} height={400} alt={"Image"} />
             </div> 
             
           </div>  

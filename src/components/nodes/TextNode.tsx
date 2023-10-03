@@ -1,25 +1,22 @@
 import React, {useState, memo} from 'react'
-import { Input } from '../ui/input'
 import { useReactFlow } from 'reactflow';
+import { Textarea } from '../ui/textarea';
 
 
 
 
-const TextInputNode = ({nodeId}:{nodeId:string}) => {
+const TextInputNode = ({nodeId, data}:{nodeId:string, data:{text?:string}}) => {
     
-    const [text, setText] = useState<string>()
+    const [text, setText] = useState<string>( data.text ?? "")
     const { setNodes } = useReactFlow(); 
 
     const handleEnterKey = (e:React.KeyboardEvent) => {
         
         if (e.code === "Enter"){
-            alert("Enter button is pressed")
-
             setNodes((nds) =>
             nds.map((node) => {
             if (node.id === nodeId) {
-              // it's important that you create a new object here
-              // in order to notify react flow about the change
+              
               node.data = {
                 text,
                 mode: "text",
@@ -33,13 +30,13 @@ const TextInputNode = ({nodeId}:{nodeId:string}) => {
         
     return(
      
-        <Input value={text} placeholder='Enter the text.' onChange={(e) => setText(e.target.value)} onKeyUp={handleEnterKey}/>
+        <Textarea value={text} placeholder='Enter the text.' onChange={(e) => setText(e.target.value)} onKeyUp={handleEnterKey}/>
 
     )
 }
 
 
-const TextDisplayNode = ( {data}:{nodeId:string, data:any}) => {
+const TextDisplayNode = ( {data, selected, nodeId}:{nodeId:string, data:any, selected:boolean}) => {
     const {text} = data
     return(
         <div className="bg-transparent">
@@ -52,16 +49,19 @@ const TextDisplayNode = ( {data}:{nodeId:string, data:any}) => {
 
 
 
-const TextNode = ({data, id}:{data:{action:'input'|'display'}, id:string}) => {
-    const {action} = data
+const TextNode = ({data, id, selected}:{data:{action:'input'|'display'}, id:string, selected:boolean}) => {
+    let {action} = data
     let textNode = null
+    if(selected){
+        action="input"
+    }
 
     switch(action){
         case "input":
-            textNode = <TextInputNode nodeId={id} />
+            textNode = <TextInputNode nodeId={id} data={data} />
           break
         case "display":
-            textNode = <TextDisplayNode nodeId={id} data={data} />
+            textNode = <TextDisplayNode nodeId={id} data={data} selected={selected}/>
           break            
     }
 

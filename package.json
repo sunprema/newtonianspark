@@ -10,6 +10,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "@craftjs/core": "^0.2.0",
     "@dagrejs/dagre": "^1.0.2",
     "@hookform/resolvers": "^3.2.0",
     "@radix-ui/react-accordion": "^1.1.2",
@@ -51,7 +52,9 @@
     "next": "13.4.12",
     "next-themes": "^0.2.1",
     "postcss": "8.4.27",
+    "re-resizable": "^6.9.11",
     "react": "18.2.0",
+    "react-contenteditable": "^3.3.7",
     "react-day-picker": "^8.8.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
@@ -68,6 +71,7 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "@types/debounce": "^1.2.2",
     "@types/node": "^20.4.8",
     "@types/react": "18.2.15",
     "@types/react-dom": "^18.2.7",

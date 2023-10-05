@@ -9,12 +9,12 @@ const NSText = ({className, text}:{className?:string, text:string}) => {
       } = useNode();
 
     return (
-        <h4 
+        <span 
             className={cn(className, "font-bold")}
             ref={(ref ) => connect(drag(ref as HTMLElement))}
         >
             {text}
-        </h4>
+        </span>
     )
 }
 

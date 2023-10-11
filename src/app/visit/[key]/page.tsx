@@ -10,8 +10,9 @@ import {
 type Topic = {
     title :string,
     summary: string,
-    id: UUID|null,
-    flow: NodesAndEdges
+    id: UUID|null,    
+    flow: NodesAndEdges,
+    coverImageURL?:string,
 }  
 type NodesAndEdges = {
     nodes : Node[],
@@ -25,7 +26,7 @@ const Page = async ({params}:{params:{'key': string}}) => {
     console.log(value)
     const topic = value as Topic
     
-    const {flow:{nodes, edges}, title, summary, id} = topic
+    const {flow:{nodes, edges}, title, summary, coverImageURL } = topic
 
     if(value == null){
         return <h1>No data for key ${key}</h1>
@@ -35,7 +36,7 @@ const Page = async ({params}:{params:{'key': string}}) => {
             <section>
                 <ScrollArea >
                 <div className="h-[calc(100vh-80px)] w-full">
-                    <BasicFlow initialNodes={nodes} initialEdges={edges} initialTitle={title} initialSummary={summary} flowKey={key} mode="mindmap"/>
+                    <BasicFlow initialNodes={nodes} initialEdges={edges} initialTitle={title} initialSummary={summary} flowKey={key} coverImageURL={coverImageURL} mode="explore"/>
                 </div>
                 </ScrollArea>
             </section>

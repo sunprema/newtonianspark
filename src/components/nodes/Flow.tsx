@@ -33,7 +33,7 @@ import {
 import Dagre from '@dagrejs/dagre';
 import ExplorerNode from "./ExplorerNode";
 import TableNode from "./TableNode";
-import { CheckCircle, PlayIcon, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
+import { CheckCircle, CopyIcon, PlayIcon, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
 import Axios from 'axios';
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from 'next/navigation'
@@ -105,13 +105,14 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
   };
 
   const BasicFlow = ( 
-    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey, mode}: 
+    {initialNodes, initialEdges,initialTitle, initialSummary, flowKey, mode , coverImageURL}: 
     {initialNodes:Node[], 
      initialEdges:Edge[],
      initialTitle?:string, 
      initialSummary?:string, 
      flowKey?:string,
-     mode:string     
+     mode:string,
+     coverImageURL?:string     
 
     }
     ) => {
@@ -124,7 +125,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     const [title, setTitle] = useState<string>(initialTitle ?? "No Title")
     const [summary, setSummary] = useState<string>(initialSummary ?? "No Summary")
 
-    const [coverImageURL, setCoverImageURL] = useState<string>()
+    const [defaultCoverImageURL, setDefaultCoverImageURL] = useState<string|undefined>(coverImageURL)
     const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false)
     const { fitView } = useReactFlow();
     const router = useRouter();
@@ -297,7 +298,10 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           </ControlButton> 
           <ControlButton onClick={()=>router.push(`/present/${key}`)} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
             <PlayIcon size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
-          </ControlButton> 
+          </ControlButton>
+          <ControlButton onClick={()=> navigator.clipboard.writeText( JSON.stringify({title, summary, defaultCoverImageURL, flowKey}))} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
+            <CopyIcon size={32}  className="hover:stroke-green-500 dark:stroke-black" />                        
+          </ControlButton>  
           <ControlButton onClick={()=>onLayout('LR')} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
             <UnfoldHorizontal size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
           </ControlButton>
@@ -356,11 +360,11 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
                       imageURL &&
                       <div key={index} className='relative'> 
                       { <img  src={imageURL} width = {300} height={300} alt="cover image"
-                        onClick={ () => setCoverImageURL(imageURL)}
+                        onClick={ () => setDefaultCoverImageURL(imageURL)}
                       />
                       }
                       {
-                          coverImageURL === imageURL ?
+                          defaultCoverImageURL === imageURL ?
                           <div className='absolute left-0 top-0'><CheckCircle className='m-2 bg-transparent' color='orange' size={32} /></div>
                           : null
                       }
@@ -385,13 +389,14 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     );
   };
   
-  const BasicFlowWrapper = ({initialNodes, initialEdges,initialTitle, initialSummary, flowKey , mode}: 
+  const BasicFlowWrapper = ({initialNodes, initialEdges,initialTitle, initialSummary, flowKey , mode, coverImageURL}: 
     {initialNodes:Node[], 
      initialEdges:Edge[],
      initialTitle?:string, 
      initialSummary?:string, 
      flowKey?:string,
-     mode:string
+     mode:string,
+     coverImageURL?:string
      }) => {
     return(
      
@@ -401,7 +406,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
         <SideToolbar />  
       </div>
       <div className="flex-1">
-      <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={initialTitle} initialSummary={initialSummary} flowKey={flowKey} mode={mode} />
+      <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={initialTitle} initialSummary={initialSummary} flowKey={flowKey} mode={mode} coverImageURL={coverImageURL}/>
       </div>
       </div>
     </ReactFlowProvider>

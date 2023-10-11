@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
+
 import React, {useState} from 'react'
 import { CheckCircle} from 'lucide-react';
 import {
@@ -18,7 +17,7 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs"  
   
-  import { Handle, Position, useReactFlow } from 'reactflow';
+  import { Handle, Position, useReactFlow, NodeResizer} from 'reactflow';
   
   import { Button } from "../ui/button";
   import Image from "next/image";
@@ -140,21 +139,7 @@ type UnsplashImageType = {
       }
     
     }
-    /*
-    const fileUploadHandler = (event:React.ChangeEvent<HTMLInputElement>) => {
-      if( event?.target?.files != null){
-        setSelectedFile(event.target.files[0])
-        setImageObtained(true)
-        toast({
-          title: 'TBD: Image will be uploaded here',
-          description : 'Image will be uplaoded and added to the node... Its to be implemented.'
-        })
-      }
-      
-    }
-    */ 
     
-
     return (
     
       <Card className="w-[500px] shadow-2xl dark:bg-slate-700">
@@ -185,7 +170,7 @@ type UnsplashImageType = {
                     <div className='nodrag grid grid-cols-4 gap-1'>
                       {imageSearchResult?.map((imsr, index) =>
                         <div className='relative'> 
-                        <img src={imsr?.urls?.regular} key={index} width={300} height={300} className='nodrag hover:cursor-pointer' onClick={()=> setSelectedImage(imsr.urls.regular)}/>
+                        <Image alt="Select Image" src={imsr?.urls?.regular} key={index} width={300} height={300} className='nodrag hover:cursor-pointer' onClick={()=> setSelectedImage(imsr.urls.regular)}/>
                         {
                           selectedImage === imsr.urls.regular ?
                           <div className='absolute left-0 top-0'><CheckCircle className='m-2 bg-transparent' color='orange' size={32} /></div>
@@ -303,8 +288,7 @@ type UnsplashImageType = {
               <Textarea disabled id="summary" className="nodrag nopan" value={summary}/>              
             </div>
             <div className="nodrag">            
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={500} height={400} alt={"Image"} />
+              <Image className="object-cover" src={`data:image/jpeg;base64,${imageData}`} width={500} height={400} alt={"Image"} />
             </div> 
             
           </div>  
@@ -321,7 +305,7 @@ type UnsplashImageType = {
 
   }
 
-  const ImageDisplayCard = ( {data}:{nodeId:string, data:any} ) => {
+  const ImageDisplayCard = ( {data, selected}:{data:any, selected:boolean} ) => {
     const {topic, summary, imageURL} = data
     return (
       <div>
@@ -341,14 +325,15 @@ type UnsplashImageType = {
       <Handle id="1" type="source" position={Position.Right} className="!h-6 !w-2 !rounded-none !bg-green-500"  />
       <Handle id="2" type="source" position={Position.Bottom} className="!h-2 !w-6 !rounded-none !bg-green-500" />
       <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
-      <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" />      
+      <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" /> 
+      <NodeResizer  isVisible={selected} minWidth={100} minHeight={30} />     
       </div>
     )
 
   }
 
 
-  const ImageCard = ({data, id}:{data:{action:'input'|'base64'|'display'}, id:string}) => {
+  const ImageCard = ({data, id, selected}:{data:{action:'input'|'base64'|'display'}, id:string, selected:boolean}) => {
 
     const {action} = data
 
@@ -361,7 +346,7 @@ type UnsplashImageType = {
           imageCard = <ImageBase64Card nodeId={id} data={data}/>
           break
         case "display":
-          imageCard = <ImageDisplayCard nodeId={id} data={data} />
+          imageCard = <ImageDisplayCard data={data} selected={selected} />
           break            
     }
     
@@ -371,7 +356,7 @@ type UnsplashImageType = {
   export default memo(ImageCard) ;
 
 
-  export  const ImageCardPresentationMode = ( {id, data}:{id:string, data:any} ) => {
+  export  const ImageCardPresentationMode = ( { data}:{data:any} ) => {
   const {topic, summary, imageURL } = data
   
   if(!imageURL){

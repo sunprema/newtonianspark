@@ -61,6 +61,7 @@ import GridNode from "./GridNode";
 import SideToolbar from "../side-toolbar";
 import DynamicFormNode from "./code/DynamicFormNode";
 import LinkCard from "./LinkCard";
+import MarkdownNode from "./code/MarkDownNode";
 
 
 
@@ -75,7 +76,8 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
     text_heading:TextNode,
     grid: GridNode,
     dynamicFormNode: DynamicFormNode,
-    linkCard: LinkCard
+    linkCard: LinkCard,
+    markdown:MarkdownNode,
   };
 
   const edgeTypes = {

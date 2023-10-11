@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import BasicFlow from "@/components/nodes/Flow";
 import { useSearchParams } from 'next/navigation'
-
+import { Skeleton } from "@/components/ui/skeleton"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
     Node,   
@@ -102,16 +102,27 @@ const Page =() => {
     
     
     return (
+    
     <section>
       <ScrollArea >
         <div className="h-[calc(100vh-80px)] w-full">
           {
-            initialNodes && 
+            initialNodes ?
             <BasicFlow initialNodes={initialNodes} initialEdges={initialEdges} initialTitle={""} initialSummary={""} flowKey={""} mode="explore"/>
+            
+            :<div className="flex h-full w-full items-center justify-center space-x-4">
+            <Skeleton className="h-12 w-12 rounded-full" />
+            <div className="space-y-2">
+              <h4 className="font-mono text-sm font-bold">Exploring...</h4>
+              <Skeleton className="h-4 w-[250px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
           }
           
         </div>
-      </ScrollArea></section>
+      </ScrollArea>
+     </section>
     )
 }
 

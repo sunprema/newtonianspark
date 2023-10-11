@@ -34,7 +34,7 @@ import {
 import Dagre from '@dagrejs/dagre';
 import ExplorerNode from "./ExplorerNode";
 import TableNode from "./TableNode";
-import { CheckCircle, Play, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
+import { CheckCircle, Play, PlayIcon, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
 import Axios from 'axios';
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from 'next/navigation'
@@ -293,18 +293,12 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
         fitView
                 
       > 
-      {
-      key &&
-      <Panel position="top-right" >
-        <Button className="mr-52" > 
-        <Play className="mr-2" color="#5fe407"/>
-        <Link href={`/present/${key}`}>Present</Link></Button>
-      </Panel>  
-      }
-      
-        <Controls className="absolute bottom-4 left-8">
+       <Controls className="absolute bottom-4 left-8">
           <ControlButton onClick={()=>setIsSaveDialogOpen(true)} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
             <SaveIcon size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
+          </ControlButton> 
+          <ControlButton onClick={()=>router.push(`/present/${key}`)} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
+            <PlayIcon size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        
           </ControlButton> 
           <ControlButton onClick={()=>onLayout('LR')} className=" border-solid hover:border-orange-500 dark:hover:border-orange-500">
             <UnfoldHorizontal size={32}  className="hover:stroke-green-500 dark:stroke-black"/>                        

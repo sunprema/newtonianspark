@@ -29,11 +29,11 @@ const Page = async() => {
     return (
         <section className="min-h-screen  dark:bg-slate-600">
         <h3 className="mb-8 border-b p-8 text-2xl font-bold">Articles</h3>   
-        <div className="flex flex-wrap items-center justify-center gap-8">
+        <div className="flex flex-wrap items-baseline justify-start gap-8">
             {
             data?.map( (d)=> {
                 return (
-                <div key={d.flowKey} className="min-h-[250px] w-[250px] group">    
+                <div key={d.flowKey} className="h-full w-[250px] group">    
                 
                 
                 <Card className=" rounded-md bg-slate-100 shadow-2xl hover:border-orange-500  dark:bg-slate-700 dark:shadow-lg dark:hover:border-orange-500">

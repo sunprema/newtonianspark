@@ -170,7 +170,7 @@ type UnsplashImageType = {
                     <div className='nodrag grid grid-cols-4 gap-1'>
                       {imageSearchResult?.map((imsr, index) =>
                         <div className='relative'> 
-                        <Image src={imsr?.urls?.regular} key={index} width={300} height={300} className='nodrag hover:cursor-pointer' onClick={()=> setSelectedImage(imsr.urls.regular)}/>
+                        <Image alt="Select Image" src={imsr?.urls?.regular} key={index} width={300} height={300} className='nodrag hover:cursor-pointer' onClick={()=> setSelectedImage(imsr.urls.regular)}/>
                         {
                           selectedImage === imsr.urls.regular ?
                           <div className='absolute left-0 top-0'><CheckCircle className='m-2 bg-transparent' color='orange' size={32} /></div>
@@ -305,7 +305,7 @@ type UnsplashImageType = {
 
   }
 
-  const ImageDisplayCard = ( {data, nodeId, selected}:{nodeId:string, data:any, selected:boolean} ) => {
+  const ImageDisplayCard = ( {data, selected}:{data:any, selected:boolean} ) => {
     const {topic, summary, imageURL} = data
     return (
       <div>
@@ -346,7 +346,7 @@ type UnsplashImageType = {
           imageCard = <ImageBase64Card nodeId={id} data={data}/>
           break
         case "display":
-          imageCard = <ImageDisplayCard nodeId={id} data={data} selected={selected} />
+          imageCard = <ImageDisplayCard data={data} selected={selected} />
           break            
     }
     
@@ -356,7 +356,7 @@ type UnsplashImageType = {
   export default memo(ImageCard) ;
 
 
-  export  const ImageCardPresentationMode = ( {id, data}:{id:string, data:any} ) => {
+  export  const ImageCardPresentationMode = ( { data}:{data:any} ) => {
   const {topic, summary, imageURL } = data
   
   if(!imageURL){

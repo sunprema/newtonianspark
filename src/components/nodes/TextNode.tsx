@@ -36,7 +36,7 @@ const TextInputNode = ({nodeId, data}:{nodeId:string, data:{text?:string}}) => {
 }
 
 
-const TextDisplayNode = ( {data, selected, nodeId}:{nodeId:string, data:any, selected:boolean}) => {
+const TextDisplayNode = ( {data,}:{ data:any}) => {
     const {text} = data
     return(
         <div className="bg-transparent">
@@ -49,7 +49,7 @@ const TextDisplayNode = ( {data, selected, nodeId}:{nodeId:string, data:any, sel
 
 
 
-const TextNode = ({data, id, selected}:{data:{action:'input'|'display'}, id:string, selected:boolean}) => {
+const TextNode = ({data, id, selected}:{data:{action:'input'|'display', text?:string}, id:string, selected:boolean}) => {
     let {action} = data
     let textNode = null
     if(selected){
@@ -61,7 +61,7 @@ const TextNode = ({data, id, selected}:{data:{action:'input'|'display'}, id:stri
             textNode = <TextInputNode nodeId={id} data={data} />
           break
         case "display":
-            textNode = <TextDisplayNode nodeId={id} data={data} selected={selected}/>
+            textNode = <TextDisplayNode data={data} />
           break            
     }
 

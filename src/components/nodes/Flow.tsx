@@ -18,8 +18,7 @@ import ReactFlow, {
     ReactFlowInstance,
     XYPosition,
     ControlButton,
-    useReactFlow,
-    Panel
+    useReactFlow,    
   } from "reactflow";
 import "reactflow/dist/style.css";
 
@@ -34,7 +33,7 @@ import {
 import Dagre from '@dagrejs/dagre';
 import ExplorerNode from "./ExplorerNode";
 import TableNode from "./TableNode";
-import { CheckCircle, Play, PlayIcon, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
+import { CheckCircle, PlayIcon, SaveIcon,UnfoldHorizontal, UnfoldVertical } from "lucide-react";
 import Axios from 'axios';
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from 'next/navigation'
@@ -61,7 +60,6 @@ import TextNode from "./TextNode";
 import GridNode from "./GridNode";
 import SideToolbar from "../side-toolbar";
 import DynamicFormNode from "./code/DynamicFormNode";
-import Link from "next/link";
 import LinkCard from "./LinkCard";
 
 

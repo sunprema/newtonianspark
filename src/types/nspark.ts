@@ -10,7 +10,8 @@ export type Topic = {
     title :string,
     summary: string,
     id: UUID|null,
-    flow: NodesAndEdges
+    flow: NodesAndEdges,
+    created_at?:string,
 }  
 export type NodesAndEdges = {
     nodes : Node[],

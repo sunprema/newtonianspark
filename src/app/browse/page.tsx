@@ -10,7 +10,8 @@ import {
     CardTitle,
   } from "@/components/ui/card"
 import Link from "next/link";
-import ClipboardContextMenuItem from "@/components/client/ClipboardContextMenuItem";
+import moment from "moment";
+import { Topic } from "@/types/nspark";
 
 
 const Page = async() => {
@@ -48,17 +49,15 @@ const Page = async() => {
                     </div>
                     </CardHeader>
                     
-                    <CardContent className="p-2">
-                        <p className="scroll-m-20 text-xs font-light tracking-tight text-gray-800 dark:text-gray-100">
+                    <CardContent className="px-0">
+                        <p className="px-4 scroll-m-20 text-xs font-extralight opacity-50 tracking-tight text-gray-800 dark:text-gray-100">
+                        {`Created:${moment(d.created_at).format("ddd, MMM Do YY, h:mm:ss a")}`}
+                        </p>
+                        <p className="p-2 scroll-m-20 text-xs font-light tracking-tight text-gray-800 dark:text-gray-100">
                         {d.summary}
                         </p>
                     </CardContent>
-                    </Link>
-                    <CardFooter>
-                    <div className="hidden group-hover:block">
-                        <ClipboardContextMenuItem copyText={JSON.stringify({title:d.title, summary:d.summary, coverImageURL:d.coverImageURL, flowKey:d.flowKey})} />
-                    </div>    
-                    </CardFooter>
+                    </Link>                   
                 </Card>
                 </div>
                 )

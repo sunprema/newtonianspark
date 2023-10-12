@@ -27,6 +27,7 @@ import { Label } from "@/components/ui/label"
 import  Axios from 'axios';
 import { useToast } from '../ui/use-toast';
 import { Textarea } from "@/components/ui/textarea"
+import { ContextMenu, ContextMenuItem, ContextMenuTrigger, ContextMenuContent, ContextMenuSeparator } from "../ui/context-menu"
 
 import {memo} from 'react'
 
@@ -46,7 +47,7 @@ type UnsplashImageType = {
     
   
 
-    const { setNodes } = useReactFlow(); 
+    const { setNodes, setEdges } = useReactFlow(); 
     const {toast} = useToast()
     
     const clearSearch =() => {
@@ -139,9 +140,16 @@ type UnsplashImageType = {
       }
     
     }
+
+    const handleDelete = () => {
+      setNodes( (nodes) => nodes.filter( (node) => node.id !== nodeId))
+      setEdges((edges) => edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId))  
+    }
     
     return (
-    
+      <div >
+      <ContextMenu>
+      <ContextMenuTrigger>
       <Card className="w-[500px] shadow-2xl dark:bg-slate-700">
 
       <CardHeader>
@@ -214,10 +222,15 @@ type UnsplashImageType = {
             
           </div>  
       </CardContent>
-
-      
-
       </Card>
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-64">
+      <ContextMenuItem inset onClick={handleDelete}>
+          Delete
+        </ContextMenuItem> 
+      </ContextMenuContent>
+      </ContextMenu>
+      </div>
       
     )
 
@@ -305,10 +318,20 @@ type UnsplashImageType = {
 
   }
 
-  const ImageDisplayCard = ( {data, selected}:{data:any, selected:boolean} ) => {
+  const ImageDisplayCard = ( {data, selected, nodeId}:{data:any, selected:boolean, nodeId:string} ) => {
+
     const {topic, summary, imageURL} = data
+    const { setNodes, setEdges } = useReactFlow(); 
+    
+    const handleDelete = () => {
+      setNodes( (nodes) => nodes.filter( (node) => node.id !== nodeId))
+      setEdges((edges) => edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId))  
+    }
+
     return (
       <div>
+      <ContextMenu>
+      <ContextMenuTrigger>  
         
       <Card className= "relative shadow-2xl dark:bg-slate-700">
         <CardHeader>
@@ -327,6 +350,14 @@ type UnsplashImageType = {
       <Handle id="3" type="target" position={Position.Left} className="!h-6 !w-2 !rounded-none !bg-red-500"  />
       <Handle id="4" type="target" position={Position.Top} className="!h-2 !w-6 !rounded-none !bg-red-500" /> 
       <NodeResizer  isVisible={selected} minWidth={100} minHeight={30} />     
+      </ContextMenuTrigger>
+      <ContextMenuContent className="w-64">
+      <ContextMenuItem inset onClick={handleDelete}>
+          Delete
+        </ContextMenuItem>
+      </ContextMenuContent>
+
+      </ContextMenu>
       </div>
     )
 
@@ -346,7 +377,7 @@ type UnsplashImageType = {
           imageCard = <ImageBase64Card nodeId={id} data={data}/>
           break
         case "display":
-          imageCard = <ImageDisplayCard data={data} selected={selected} />
+          imageCard = <ImageDisplayCard data={data} selected={selected} nodeId={id} />
           break            
     }
     

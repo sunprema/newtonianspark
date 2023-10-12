@@ -1,3 +1,4 @@
+import { memo } from "react";
 import {
     Card,
     CardContent,
@@ -68,4 +69,14 @@ const DynamicFormNode = ({data, id}:{data:TableUIData, id:string})  => {
     )
 }
 
-export default DynamicFormNode ;
+export default memo(DynamicFormNode) ;
+
+
+export const DynamicFormNodePresentationMode = ({data , id}:{data:TableUIData, id:string}) => {
+    return(
+        <DynamicFormNode data={data} id={id} />
+    )
+
+}
+
+

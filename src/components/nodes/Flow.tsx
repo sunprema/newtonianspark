@@ -231,7 +231,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           { title,
             summary,
             flow,
-            coverImageURL
+            coverImageURL: defaultCoverImageURL,
           }}
           )
           const keySaved = response.data['key']
@@ -265,7 +265,7 @@ const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));//dagre gra
           })
         }
       }
-    },[rfInstance,key, toast, title, summary, coverImageURL]) 
+    },[rfInstance,key, toast, title, summary, defaultCoverImageURL]) 
 
     const onRefresh = () => {
       router.refresh()

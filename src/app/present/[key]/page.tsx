@@ -17,7 +17,7 @@ const PresentPage = async ({params}:{params:{'key': string}}) => {
     }
     
     return (
-        <PresentationHandler topic={topic} />    
+        <PresentationHandler topic={topic} flowKey={key} />    
     )
 }
 

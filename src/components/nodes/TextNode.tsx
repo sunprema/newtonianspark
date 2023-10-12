@@ -30,7 +30,7 @@ const TextInputNode = ({nodeId, data}:{nodeId:string, data:{text?:string}}) => {
         
     return(
      
-        <Textarea value={text} placeholder='Enter the text.' onChange={(e) => setText(e.target.value)} onKeyUp={handleEnterKey}/>
+        <Textarea value={text} placeholder='Enter the text.' onChange={(e) => setText(e.target.value)} onKeyUp={handleEnterKey} />
 
     )
 }

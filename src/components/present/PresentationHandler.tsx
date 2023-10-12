@@ -9,14 +9,25 @@ import { Button } from "../ui/button";
 import { ExplorerNodePresentationMode } from "../nodes/ExplorerNode";
 import { ImageCardPresentationMode } from "../nodes/ImageCard";
 import { MindMapNodePresentationMode } from "../nodes/MindMapNode";
+import { TableNodePresentationMode } from "../nodes/TableNode";
+import { DynamicFormNodePresentationMode } from "../nodes/code/DynamicFormNode";
+import { useRouter } from "next/navigation";
+import { GridNodePresentationMode } from "../nodes/GridNode";
 
-
-const PresentationHandler = ( {topic}:{topic:Topic} ) => {
+const PresentationHandler = ( {topic, flowKey}:{topic:Topic, flowKey:string} ) => {
 
     const {flow:{nodes}} = topic
+    const router = useRouter()
+
     const [nodeIndex, setNodeIndex] = useState<number>(0)
     const decrNodeIndex = () => nodeIndex != 0 ? setNodeIndex(nodeIndex-1) : null
     const incrNodeIndex = () => nodeIndex < nodes.length -1 ? setNodeIndex(nodeIndex+1) : setNodeIndex(0)
+    
+    const gotoVisitPage = useCallback(() =>{
+        router.push(`/visit/${flowKey}`)
+
+    },[ flowKey, router ])
+
     
     const getNodeSlide = useCallback( () => {
         const currentNode:Node = nodes[nodeIndex]
@@ -30,7 +41,7 @@ const PresentationHandler = ( {topic}:{topic:Topic} ) => {
                 nodeSlide = <ExplorerNodePresentationMode id={currentNode.id} data={currentNode.data} />
                 break;
             case "table":
-                nodeSlide = <h1> {currentNode.id} - table</h1> 
+                nodeSlide = <TableNodePresentationMode id={currentNode.id} data={currentNode.data} />
                 break;
             case "image":
                 nodeSlide = <ImageCardPresentationMode data={currentNode.data} />  
@@ -40,15 +51,15 @@ const PresentationHandler = ( {topic}:{topic:Topic} ) => {
                 break;
 
             case "text_heading":
-                nodeSlide = <h1> {currentNode.id} - text_heading</h1> 
+                nodeSlide = <h4 className="text-3xl font-bold ">{currentNode?.data?.text}</h4> 
                 break;
 
             case "grid":
-                nodeSlide = <h1> {currentNode.id} - grid</h1> 
+                nodeSlide = <GridNodePresentationMode id={currentNode.id} data={currentNode.data} />
                 break;
 
             case "dynamicFormNode":
-                nodeSlide = <h1> {currentNode.id} - dynamicFormNode</h1>    
+                nodeSlide = <DynamicFormNodePresentationMode id={currentNode.id} data={currentNode.data}/>
                 break;
 
 
@@ -61,15 +72,14 @@ const PresentationHandler = ( {topic}:{topic:Topic} ) => {
 
     return (
 
-        <div className="absolute left-0 top-16 h-full w-full dark:bg-slate-800">
+        <div className="absolute left-0 top-4 h-full w-full dark:bg-slate-800">
             <div className="container mx-auto flex h-full items-center">
-
                 {getNodeSlide()}
             </div>
 
         <div className="absolute bottom-32 right-0 mb-6 mr-6">
             <div className="flex gap-0">
-            <Button className="rounded-none hover:bg-orange-500" onClick={incrNodeIndex}> Exit </Button>
+            <Button className="rounded-none hover:bg-orange-500" onClick={gotoVisitPage}> Exit </Button>
             <Button className="rounded-none hover:bg-orange-500" onClick={decrNodeIndex}> Back </Button>
             <Button className="rounded-none hover:bg-orange-500" onClick={incrNodeIndex}> Next </Button>
         </div>            

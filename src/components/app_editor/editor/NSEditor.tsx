@@ -30,9 +30,7 @@ const NSEditor = () => {
                 </div>
                 <div className="flex-1 h-full w-8/12 dark:bg-black">
                 <Frame>
-                        <Element is={NSContainer} canvas >
-                        
-                        </Element>
+                        <NSContainer />
                 </Frame>
                 </div>
 

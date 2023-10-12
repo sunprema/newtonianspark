@@ -32,6 +32,7 @@ import { memo, useState } from "react";
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "../ui/button";
+import { Separator } from "../ui/separator";
 
 
 const columnTypes = [
@@ -329,7 +330,7 @@ const ColumnsDisplay = ({data}:{data:Table}) => {
     
 
     return (
-      <div className="w-[500px] shadow-2xl bg-slate-50 dark:bg-slate-700">
+      <div className="w-[500px] bg-slate-50 shadow-2xl dark:bg-slate-700">
         <CardHeader>
           <CardTitle>Add a Table</CardTitle>
           <CardDescription>You can add a table</CardDescription>
@@ -341,7 +342,7 @@ const ColumnsDisplay = ({data}:{data:Table}) => {
               <Input id="title" placeholder="Enter table name" value={tableName} onChange={(e) => setTableName(e.target.value)}/>
               <Label htmlFor="description">Description</Label>
               <Input id="title" placeholder="Enter description" value={description} onChange={(e) => setDescription(e.target.value)}/>
-              <div className='flex w-full gap-2 m-2 mt-4 py-5'>
+              <div className='m-2 mt-4 flex w-full gap-2 py-5'>
                 <Label className="flex-1">Column Name</Label>
                 <Label>Data Type</Label>
                 <Label>PK</Label>
@@ -401,3 +402,67 @@ const ColumnsDisplay = ({data}:{data:Table}) => {
   
   
   export default memo(TableNode);
+
+
+  export const TableNodePresentationMode = ({data , id}:{data:Table, id:string}) => {
+    const {columns}:{columns:Column[]|null} = data
+    
+     
+    return (
+      <div className="w-2/3 p-8 dark:bg-slate-700">
+       
+      <h4 className="text-2xl font-bold"> {data.table_name }</h4>  
+      
+      <h4 className="text-md my-8 font-light "> {data.description }</h4>  
+      <Separator orientation="horizontal" className="mb-8 bg-orange-500" />
+
+      <ul className="space-y-2 divide-y dark:divide-slate-500">
+      {
+        columns?.map( (column) => {
+
+          return(
+            <div className="relative flex w-[full] items-center p-2" key={column.name}> 
+              
+
+              <div className="w-[24px]">
+                {column.primary_key ? 
+                  <KeyRound size={14} className=" stroke-green-600 dark:stroke-green-600" strokeWidth={3.0}/> 
+                  : column.foreign_key ? 
+                    <KeyRound size={14} className="stroke-orange-800 dark:stroke-orange-100" strokeWidth={3.0}/> : null 
+                }
+              </div>              
+              <div className="flex-auto text-left text-base">{column.name}</div>
+              <div className="text-right text-base">{column.type}</div>                            
+              { column.primary_key? 
+              <div
+                      id={`handle-${data.table_name}-${column.name}` }
+                      className="relative left-4 !h-4 !w-4 !rounded-full !bg-green-500 ring ring-green-100"
+                      
+                  /> 
+              :column.foreign_key != null ?
+                <div
+                    id={`handle-${data.table_name}-${column.name}` }                    
+                    
+                    className="relative left-4  !h-4 !w-4 !rounded-full !bg-orange-500 ring ring-orange-100"
+                    
+                /> : null
+
+              }
+            </div>
+          )
+          }
+        )
+      }
+     </ul>
+
+      
+    </div>  
+        
+      
+     
+  
+        
+    )
+  
+  
+  }

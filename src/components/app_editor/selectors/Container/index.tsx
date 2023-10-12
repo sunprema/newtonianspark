@@ -8,7 +8,7 @@ const NSContainer = ({className, children}:{className?:string, children?:ReactNo
 
     const {connectors:{connect,drag}} = useNode()
     return (
-    <Element is="div" ref={(ref:HTMLElement) => connect(drag(ref))} className={cn(className, "bg-inherit")} canvas>        
+    <Element is="div" id="container" ref={(ref:HTMLElement) => connect(drag(ref))} className={cn(className, "bg-inherit border p-2 ")} canvas>        
         {children} 
     </Element>
     )

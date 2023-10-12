@@ -27,6 +27,7 @@ import { Textarea } from "../ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Button } from "../ui/button";
 import { Sparkles } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton"
 
 import axios from 'axios';
 
@@ -158,6 +159,7 @@ const ExplorerNodeInputMode = ({id}:{id:string}) => {
 
   const [generatePrompt, setGeneratePrompt] = useState<string>();
   const [isAiGenerated, setIsAiGenerated ] = useState<boolean>(false)
+  const [isGenerating, setIsGenerating] = useState<boolean>(false)
 
   const {setNodes} = useReactFlow()
 
@@ -172,6 +174,7 @@ const ExplorerNodeInputMode = ({id}:{id:string}) => {
 
   const handleGenerateNodeRequest = async() => {
     setIsAiGenerated(false)
+    setIsGenerating(true)
     //handle the request, then set setIsAiGenerated to true
     try{
       const response = await axios.post("/api/contextual/explore", {explore:generatePrompt})
@@ -186,9 +189,11 @@ const ExplorerNodeInputMode = ({id}:{id:string}) => {
       setSummary(summary)
       setQuestions(questions ?? [])
       setIsAiGenerated(true)
+      setIsGenerating(false)
       
 
     }catch(error){
+      setIsGenerating(false)
       console.log(error)
     }
     
@@ -346,6 +351,20 @@ const ExplorerNodeInputMode = ({id}:{id:string}) => {
 
               </CardTitle>
               </CardHeader>
+              {
+                isGenerating && 
+                <CardFooter>
+
+            <div className="flex h-full w-full items-center justify-center space-x-4">
+                <Skeleton className="h-12 w-12 rounded-full" />
+                <div className="space-y-2">
+                <h4 className="font-mono text-sm font-bold">Exploring...</h4>
+                <Skeleton className="h-4 w-[250px]" />
+                <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+                </CardFooter>
+              }
             </div>
         </TabsContent>
 

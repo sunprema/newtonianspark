@@ -29,7 +29,7 @@ const Page = async() => {
     return (
         <section className="min-h-screen  dark:bg-slate-600">
         <h3 className="mb-8 border-b p-8 text-2xl font-bold">Articles</h3>   
-        <div className="flex flex-wrap items-baseline justify-start gap-8">
+        <div className="flex flex-wrap items-baseline justify-center gap-8">
             {
             data?.map( (d)=> {
                 return (

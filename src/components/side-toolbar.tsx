@@ -78,17 +78,7 @@ const SideToolbar = () => {
             </CardContent>
             </Card>
 
-            <Card draggable  
-                className="group 
-                rounded-none border-none 
-                shadow-none dark:bg-inherit" onDragStart={(event) => onDragStart(event, 'markdown')}>
-            <CardContent className="flex items-center justify-between gap-4 align-middle">
-            <div>
-                <Code color="#F97316" size={28}/>    
-                <h6 className="scroll-m-20 text-xs font-light tracking-tight group-hover:text-orange-500 group-hover:dark:text-orange-500">Code</h6>
-            </div>
-            </CardContent>
-            </Card>
+            
 
             </div>
             </div>

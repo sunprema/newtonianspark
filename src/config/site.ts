@@ -11,14 +11,26 @@ export const siteConfig = {
     },
 
     {
-      title: "Browse",
-      href: "/browse",
+      title: "Explore",
+      href: "/create",
     },
+
     {
-      title: "Database",
+      title: "Database design",
       href: "/ddl_home",
     },    
     
+    {
+      title: "Electronic circuits",
+      href: "/tbd",
+      
+    },
+
+    {
+      title: "",
+      href: "/tdb",
+      
+    },
   ]
   
 }

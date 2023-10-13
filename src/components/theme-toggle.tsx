@@ -10,6 +10,7 @@ export function ThemeToggle() {
   const { setTheme, theme } = useTheme()
 
   return (
+    <div className="absolute right-2">
     <Button
       variant="ghost"
       size="icon"
@@ -19,5 +20,6 @@ export function ThemeToggle() {
       <Moon className="hidden h-5 w-5 dark:block" />
       <span className="sr-only">Toggle theme</span>
     </Button>
+    </div>
   )
 }
